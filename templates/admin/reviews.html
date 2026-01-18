@@ -1,0 +1,287 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Reviews Management - Admin Panel{% endblock %}
+
+{% block page_title %}Reviews Management{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3><i class="fas fa-star" style="color: var(--secondary); margin-right: 10px;"></i>All Reviews</h3>
+    </div>
+    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Car</th>
+                    <th>User</th>
+                    <th>Rating</th>
+                    <th>Review</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="reviewsTable">
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--gray);">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="pagination" style="margin-top: 20px; display: flex; justify-content: center; gap: 10px; align-items: center;"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentPage = 1;
+    const pageSize = 10;
+
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    function getStatusBadge(review) {
+        if (review.is_hidden) {
+            return '<span class="badge badge-danger">Hidden</span>';
+        }
+        if (review.is_approved) {
+            return '<span class="badge badge-success">Visible</span>';
+        }
+        return '<span class="badge badge-warning">Pending</span>';
+    }
+
+    function getRatingStars(rating) {
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                stars += '<span style="color: #ff6b35;">★</span>';
+            } else {
+                stars += '<span style="color: #cbd5e0;">☆</span>';
+            }
+        }
+        return stars;
+    }
+
+    async function loadReviews(resetPage = false) {
+        if (resetPage) {
+            currentPage = 1;
+        }
+
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const reviewsTable = document.getElementById('reviewsTable');
+        
+        loadingSpinner.style.display = 'block';
+        
+        try {
+            const url = `/reviews?page=${currentPage}&page_size=${pageSize}`;
+            const data = await apiCall(url);
+            
+            if (data.items && data.items.length > 0) {
+                reviewsTable.innerHTML = data.items.map(review => {
+                    // Build user name
+                    let userName = `User #${review.user_id}`;
+                    if (review.user_firstname || review.user_lastname) {
+                        const firstname = review.user_firstname || '';
+                        const lastname = review.user_lastname || '';
+                        userName = `${firstname} ${lastname}`.trim() || userName;
+                    }
+                    
+                    // Build car name
+                    let carName = `Car #${review.car_id}`;
+                    if (review.car_brand || review.car_model) {
+                        const brand = review.car_brand || '';
+                        const model = review.car_model || '';
+                        carName = `${brand} ${model}`.trim() || carName;
+                    }
+                    
+                    return `
+                        <tr>
+                            <td>#${review.id}</td>
+                            <td>
+                                <a href="/admin/cars/${review.car_id}/edit" style="color: var(--primary); text-decoration: none; font-weight: 500;" 
+                                   onmouseover="this.style.textDecoration='underline'" 
+                                   onmouseout="this.style.textDecoration='none'">
+                                    ${carName}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/admin/users/${review.user_id}" style="color: var(--primary); text-decoration: none; font-weight: 500;" 
+                                   onmouseover="this.style.textDecoration='underline'" 
+                                   onmouseout="this.style.textDecoration='none'">
+                                    ${userName}
+                                </a>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    ${getRatingStars(review.rating)}
+                                    <span style="margin-left: 4px; font-weight: 600;">${review.rating}/5</span>
+                                </div>
+                            </td>
+                            <td style="max-width: 300px;">
+                                ${review.review_text ? `<p style="margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${review.review_text}">${review.review_text}</p>` : '<span style="color: var(--gray);">No text</span>'}
+                            </td>
+                            <td>${getStatusBadge(review)}</td>
+                            <td>
+                                <div style="display: flex; gap: 5px;">
+                                    ${review.is_hidden ? `
+                                        <button onclick="toggleReviewVisibility(${review.id}, false)" 
+                                                class="btn btn-success" 
+                                                style="padding: 5px 10px; font-size: 12px;"
+                                                title="Show Review">
+                                            <i class="fas fa-eye"></i> Show
+                                        </button>
+                                    ` : `
+                                        <button onclick="toggleReviewVisibility(${review.id}, true)" 
+                                                class="btn btn-warning" 
+                                                style="padding: 5px 10px; font-size: 12px;"
+                                                title="Hide Review">
+                                            <i class="fas fa-eye-slash"></i> Hide
+                                        </button>
+                                    `}
+                                    <button onclick="deleteReview(${review.id})" 
+                                            class="btn btn-danger" 
+                                            style="padding: 5px 10px; font-size: 12px;"
+                                            title="Delete Review">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                updatePagination(data);
+            } else {
+                reviewsTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-star" style="font-size: 48px; color: var(--gray); margin-bottom: 15px; display: block;"></i>
+                            <p style="color: var(--gray); font-size: 16px; margin: 0;">No reviews yet</p>
+                            <p style="color: var(--gray); font-size: 14px; margin-top: 5px;">Customer reviews will appear here once they rate cars</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading reviews:', error);
+            const errorMessage = error.message || 'Unknown error occurred';
+            console.error('Full error details:', {
+                message: errorMessage,
+                stack: error.stack,
+                name: error.name
+            });
+            
+            // Only show error if table is empty
+            if (reviewsTable.innerHTML.includes('Loading...') || reviewsTable.innerHTML.trim() === '') {
+                reviewsTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--danger);">
+                            <i class="fas fa-exclamation-circle" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                            <p>Error loading reviews</p>
+                            <small>${errorMessage}</small>
+                            <br><br>
+                            <button onclick="loadReviews(false)" class="btn btn-outline" style="margin-top: 10px;">Retry</button>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                // If data is already loaded, just log the error
+                showAlert('Error refreshing reviews: ' + errorMessage, 'error');
+            }
+        } finally {
+            loadingSpinner.style.display = 'none';
+        }
+    }
+
+    function updatePagination(data) {
+        const paginationDiv = document.getElementById('pagination');
+        if (data.total_pages <= 1) {
+            paginationDiv.innerHTML = '';
+            return;
+        }
+
+        let paginationHTML = '';
+        
+        // Previous button
+        if (data.page > 1) {
+            paginationHTML += `<button onclick="changePage(${data.page - 1})" class="btn btn-outline">Previous</button>`;
+        }
+        
+        // Page numbers
+        paginationHTML += `<span style="margin: 0 15px;">Page ${data.page} of ${data.total_pages}</span>`;
+        
+        // Next button
+        if (data.page < data.total_pages) {
+            paginationHTML += `<button onclick="changePage(${data.page + 1})" class="btn btn-outline">Next</button>`;
+        }
+        
+        paginationDiv.innerHTML = paginationHTML;
+    }
+
+    function changePage(page) {
+        currentPage = page;
+        loadReviews(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function toggleReviewVisibility(reviewId, hide) {
+        if (!confirm(hide ? 'Are you sure you want to hide this review? It will not be visible to customers.' : 'Are you sure you want to show this review?')) {
+            return;
+        }
+
+        try {
+            const response = await apiCall(`/reviews/${reviewId}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    is_hidden: hide
+                })
+            });
+            
+            showAlert(hide ? 'Review hidden successfully' : 'Review shown successfully', 'success');
+            loadReviews(false);
+        } catch (error) {
+            showAlert('Error updating review: ' + (error.message || 'Unknown error'), 'error');
+        }
+    }
+
+    async function deleteReview(reviewId) {
+        if (!confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            await apiCall(`/reviews/${reviewId}`, {
+                method: 'DELETE'
+            });
+            
+            showAlert('Review deleted successfully', 'success');
+            loadReviews(false);
+        } catch (error) {
+            showAlert('Error deleting review: ' + (error.message || 'Unknown error'), 'error');
+        }
+    }
+
+    function waitForBaseScripts(callback) {
+        if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
+            callback();
+        } else {
+            setTimeout(() => waitForBaseScripts(callback), 100);
+        }
+    }
+
+    waitForBaseScripts(() => {
+        loadReviews(false);
+    });
+</script>
+{% endblock %}
+

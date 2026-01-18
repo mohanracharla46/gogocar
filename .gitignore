@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Database
+*.db
+*.sqlite
+
+# Static files (if not needed in git)
+# static/images/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+images/*.jpg
+images/*.png
+images/*.jpeg

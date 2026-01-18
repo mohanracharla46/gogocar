@@ -1,0 +1,4026 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoGo Self Drive Cars - Car Rentals in Hyderabad</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #061a40;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Updated Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(32, 76, 79, 0.1) 0%, transparent 40%),
+                linear-gradient(135deg, #061a3d 0%, #0c2a5c 40%, #1e4d4e 100%);
+            z-index: -2;
+        }
+
+        .wavy-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='1440' height='800' viewBox='0 0 1440 800' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-100 600C200 500 400 700 700 600C1000 500 1200 700 1540 600' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3Cpath d='M-100 550C200 450 400 650 700 550C1000 450 1200 650 1540 550' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3Cpath d='M-100 500C200 400 400 600 700 500C1000 400 1200 600 1540 500' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header New Design */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 80px;
+            background: #ffffff;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            background: #2b3990;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-img img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            justify-self: start;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2b3990;
+            /* Dark Blue */
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: #475569;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+            justify-self: center;
+        }
+
+        nav a {
+            color: #1e293b;
+            /* Dark Slate */
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #2b3990;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff6b35;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #ffffff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Login Button New Design */
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .host-btn {
+            padding: 10px 25px;
+            border: 2px solid #061a40;
+            color: #061a40;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .host-btn:hover {
+            background: #061a40;
+            color: #ffffff;
+        }
+
+        .login-btn-new {
+            background: #061a40;
+            color: #ffffff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6, 26, 64, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 26, 64, 0.3);
+            background: #0a295c;
+        }
+
+        .user-icon {
+            width: 20px;
+            height: 20px;
+            fill: #2b3990;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 900px) {
+            header {
+                display: flex;
+                justify-content: space-between;
+                padding: 15px 20px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            /* Use existing mobile menu logic if needed, or hide for now */
+            .auth-buttons {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+        /* Hero Section Refined Design */
+        /* Hero Section Redesign */
+        .hero {
+            min-height: 100vh;
+            padding-top: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            /* Aligned to top */
+            gap: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* LEFT SIDE: PROMO CONTENT */
+        .hero-promo {
+            flex: 1;
+            max-width: 580px;
+            /* Unified offset */
+        }
+
+        .promo-headline {
+            font-size: 64px;
+            /* Slightly reduced for better fit */
+            font-weight: 800;
+            line-height: 1.1;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .promo-price-highlight {
+            color: #00d2ff;
+            /* Cyan accent */
+            display: block;
+        }
+
+        .promo-subtext {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 480px;
+            line-height: 1.5;
+            margin-bottom: 35px;
+            font-weight: 500;
+        }
+
+        .hero-promo-car {
+            width: 100%;
+            max-width: 550px;
+            margin-top: -600px;
+            margin-left: -1950px;
+            /* Shifted significantly left */
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+            transition: transform 0.5s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-promo-car:hover {
+            transform: scale(1.02);
+        }
+
+        /* RIGHT SIDE: SEARCH CARD */
+        .hero-card {
+            flex: 1;
+            max-width: 580px;
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-card-inner {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Toggle Buttons */
+        .toggle-container {
+            display: flex;
+            background: #eceff5;
+            margin-bottom: 0;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 16px 0;
+            /* Reduced height */
+            border: none;
+            background: #e0e6f0;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .toggle-btn.active {
+            background: #2b3990;
+            color: #ffffff;
+        }
+
+        .toggle-btn#subscriptionTab.active {
+            background: #2b3990;
+            color: #ffffff;
+        }
+
+        .toggle-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .toggle-subtitle {
+            font-size: 12px;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        /* Search Card Body */
+        .search-card-body {
+            padding: 25px 35px;
+            /* Reduced vertical padding */
+        }
+
+        .search-card-body h2 {
+            font-size: 22px;
+            /* Smaller font */
+            font-weight: 700;
+            color: #2b3990;
+            margin-bottom: 20px;
+            /* Reduced margin */
+        }
+
+        .input-group {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 20px;
+            /* Reduced padding */
+            margin-bottom: 12px;
+            /* Reduced margin */
+            transition: border-color 0.3s;
+        }
+
+        .input-group:hover {
+            border-color: #2b3990;
+        }
+
+        .input-label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .input-value {
+            font-size: 20px;
+            /* Smaller font for location */
+            font-weight: 700;
+            color: #1e293b;
+            border: none;
+            background: transparent;
+            width: 100%;
+            outline: none;
+            display: block;
+        }
+
+        input.input-value {
+            font-size: 18px;
+            /* Slightly smaller for inputs to fit datetime */
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+            z-index: 1;
+        }
+
+        .date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 0;
+            /* Fully removed margin */
+        }
+
+        .date-grid .input-group {
+            margin-bottom: 0;
+            /* Remove internal margin contributing to gap */
+        }
+
+        .duration-text {
+            text-align: center;
+            font-size: 13px;
+            color: #2b3990;
+            margin-bottom: 8px;
+            /* Further reduced margin to button */
+            font-weight: 700;
+            padding: 4px 8px;
+            /* Reduced vertical padding */
+            border-radius: 8px;
+        }
+
+        .search-btn {
+            width: 100%;
+            background: #2b3990;
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            /* Reduced vertical padding */
+            border-radius: 12px;
+            font-size: 18px;
+            /* Slightly smaller */
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(43, 57, 144, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .search-btn:hover {
+            background: #1e296a;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(43, 57, 144, 0.3);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Ensure headline stays on top */
+        .promo-headline {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Responsive adjustment */
+        @media (max-width: 1100px) {
+            .hero-container {
+                flex-direction: column;
+                gap: 50px;
+                text-align: center;
+                align-items: center;
+                padding-top: 50px;
+            }
+
+            .promo-headline {
+                font-size: 48px;
+            }
+
+            .hero-promo-car {
+                margin-top: 0;
+                max-width: 400px;
+            }
+
+            .hero-card {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Ensure text stays on top of car */
+        .promo-headline {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Responsive adjustment */
+        @media (max-width: 1100px) {
+            .hero-container {
+                flex-direction: column;
+                gap: 50px;
+                text-align: center;
+                align-items: center;
+                padding-top: 50px;
+            }
+
+            .promo-headline {
+                font-size: 48px;
+            }
+
+            .hero-promo-car {
+                margin-top: 20px;
+                max-width: 400px;
+                position: static;
+            }
+
+            .hero-card {
+                width: 100%;
+                max-width: 550px;
+            }
+        }
+
+
+        /* Location Modal */
+        .location-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .location-modal.active {
+            display: flex;
+        }
+
+        .location-modal-content {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .location-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .location-modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
+        }
+
+        .location-modal-close {
+            background: transparent;
+            border: none;
+            font-size: 32px;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .location-modal-close:hover {
+            background: #f1f5f9;
+            color: #1a202c;
+        }
+
+        .location-search {
+            margin-bottom: 20px;
+        }
+
+        .location-search-input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .location-search-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .location-list {
+            display: grid;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .location-item {
+            padding: 18px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+        }
+
+        .location-item:hover {
+            border-color: #ff6b35;
+            background: #fff5f2;
+            transform: translateX(4px);
+        }
+
+        .location-item.selected {
+            border-color: #ff6b35;
+            background: #fff5f2;
+        }
+
+        .location-icon {
+            width: 40px;
+            height: 40px;
+            background: #ff6b35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .location-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #ffffff;
+        }
+
+        .location-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a202c;
+            flex: 1;
+        }
+
+        .location-check {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .location-item.selected .location-check {
+            background: #ff6b35;
+            border-color: #ff6b35;
+        }
+
+        .location-item.selected .location-check::after {
+            content: '✓';
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .location-modal-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn-modal-primary {
+            padding: 14px 32px;
+            background: #ff6b35;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-modal-primary:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-modal-primary:disabled {
+            background: #cbd5e0;
+            color: #64748b;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-modal-secondary {
+            padding: 14px 32px;
+            background: #f1f5f9;
+            color: #1a202c;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-modal-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .location-empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .location-empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Terms and Conditions Modal */
+        .terms-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+        }
+
+        .terms-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .terms-modal-content {
+            background: #ffffff;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .terms-modal-header {
+            position: sticky;
+            top: 0;
+            background: #ffffff;
+            padding: 25px 30px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .terms-modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
+        }
+
+        .terms-modal-close {
+            background: transparent;
+            border: none;
+            font-size: 32px;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .terms-modal-close:hover {
+            background: #f1f5f9;
+            color: #1a202c;
+        }
+
+        .terms-modal-body {
+            padding: 30px;
+            color: #1a202c;
+            line-height: 1.8;
+        }
+
+        .terms-modal-body h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .terms-modal-body h2:first-child {
+            margin-top: 0;
+        }
+
+        .terms-modal-body h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #334155;
+            margin: 20px 0 10px 0;
+        }
+
+        .terms-modal-body p {
+            margin-bottom: 15px;
+            color: #475569;
+        }
+
+        .terms-modal-body ul,
+        .terms-modal-body ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .terms-modal-body li {
+            margin-bottom: 10px;
+            color: #475569;
+        }
+
+        .terms-modal-footer {
+            position: sticky;
+            bottom: 0;
+            background: #ffffff;
+            padding: 20px 30px;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .terms-checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .terms-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .terms-checkbox-label {
+            font-size: 14px;
+            color: #475569;
+            cursor: pointer;
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ffffff;
+            color: #1a202c;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            max-width: 400px;
+            animation: slideInRight 0.3s ease-out;
+            border-left: 4px solid #ef4444;
+        }
+
+        .notification.success {
+            border-left-color: #10b981;
+        }
+
+        .notification.warning {
+            border-left-color: #f59e0b;
+        }
+
+        .notification.info {
+            border-left-color: #3b82f6;
+        }
+
+        .notification-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .notification-message {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .notification-close {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .notification-close:hover {
+            background: #f1f5f9;
+            color: #1a202c;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .notification.hiding {
+            animation: slideOutRight 0.3s ease-out forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero {
+                padding: 100px 30px 30px;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .hero-left-section {
+                grid-column: 1 / -1;
+                text-align: center;
+            }
+
+            .hero-right-section {
+                grid-column: 1 / -1;
+            }
+
+            .hero-headline {
+                font-size: 48px;
+                margin-bottom: 20px;
+            }
+
+            .hero-right-image {
+                max-height: 580px;
+                transform: scale(1.05);
+            }
+
+            .hero-features {
+                font-size: 20px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .header-car-image {
+                height: 40px;
+                margin-left: 10px;
+            }
+
+            .header-right-section {
+                gap: 8px;
+            }
+
+            .menu-toggle {
+                display: flex;
+                order: 2;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 25, 41, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                gap: 0;
+                padding: 20px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                order: 4;
+                margin-top: 0;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                padding: 12px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                width: 100%;
+                font-size: 16px;
+            }
+
+            nav a:last-child {
+                border-bottom: none;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .login-btn,
+            .signup-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+                order: 3;
+            }
+
+            .auth-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .hero-headline {
+                font-size: 36px;
+            }
+
+            .hero-features {
+                font-size: 18px;
+            }
+
+            .hero-location {
+                font-size: 16px;
+            }
+
+            .hero-right-image {
+                max-height: 520px;
+                transform: scale(1.05);
+            }
+
+            .btn {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 12px 15px;
+                flex-direction: row;
+                align-items: center;
+                position: relative;
+            }
+
+            .header-car-image {
+                height: 35px;
+                margin-left: 8px;
+            }
+
+            .header-right-section {
+                gap: 6px;
+            }
+
+            .menu-toggle {
+                display: flex;
+                order: 2;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 25, 41, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                gap: 0;
+                padding: 15px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                order: 4;
+                margin-top: 0;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                padding: 12px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                width: 100%;
+                font-size: 15px;
+            }
+
+            nav a:last-child {
+                border-bottom: none;
+            }
+
+            .logo-main {
+                font-size: 20px;
+            }
+
+            .logo-sub {
+                font-size: 10px;
+            }
+
+            .login-btn,
+            .signup-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+                order: 3;
+                margin-top: 0;
+            }
+
+            .auth-buttons {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .hero-headline {
+                font-size: 28px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .location-modal-content {
+                padding: 30px 20px;
+                max-width: 95%;
+            }
+
+            .location-modal-title {
+                font-size: 24px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* How It Works Section Redesign */
+        .how-it-works {
+            position: relative;
+            background: linear-gradient(rgba(43, 57, 144, 0.85), rgba(43, 57, 144, 0.85)), url('/static/img/family-car.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 100px 50px;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .moments-label {
+            position: absolute;
+            top: 60px;
+            right: 60px;
+            text-align: right;
+            font-size: 40px;
+            font-weight: 900;
+            line-height: 0.9;
+            color: rgba(255, 255, 255, 0.08);
+            /* More subtle */
+            text-transform: uppercase;
+            max-width: 350px;
+            pointer-events: none;
+            letter-spacing: -1px;
+        }
+
+        .how-it-works-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .how-it-works-title {
+            font-size: 42px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .how-it-works-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 60px;
+            font-weight: 500;
+        }
+
+        .steps-card {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            gap: 0;
+            /* Flush or very close */
+            max-width: 1100px;
+            margin: 0 auto;
+            border-radius: 20px;
+        }
+
+        .white-steps-bar {
+            display: flex;
+            flex: 3;
+            background: #ffffff;
+            border-radius: 20px 0 0 20px;
+            /* Rounded only on the left */
+            box-shadow: -15px 15px 40px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+        }
+
+        .step-item {
+            flex: 1;
+            padding: 40px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        /* Rounding only the start of the bar */
+        .white-steps-bar .step-item:first-child {
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+        }
+
+        /* No rounding on the right side of step 3 to mesh with blue box */
+        .white-steps-bar .step-item:last-child {
+            border-radius: 0;
+        }
+
+        /* Connecting lines */
+        .step-item::after {
+            content: '';
+            position: absolute;
+            top: 70px;
+            /* Center with circle (padding 40px + 60px/2) */
+            right: -25%;
+            width: 50%;
+            height: 1.5px;
+            background: #cbd5e1;
+            z-index: 1;
+        }
+
+        .step-item:last-child::after {
+            display: none;
+        }
+
+        /* Line between step 3 and 4 */
+        .white-steps-bar .step-item:last-child::after {
+            display: block;
+            right: -25px;
+            /* Spans the visual "gap" if there is one */
+            width: 50px;
+        }
+
+        .step-number {
+            width: 65px;
+            height: 65px;
+            background: #cbd5e1;
+            /* Step 1 default */
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Color scale for steps matching image precisely */
+        .white-steps-bar .step-item:nth-child(1) .step-number {
+            background: #b8c1d1;
+            /* Lilac / Light Blue */
+        }
+
+        .white-steps-bar .step-item:nth-child(2) .step-number {
+            background: #7d8eb3;
+            /* Medium Blue */
+        }
+
+        .white-steps-bar .step-item:nth-child(3) .step-number {
+            background: #2b3990;
+            /* Deep Blue */
+        }
+
+        .step-item-active {
+            flex: 1.2;
+            background-color: #2b3990;
+            background-image:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.06) 25%, transparent 25%),
+                linear-gradient(225deg, rgba(255, 255, 255, 0.06) 25%, transparent 25%),
+                linear-gradient(45deg, rgba(255, 255, 255, 0.06) 25%, transparent 25%),
+                linear-gradient(315deg, rgba(255, 255, 255, 0.06) 25%, transparent 25%);
+            background-position: 10px 0, 10px 0, 0 0, 0 0;
+            background-size: 20px 20px;
+            background-repeat: repeat;
+            color: #ffffff;
+            border-radius: 25px;
+            /* Distinct rounding */
+            box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+            padding: 40px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: -5px 0 -5px -10px;
+            /* Slight overlay/inset look */
+        }
+
+        .step-item-active .step-label {
+            color: #ffffff;
+        }
+
+        .step-item-active .step-number {
+            background: #ffffff;
+            color: #2b3990;
+        }
+
+        .step-label {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4354b0;
+            /* Slightly lighter blue for readability */
+            text-align: center;
+        }
+
+        .step-item-active .step-label {
+            color: #ffffff;
+        }
+
+        @media (max-width: 1024px) {
+            .steps-card {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .step-item:nth-child(2)::after {
+                display: none;
+            }
+
+            .moments-label {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .steps-card {
+                grid-template-columns: 1fr;
+            }
+
+            .step-item::after {
+                display: none;
+            }
+
+            .how-it-works-title {
+                font-size: 32px;
+            }
+        }
+
+        .step-text {
+            font-size: 16px;
+        }
+        }
+
+        @media (max-width: 480px) {
+            .how-it-works {
+                padding: 40px 20px;
+            }
+
+            .how-it-works-title {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+
+            .how-it-works-steps {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .step {
+                flex-direction: row;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .step-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .step-icon svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .step-text {
+                font-size: 16px;
+            }
+        }
+
+        /* Why Choose Us Section */
+        .why-choose-us {
+            background: #f4f7fe;
+            /* Light pastel background from design */
+            padding: 80px 50px;
+            color: #1a202c;
+        }
+
+        .why-choose-us-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .why-choose-us-title {
+            font-size: 40px;
+            font-weight: 800;
+            color: #2b3990;
+            /* Brand blue */
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .why-choose-us-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 columns as per design */
+            gap: 30px;
+            align-items: stretch;
+        }
+
+        .benefit-card {
+            background: #ffffff;
+            display: flex;
+            flex-direction: row;
+            /* Horizontal layout */
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(43, 57, 144, 0.08);
+            /* Soft blue shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: left;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(43, 57, 144, 0.12);
+        }
+
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            background: #b8c1d1;
+            /* Correct lilac/light purple circle color */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #2b3990;
+        }
+
+        .benefit-icon svg {
+            width: 35px;
+            height: 35px;
+            stroke-width: 2.5;
+        }
+
+        .benefit-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .benefit-heading {
+            font-size: 18px;
+            font-weight: 800;
+            color: #2b3990;
+            text-transform: uppercase;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .benefit-text {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        /* Responsive for Why Choose Us */
+        @media (max-width: 1024px) {
+            .why-choose-us-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+
+            .why-choose-us-title {
+                font-size: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .why-choose-us {
+                padding: 60px 30px;
+            }
+
+            .why-choose-us-title {
+                font-size: 36px;
+                margin-bottom: 40px;
+            }
+
+            .why-choose-us-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+
+            .benefit-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .benefit-icon svg {
+                width: 40px;
+                height: 40px;
+            }
+
+            .benefit-heading {
+                font-size: 18px;
+            }
+
+            .benefit-text {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .why-choose-us {
+                padding: 40px 20px;
+            }
+
+            .why-choose-us-title {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+
+            .why-choose-us-cards {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .benefit-card {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .benefit-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .benefit-icon svg {
+                width: 40px;
+                height: 40px;
+            }
+
+            .benefit-heading {
+                font-size: 18px;
+            }
+
+            .benefit-text {
+                font-size: 14px;
+            }
+        }
+
+        /* Featured Cars Section Redesign */
+        .featured-cars {
+            background: #f4f7fe;
+            /* Light pastel background */
+            padding: 80px 50px;
+        }
+
+        .featured-cars-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .featured-category {
+            margin-bottom: 80px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2b3990;
+            margin: 0;
+        }
+
+        .category-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-arrow {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #ffffff;
+            color: #2b3990;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .nav-arrow:hover {
+            background: #2b3990;
+            color: #ffffff;
+        }
+
+        .nav-arrow svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .car-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .car-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(43, 57, 144, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 380px;
+            /* Increased to accommodate content comfortably */
+        }
+
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(43, 57, 144, 0.12);
+        }
+
+        .card-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .car-info {
+            flex: 1;
+        }
+
+        .car-model {
+            font-size: 18px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .car-brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2b3990;
+            margin-bottom: 20px;
+        }
+
+        .car-specs {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 0;
+            margin-top: auto;
+            /* Pushes everything above it up and footer down */
+            margin-bottom: 5px;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .spec-item svg {
+            color: #94a3b8;
+        }
+
+        .car-visual {
+            flex: 1.8;
+            /* Increased horizontal space for the car */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 160px;
+            /* Increased height for larger visual impact */
+        }
+
+        .car-visual img {
+            max-width: 110%;
+            /* Allow slight overflow into gaps for bigger feel */
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.12));
+            transition: transform 0.4s ease;
+        }
+
+        .car-card:hover .car-visual img {
+            transform: scale(1.1);
+            /* Subtle zoom on card hover */
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .price-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .from-text {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 2px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: 800;
+            color: #2b3990;
+        }
+
+        .per-unit {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .book-now-btn {
+            background: #2b3990;
+            color: #ffffff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .book-now-btn:hover {
+            background: #1e2866;
+            transform: scale(1.05);
+        }
+
+        /* Responsive for Featured Cars */
+        @media (max-width: 1024px) {
+            .car-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .featured-cars {
+                padding: 60px 20px;
+            }
+
+            .car-cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .car-card {
+                min-height: auto;
+            }
+        }
+
+        /* Offers Section */
+        .offers-section {
+            background: linear-gradient(135deg, #ff6b35 0%, #3b82f6 100%);
+            padding: 80px 50px;
+            color: #ffffff;
+        }
+
+        .offers-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .offers-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .offer-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            color: #1a202c;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b35 0%, #3b82f6 100%);
+        }
+
+        .offer-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .offer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .offer-code {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6b35;
+            letter-spacing: 2px;
+        }
+
+        .offer-discount {
+            background: linear-gradient(135deg, #ff6b35 0%, #3b82f6 100%);
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .offer-description {
+            font-size: 16px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .offer-conditions {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .offer-condition-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .offer-condition-icon {
+            width: 16px;
+            height: 16px;
+            color: #64748b;
+        }
+
+        .copy-code-btn {
+            width: 100%;
+            background: #3b82f6;
+            color: #ffffff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .copy-code-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .copy-code-btn.copied {
+            background: #16a34a;
+        }
+
+        /* Responsive for Offers */
+        @media (max-width: 1024px) {
+            .offers-title {
+                font-size: 40px;
+            }
+
+            .offers-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .offers-section {
+                padding: 60px 30px;
+            }
+
+            .offers-title {
+                font-size: 36px;
+                margin-bottom: 40px;
+            }
+
+            .offers-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .offers-section {
+                padding: 40px 20px;
+            }
+
+            .offers-title {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+
+            .offer-card {
+                padding: 20px;
+            }
+
+            .offer-code {
+                font-size: 20px;
+            }
+
+            .offer-discount {
+                font-size: 16px;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Customer Reviews Section */
+        .customer-reviews {
+            background: #ffffff;
+            padding: 80px 50px;
+            color: #1a202c;
+        }
+
+        .customer-reviews-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .customer-reviews-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 60px;
+            text-align: left;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        /* Horizontal Scrolling Reviews */
+        .reviews-scroll-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            padding: 20px 0;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .reviews-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .reviews-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .reviews-scroll-container::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+
+        .reviews-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
+        .reviews-horizontal {
+            display: inline-flex;
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .review-card-horizontal {
+            min-width: 400px;
+            max-width: 400px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            display: inline-flex;
+            gap: 20px;
+            align-items: flex-start;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            white-space: normal;
+        }
+
+        .review-card-horizontal:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .review-card-horizontal {
+                min-width: 300px;
+                max-width: 300px;
+            }
+        }
+
+        .review-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .review-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .review-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4a5568;
+            margin: 0;
+        }
+
+        .reviewer-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a202c;
+            margin: 0;
+        }
+
+        /* Call to Action Footer */
+        .cta-footer {
+            background: linear-gradient(135deg, #ff6b35 0%, #3b82f6 100%);
+            padding: 60px 50px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .cta-footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cta-text {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .cta-phone {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            transition: opacity 0.3s ease;
+        }
+
+        .cta-phone:hover {
+            opacity: 0.9;
+            text-decoration: underline;
+        }
+
+        .cta-link {
+            color: #ffffff;
+            text-decoration: underline;
+            font-weight: 700;
+            transition: opacity 0.3s ease;
+        }
+
+        .cta-link:hover {
+            opacity: 0.9;
+        }
+
+        /* Responsive for Customer Reviews */
+        @media (max-width: 1024px) {
+            .customer-reviews-title {
+                font-size: 40px;
+            }
+
+            .reviews-grid {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .customer-reviews {
+                padding: 60px 30px;
+            }
+
+            .customer-reviews-title {
+                font-size: 36px;
+                margin-bottom: 40px;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .review-card {
+                padding: 20px;
+            }
+
+            .review-avatar {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+
+            .review-text {
+                font-size: 15px;
+            }
+
+            .reviewer-name {
+                font-size: 16px;
+            }
+
+            .cta-footer {
+                padding: 40px 30px;
+            }
+
+            .cta-text {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .customer-reviews {
+                padding: 40px 20px;
+            }
+
+            .customer-reviews-title {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+
+            .review-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .review-avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
+            }
+
+            .cta-footer {
+                padding: 30px 20px;
+            }
+
+            .cta-text {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-img">
+                <img src="/static/img/logo.png" alt="GOGO CARS">
+            </div>
+            <div class="logo">
+                <div class="logo-main">GOGO CARS</div>
+                <div class="logo-sub">RENT A BUDGET CARS</div>
+            </div>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav id="mainNav">
+            <a href="/">Car Rentals <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg></a>
+            <a href="#why-choose-us">About Us</a>
+            <a href="#footer">Contact Us</a>
+        </nav>
+
+        <div class="auth-buttons">
+            <a href="/host" class="host-btn">Become a HOST</a>
+            {% if is_authenticated %}
+            <a href="/auth/logout" class="login-btn-new">Logout</a>
+            {% else %}
+            <a href="{{ login_url }}" class="login-btn-new" onclick="setAuthAction('login', event)">
+                Login or Signup
+            </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="wavy-pattern"></div>
+        <div class="hero-container">
+            <!-- Promo Section (Left Side) -->
+            <div class="hero-promo" id="heroPromoContent">
+                <h1 class="promo-headline">Rent a car@ <br>
+                    <span class="promo-price-highlight">Rs.1399/12hrs</span>
+                </h1>
+                <p class="promo-subtext">Wide range of Hatchbacks, Sedans and SUV's with multiple fuel and transmission
+                    options</p>
+                <img src="/static/img/car-suv.png" alt="Car" class="hero-promo-car" id="heroCarImage">
+            </div>
+
+            <!-- Hero Card (Right Side) -->
+            <div class="hero-card">
+                <div class="hero-card-inner">
+                    <div class="toggle-container">
+                        <button class="toggle-btn active" id="rentalTab" onclick="toggleHeroMode('rental')">
+                            <span class="toggle-title">Daily Drives</span>
+                            <span class="toggle-subtitle">Upto 7 Days</span>
+                        </button>
+                        <button class="toggle-btn" id="subscriptionTab" onclick="toggleHeroMode('subscription')">
+                            <span class="toggle-title">Subscription</span>
+                            <span class="toggle-subtitle">7 Days+ Ride</span>
+                        </button>
+                    </div>
+
+                    <div class="search-card-body">
+                        <h2>Looking for Best Car Rentals?</h2>
+
+                        <div class="input-group" id="selectLocationBtn" style="cursor: pointer;">
+                            <span class="input-label">Location</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="input-value" id="selectedLocationDisplay">Hyderabad</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b3990"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="date-grid">
+                            <div class="input-group">
+                                <label class="input-label" for="pickupDate">Pick-Up Date</label>
+                                <input type="datetime-local" class="input-value" id="pickupDate"
+                                    value="2026-01-14T10:00">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="returnDate">Return Date</label>
+                                <input type="datetime-local" class="input-value" id="returnDate"
+                                    value="2026-01-16T22:00">
+                            </div>
+                        </div>
+
+                        <div class="duration-text">Duration 2 Days and 12 Hours</div>
+
+                        <button class="search-btn">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location Selection Modal (Preserved functionality) -->
+            <div id="locationModal" class="location-modal">
+                <div class="location-modal-content">
+                    <div class="location-modal-header">
+                        <h2 class="location-modal-title">Select Your Location</h2>
+                        <button class="location-modal-close" id="closeLocationModal">&times;</button>
+                    </div>
+
+                    <div class="location-search">
+                        <input type="text" id="locationSearchInput" class="location-search-input"
+                            placeholder="Search locations...">
+                    </div>
+
+                    <div class="location-list" id="locationList">
+                        {% for location in locations %}
+                        <div class="location-item" data-location="{{ location.location }}">
+                            <div class="location-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                            </div>
+                            <span class="location-name">{{ location.location }}</span>
+                            <div class="location-check"></div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if not locations %}
+                    <div class="location-empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <p>No locations available</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="location-modal-footer">
+                        <button class="btn-modal-secondary" id="cancelLocationBtn">Cancel</button>
+                        <button class="btn-modal-primary" id="confirmLocationBtn" disabled>Go to Cars</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section Redesign -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="moments-label">
+            We are Actually <br>
+            Delivering Memorable <br>
+            Moments
+        </div>
+        <div class="how-it-works-container">
+            <h2 class="how-it-works-title">How to book a car on GOGOCARS</h2>
+            <p class="how-it-works-subtitle">Book a car online in 4 Simple steps.</p>
+
+            <div class="steps-card">
+                <div class="white-steps-bar">
+                    <div class="step-item">
+                        <div class="step-number">01</div>
+                        <div class="step-label">Select Location & Date</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">02</div>
+                        <div class="step-label">Choose Your Car</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">03</div>
+                        <div class="step-label">Verify & Payment</div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Active/Highlight -->
+                <div class="step-item step-item-active">
+                    <div class="step-number">04</div>
+                    <div class="step-label">Enjoy Your Trip</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Cars Sections -->
+    <section class="featured-cars">
+        <div class="featured-cars-container">
+
+            <!-- Category 1: Top Selling -->
+            <div class="featured-category">
+                <div class="category-header">
+                    <h2 class="category-title">Top Selling Cars in Hyderabad</h2>
+                    <div class="category-nav">
+                        <button class="nav-arrow prev" aria-label="Previous">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <button class="nav-arrow next" aria-label="Next">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="car-cards-grid">
+                    <!-- Baleno -->
+                    <div class="car-card">
+                        <div class="card-content">
+                            <div class="car-info">
+                                <div class="car-model">Baleno</div>
+                                <div class="car-brand">Maruti</div>
+                            </div>
+                            <div class="car-visual">
+                                <img src="/static/img/car-suv.png" alt="Baleno">
+                            </div>
+                        </div>
+                        <div class="car-specs">
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v4c0 .6.4 1 1 1h2">
+                                    </path>
+                                    <circle cx="7" cy="17" r="2"></circle>
+                                    <path d="M9 17h6"></path>
+                                    <circle cx="17" cy="17" r="2"></circle>
+                                </svg>
+                                Hatchback
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 8v8"></path>
+                                    <path d="M8 12h8"></path>
+                                </svg>
+                                Manual
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                5 Seats
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="price-info">
+                                <div class="from-text">From</div>
+                                <div class="price">₹ 91 <span class="per-unit">per hour</span></div>
+                            </div>
+                            <button class="book-now-btn">BOOK NOW</button>
+                        </div>
+                    </div>
+
+                    <!-- Ertiga AT -->
+                    <div class="car-card">
+                        <div class="card-content">
+                            <div class="car-info">
+                                <div class="car-model">Ertiga AT</div>
+                                <div class="car-brand">Maruti</div>
+                            </div>
+                            <div class="car-visual">
+                                <img src="/static/img/toggle-car.png" alt="Ertiga">
+                            </div>
+                        </div>
+                        <div class="car-specs">
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v4c0 .6.4 1 1 1h2">
+                                    </path>
+                                    <circle cx="7" cy="17" r="2"></circle>
+                                    <path d="M9 17h6"></path>
+                                    <circle cx="17" cy="17" r="2"></circle>
+                                </svg>
+                                MPV
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 8v8"></path>
+                                    <path d="M8 12h8"></path>
+                                </svg>
+                                Automatic
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                7 Seats
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="price-info">
+                                <div class="from-text">From</div>
+                                <div class="price">₹ 116 <span class="per-unit">per hour</span></div>
+                            </div>
+                            <button class="book-now-btn">BOOK NOW</button>
+                        </div>
+                    </div>
+
+                    <!-- Fronx AT -->
+                    <div class="car-card">
+                        <div class="card-content">
+                            <div class="car-info">
+                                <div class="car-model">Fronx AT</div>
+                                <div class="car-brand">Maruti</div>
+                            </div>
+                            <div class="car-visual">
+                                <img src="/static/img/car-suv.png" alt="Fronx">
+                            </div>
+                        </div>
+                        <div class="car-specs">
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v4c0 .6.4 1 1 1h2">
+                                    </path>
+                                    <circle cx="7" cy="17" r="2"></circle>
+                                    <path d="M9 17h6"></path>
+                                    <circle cx="17" cy="17" r="2"></circle>
+                                </svg>
+                                Compact SUV
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 8v8"></path>
+                                    <path d="M8 12h8"></path>
+                                </svg>
+                                Automatic
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                5 Seats
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="price-info">
+                                <div class="from-text">From</div>
+                                <div class="price">₹ 108 <span class="per-unit">per hour</span></div>
+                            </div>
+                            <button class="book-now-btn">BOOK NOW</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 2: Premium Cars -->
+            <div class="featured-category" style="margin-top: 80px;">
+                <div class="category-header">
+                    <h2 class="category-title">Premium Cars</h2>
+                    <div class="category-nav">
+                        <button class="nav-arrow prev" aria-label="Previous">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <button class="nav-arrow next" aria-label="Next">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="car-cards-grid">
+                    <!-- Innova Crysta -->
+                    <div class="car-card">
+                        <div class="card-content">
+                            <div class="car-info">
+                                <div class="car-model">Innova Crysta</div>
+                                <div class="car-brand">Toyota</div>
+                            </div>
+                            <div class="car-visual">
+                                <img src="/static/img/toggle-car.png" alt="Innova">
+                            </div>
+                        </div>
+                        <div class="car-specs">
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v4c0 .6.4 1 1 1h2">
+                                    </path>
+                                    <circle cx="7" cy="17" r="2"></circle>
+                                    <path d="M9 17h6"></path>
+                                    <circle cx="17" cy="17" r="2"></circle>
+                                </svg>
+                                MPV
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 8v8"></path>
+                                    <path d="M8 12h8"></path>
+                                </svg>
+                                Manual
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                7 Seats
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="price-info">
+                                <div class="from-text">From</div>
+                                <div class="price">₹ 191 <span class="per-unit">per hour</span></div>
+                            </div>
+                            <button class="book-now-btn">BOOK NOW</button>
+                        </div>
+                    </div>
+
+                    <!-- Alcazar -->
+                    <div class="car-card">
+                        <div class="card-content">
+                            <div class="car-info">
+                                <div class="car-model">Alcazar</div>
+                                <div class="car-brand">Hyundai</div>
+                            </div>
+                            <div class="car-visual">
+                                <img src="/static/img/car-suv.png" alt="Alcazar">
+                            </div>
+                        </div>
+                        <div class="car-specs">
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v4c0 .6.4 1 1 1h2">
+                                    </path>
+                                    <circle cx="7" cy="17" r="2"></circle>
+                                    <path d="M9 17h6"></path>
+                                    <circle cx="17" cy="17" r="2"></circle>
+                                </svg>
+                                SUV
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 8v8"></path>
+                                    <path d="M8 12h8"></path>
+                                </svg>
+                                Automatic
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                7 Seats
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="price-info">
+                                <div class="from-text">From</div>
+                                <div class="price">₹ 170 <span class="per-unit">per hour</span></div>
+                            </div>
+                            <button class="book-now-btn">BOOK NOW</button>
+                        </div>
+                    </div>
+
+                    <!-- Seltos -->
+                    <div class="car-card">
+                        <div class="card-content">
+                            <div class="car-info">
+                                <div class="car-model">Seltos</div>
+                                <div class="car-brand">Kia</div>
+                            </div>
+                            <div class="car-visual">
+                                <img src="/static/img/toggle-car.png" alt="Seltos">
+                            </div>
+                        </div>
+                        <div class="car-specs">
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v4c0 .6.4 1 1 1h2">
+                                    </path>
+                                    <circle cx="7" cy="17" r="2"></circle>
+                                    <path d="M9 17h6"></path>
+                                    <circle cx="17" cy="17" r="2"></circle>
+                                </svg>
+                                Compact SUV
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 8v8"></path>
+                                    <path d="M8 12h8"></path>
+                                </svg>
+                                Manual
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                5 Seats
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="price-info">
+                                <div class="from-text">From</div>
+                                <div class="price">&#8377; 108 <span class="per-unit">per hour</span></div>
+                            </div>
+                            <button class="book-now-btn">BOOK NOW</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-us" id="why-choose-us">
+        <div class="why-choose-us-container">
+            <h2 class="why-choose-us-title">Why GOGOCARS?</h2>
+            <div class="why-choose-us-cards">
+                <!-- Card 1: Home Delivery -->
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            <path d="M10 18h4"></path>
+                        </svg>
+                    </div>
+                    <div class="benefit-content">
+                        <h3 class="benefit-heading">Home Delivery & Return</h3>
+                        <p class="benefit-text">On-time doorstep service, at your preffered location and time</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Best Price -->
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                        </svg>
+                    </div>
+                    <div class="benefit-content">
+                        <h3 class="benefit-heading">Best Price</h3>
+                        <p class="benefit-text">Flexible pricing plans with unlimited Kms or with Kms plans</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Well Maintenance -->
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v4c0 .6.4 1 1 1h2">
+                            </path>
+                            <circle cx="7" cy="17" r="2"></circle>
+                            <path d="M9 17h6"></path>
+                            <circle cx="17" cy="17" r="2"></circle>
+                            <path d="M12 2v2"></path>
+                            <path d="M12 6v1"></path>
+                        </svg>
+                    </div>
+                    <div class="benefit-content">
+                        <h3 class="benefit-heading">Well Maintenance</h3>
+                        <p class="benefit-text">Regular service & maintenance Inspected before each trip</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Offers Section -->
+    {% if offers and offers|length > 0 %}
+    <section class="offers-section" id="offers">
+        <div class="offers-container">
+            <h2 class="offers-title">Special Offers & Discounts</h2>
+            <div class="offers-grid">
+                {% for offer in offers %}
+                <div class="offer-card">
+                    <div class="offer-header">
+                        <div class="offer-code">{{ offer.coupon_code }}</div>
+                        <div class="offer-discount">{{ offer.discount_display }}</div>
+                    </div>
+                    {% if offer.description %}
+                    <div class="offer-description">{{ offer.description }}</div>
+                    {% endif %}
+                    <div class="offer-conditions">
+                        {% if offer.min_amount %}
+                        <div class="offer-condition-item">
+                            <span>Min. order: &#8377;{{ offer.min_amount }}</span>
+                        </div>
+                        {% endif %}
+                        {% if offer.max_discount %}
+                        <div class="offer-condition-item">
+                            <svg class="offer-condition-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                            </svg>
+                            <span>Max. discount: &#8377;{{ offer.max_discount }}</span>
+                        </div>
+                        {% endif %}
+                        {% if offer.expiration_time %}
+                        <div class="offer-condition-item">
+                            <svg class="offer-condition-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            <span>Valid until: {{ offer.expiration_time[:10] }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <button class="copy-code-btn" onclick="copyCouponCode('{{ offer.coupon_code }}', this)">
+                        Copy Code
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Customer Reviews Section -->
+    <section class="customer-reviews" id="customerReviewsSection" style="display: none;">
+        <div class="customer-reviews-container">
+            <h2 class="customer-reviews-title">Customer Reviews</h2>
+            <div class="reviews-scroll-container" id="reviewsScrollContainer">
+                <div class="reviews-horizontal" id="reviewsHorizontal">
+                    <!-- Reviews will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Footer -->
+    <footer class="cta-footer">
+        <div class="cta-footer-container">
+            <p class="cta-text">
+                Ready to Drive? Call <a href="tel:9052775477" class="cta-phone">9052775477</a> or <a href="/cars"
+                    class="cta-link">Book Online Now!</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Location Modal functionality
+        const selectLocationBtn = document.getElementById('selectLocationBtn');
+        const locationModal = document.getElementById('locationModal');
+        const closeLocationModal = document.getElementById('closeLocationModal');
+        const cancelLocationBtn = document.getElementById('cancelLocationBtn');
+        const confirmLocationBtn = document.getElementById('confirmLocationBtn');
+        const locationSearchInput = document.getElementById('locationSearchInput');
+        const locationList = document.getElementById('locationList');
+
+        let selectedLocation = null;
+
+        // Open modal
+        if (selectLocationBtn && locationModal) {
+            selectLocationBtn.addEventListener('click', function () {
+                locationModal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            });
+        }
+
+        // Close modal
+        function closeModal() {
+            if (locationModal) {
+                locationModal.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+                // Reset selection
+                selectedLocation = null;
+                if (locationList) {
+                    locationList.querySelectorAll('.location-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                }
+                if (confirmLocationBtn) {
+                    confirmLocationBtn.disabled = true;
+                }
+                if (locationSearchInput) {
+                    locationSearchInput.value = '';
+                }
+            }
+        }
+
+        if (closeLocationModal) {
+            closeLocationModal.addEventListener('click', closeModal);
+        }
+
+        if (cancelLocationBtn) {
+            cancelLocationBtn.addEventListener('click', closeModal);
+        }
+
+        // Close modal when clicking outside
+        if (locationModal) {
+            locationModal.addEventListener('click', function (e) {
+                if (e.target === locationModal) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && locationModal && locationModal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Hero Section Toggle Logic
+        function toggleHeroMode(mode) {
+            const rentalTab = document.getElementById('rentalTab');
+            const subscriptionTab = document.getElementById('subscriptionTab');
+            const heroCardTitle = document.getElementById('heroCardTitle');
+            const heroPromoContent = document.getElementById('heroPromoContent');
+            const heroCarImage = document.getElementById('heroCarImage');
+            const toggleCar = document.getElementById('toggleCarIndicator');
+
+            // Trigger Content Animation
+            heroPromoContent.classList.remove('fade-slide-up');
+            if (heroCarImage) heroCarImage.classList.remove('fade-slide-up');
+
+            // Trigger reflow to restart animation
+            void heroPromoContent.offsetWidth;
+
+            heroPromoContent.classList.add('fade-slide-up');
+            if (heroCarImage) heroCarImage.classList.add('fade-slide-up');
+
+            if (mode === 'rental') {
+                // Update Tabs
+                rentalTab.classList.add('active');
+                rentalTab.classList.add('active-tab-anim');
+                setTimeout(() => rentalTab.classList.remove('active-tab-anim'), 400);
+
+                subscriptionTab.classList.remove('active');
+
+                // Update Toggle Car Position
+                if (toggleCar) toggleCar.classList.remove('move-right');
+
+                // Update Card Title
+                heroCardTitle.textContent = 'Rentals';
+
+                // Update Promo Content
+                heroPromoContent.querySelector('.promo-headline').innerHTML = `
+                    Subscribe a car @ <br>
+                    <span class="promo-price">₹570</span><span class="promo-price-suffix">/day</span>
+                `;
+
+                // Update Benefits
+                const benefitsList = heroPromoContent.querySelector('.benefits-list');
+                benefitsList.innerHTML = `
+                    <li><span class="check-circle"></span> Only ₹5,000 refundable deposit</li>
+                    <li><span class="check-circle"></span> No loan liability, Zero downpayment</li>
+                    <li><span class="check-circle"></span> Insurance & maintenance included</li>
+                `;
+
+                // Update Image - assuming car-suv.png is the red one
+                if (heroCarImage) heroCarImage.src = "/static/img/car-suv.png";
+
+            } else if (mode === 'subscription') {
+                // Update Tabs
+                subscriptionTab.classList.add('active');
+                subscriptionTab.classList.add('active-tab-anim');
+                setTimeout(() => subscriptionTab.classList.remove('active-tab-anim'), 400);
+
+                rentalTab.classList.remove('active');
+
+                // Update Toggle Car Position
+                if (toggleCar) toggleCar.classList.add('move-right');
+
+                // Update Card Title
+                heroCardTitle.textContent = 'Subscriptions';
+
+                // Update Promo Content
+                heroPromoContent.querySelector('.promo-headline').innerHTML = `
+                    Private car for <br> essential travels
+                `;
+
+                // Update Benefits (Text paragraph for subscription)
+                const benefitsList = heroPromoContent.querySelector('.benefits-list');
+                // Replace list with paragraph or different list items
+                benefitsList.innerHTML = `
+                    <div style="font-size: 18px; color: #334155; line-height: 1.6; max-width: 600px;">
+                        No long term commitment, Min 7 days.<br>
+                        Experience the comfort and safety of your own <br> car without the hassle of ownership.
+                    </div>
+                `;
+
+                // Update Image - using image.png for subscription
+                if (heroCarImage) heroCarImage.src = "/static/img/image.png";
+            }
+        }
+        // Location item selection
+        if (locationList) {
+            locationList.addEventListener('click', function (e) {
+                const locationItem = e.target.closest('.location-item');
+                if (locationItem) {
+                    // Remove previous selection
+                    locationList.querySelectorAll('.location-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+
+                    // Add selection to clicked item
+                    locationItem.classList.add('selected');
+                    selectedLocation = locationItem.getAttribute('data-location');
+
+                    // Enable confirm button
+                    if (confirmLocationBtn) {
+                        confirmLocationBtn.disabled = false;
+                    }
+                }
+            });
+        }
+
+        // Location search functionality
+        if (locationSearchInput && locationList) {
+            locationSearchInput.addEventListener('input', function () {
+                const searchTerm = this.value.toLowerCase().trim();
+                const locationItems = locationList.querySelectorAll('.location-item');
+
+                locationItems.forEach(item => {
+                    const locationName = item.getAttribute('data-location').toLowerCase();
+                    if (locationName.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Confirm location and redirect
+        if (confirmLocationBtn) {
+            confirmLocationBtn.addEventListener('click', function () {
+                if (selectedLocation) {
+                    window.location.href = `/cars?location=${encodeURIComponent(selectedLocation)}`;
+                }
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Featured Cars Data
+        const featuredCarsData = {{ featured_cars | tojson if featured_cars else '[]' }};
+
+        // Load Featured Cars
+        function loadFeaturedCars() {
+            const grid = document.getElementById('featuredCarsGrid');
+            if (!grid) return;
+
+            if (featuredCarsData && featuredCarsData.length > 0) {
+                grid.innerHTML = featuredCarsData.map((car, index) => {
+                    const carName = `${car.brand || ''} ${car.car_model || ''}`.trim();
+                    const carImage = car.images ? (car.images.split(',')[0] || '/static/img/landing.png') : '/static/img/landing.png';
+                    const price = car.base_price ? `₹ ${Math.round(car.base_price).toLocaleString('en-IN')}/day` : 'Price on request';
+
+                    return `
+                        <div class="car-card" onclick="window.location.href='/cars'">
+                            <div class="car-image-container">
+                                <img src="${carImage}" alt="${carName}" class="car-image" onerror="this.src='/static/img/landing.png'">
+                            </div>
+                            <div class="car-details">
+                                <h3 class="car-name">${carName}</h3>
+                                <p class="car-price">${price}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                grid.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #64748b; grid-column: 1 / -1;">
+                        <p>No cars available at the moment.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Reviews Data
+        const reviewsData = {{ reviews | tojson if reviews else '[]' }};
+
+        // Load Reviews with Auto-scroll
+        function loadReviews() {
+            const reviewsSection = document.getElementById('customerReviewsSection');
+            const reviewsContainer = document.getElementById('reviewsHorizontal');
+
+            if (!reviewsSection || !reviewsContainer) return;
+
+            if (reviewsData && reviewsData.length > 0) {
+                // Show the section
+                reviewsSection.style.display = 'block';
+
+                // Display reviews (5-10)
+                const reviewsToShow = reviewsData.slice(0, Math.min(10, reviewsData.length));
+
+                reviewsContainer.innerHTML = reviewsToShow.map(review => {
+                    const userName = `${review.user_firstname || ''} ${review.user_lastname || ''}`.trim() || 'Anonymous';
+                    const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'AN';
+                    const carName = `${review.car_brand || ''} ${review.car_model || ''}`.trim() || 'Car';
+                    const ratingStars = '⭐'.repeat(review.rating || 5);
+                    const reviewDate = review.created_at ? new Date(review.created_at).toLocaleDateString('en-IN', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    }) : '';
+
+                    return `
+                        <div class="review-card-horizontal">
+                            <div class="review-avatar">${initials}</div>
+                            <div class="review-content">
+                                <div style="margin-bottom: 8px; color: #fbbf24; font-size: 16px;">${ratingStars}</div>
+                                <p class="review-text">${review.comment || 'Great experience!'}</p>
+                                <p class="reviewer-name">${userName}</p>
+                                ${reviewDate ? `<p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">${reviewDate}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Auto-scroll functionality
+                startAutoScroll();
+            } else {
+                // Hide the section if no reviews
+                reviewsSection.style.display = 'none';
+            }
+        }
+
+        // Auto-scroll reviews horizontally
+        function startAutoScroll() {
+            const scrollContainer = document.getElementById('reviewsScrollContainer');
+            if (!scrollContainer) return;
+
+            let scrollPosition = 0;
+            const scrollSpeed = 1; // pixels per frame
+            const scrollDelay = 20; // milliseconds between frames
+
+            function scroll() {
+                scrollPosition += scrollSpeed;
+                const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+
+                if (scrollPosition >= maxScroll) {
+                    // Reset to start when reaching the end
+                    scrollPosition = 0;
+                    scrollContainer.scrollTo({ left: 0, behavior: 'auto' });
+                } else {
+                    scrollContainer.scrollTo({ left: scrollPosition, behavior: 'auto' });
+                }
+            }
+
+            // Start auto-scroll
+            const scrollInterval = setInterval(scroll, scrollDelay);
+
+            // Pause on hover
+            scrollContainer.addEventListener('mouseenter', () => {
+                clearInterval(scrollInterval);
+            });
+
+            scrollContainer.addEventListener('mouseleave', () => {
+                const newInterval = setInterval(scroll, scrollDelay);
+                // Store interval ID for cleanup if needed
+                scrollContainer.dataset.scrollInterval = newInterval;
+            });
+        }
+
+        // Copy coupon code function
+        function copyCouponCode(code, button) {
+            navigator.clipboard.writeText(code).then(function () {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+
+                setTimeout(function () {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function (err) {
+                console.error('Failed to copy code:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.classList.add('copied');
+                    setTimeout(function () {
+                        button.textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    alert('Failed to copy code. Please copy manually: ' + code);
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        // Hero Mode Toggling
+        function toggleHeroMode(mode) {
+            const rentalTab = document.getElementById('rentalTab');
+            const subscriptionTab = document.getElementById('subscriptionTab');
+            const heroPromoContent = document.getElementById('heroPromoContent');
+
+            if (mode === 'rental') {
+                rentalTab.classList.add('active');
+                subscriptionTab.classList.remove('active');
+                heroPromoContent.innerHTML = `
+                    <h1 class="promo-headline">Rent a car@ <br>
+                        <span class="promo-price-highlight">Rs.1399/12hrs</span>
+                    </h1>
+                    <p class="promo-subtext">Wide range of Hatchbacks, Sedans and SUV's with multiple fuel and transmission options</p>
+                    <img src="/static/img/car-suv.png" alt="Car" class="hero-promo-car" id="heroCarImage">
+                `;
+            } else {
+                rentalTab.classList.remove('active');
+                subscriptionTab.classList.add('active');
+                heroPromoContent.innerHTML = `
+                    <h1 class="promo-headline">Monthly <br>
+                        <span class="promo-price-highlight">Subscriptions</span>
+                    </h1>
+                    <p class="promo-subtext">Get a car for more than 7 days with zero downpayment and included maintenance.</p>
+                    <img src="/static/img/toggle-car.png" alt="Subscription Car" class="hero-promo-car" id="heroCarImage">
+                `;
+            }
+        }
+
+        // Location Modal Logic
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectLocationBtn = document.getElementById('selectLocationBtn');
+            const locationModal = document.getElementById('locationModal');
+            const closeLocationModal = document.getElementById('closeLocationModal');
+            const cancelLocationBtn = document.getElementById('cancelLocationBtn');
+            const confirmLocationBtn = document.getElementById('confirmLocationBtn');
+            const locationItems = document.querySelectorAll('.location-item');
+            const selectedLocationDisplay = document.getElementById('selectedLocationDisplay');
+            const locationSearchInput = document.getElementById('locationSearchInput');
+            const searchBtn = document.querySelector('.search-btn');
+
+            if (selectLocationBtn) {
+                selectLocationBtn.addEventListener('click', () => {
+                    locationModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            const closeModal = () => {
+                locationModal.classList.remove('active');
+                document.body.style.overflow = '';
+            };
+
+            if (closeLocationModal) closeLocationModal.addEventListener('click', closeModal);
+            if (cancelLocationBtn) cancelLocationBtn.addEventListener('click', closeModal);
+
+            locationItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    locationItems.forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+                    const loc = item.getAttribute('data-location');
+                    window.selectedLocation = loc;
+                    confirmLocationBtn.disabled = false;
+                });
+            });
+
+            if (confirmLocationBtn) {
+                confirmLocationBtn.addEventListener('click', () => {
+                    if (window.selectedLocation) {
+                        selectedLocationDisplay.textContent = window.selectedLocation;
+                        closeModal();
+                    }
+                });
+            }
+
+            if (searchBtn) {
+                searchBtn.addEventListener('click', () => {
+                    if (!window.selectedLocation && selectedLocationDisplay.textContent === 'Hyderabad') {
+                        window.selectedLocation = 'Hyderabad';
+                    }
+
+                    if (window.selectedLocation) {
+                        window.location.href = `/cars?location=${encodeURIComponent(window.selectedLocation)}`;
+                    } else {
+                        showNotification('Please select a location first', 'warning');
+                        locationModal.classList.add('active');
+                    }
+                });
+            }
+
+            if (locationSearchInput) {
+                locationSearchInput.addEventListener('input', (e) => {
+                    const search = e.target.value.toLowerCase();
+                    locationItems.forEach(item => {
+                        const name = item.querySelector('.location-name').textContent.toLowerCase();
+                        item.style.display = name.includes(search) ? 'flex' : 'none';
+                    });
+                });
+            }
+
+            // Date and Duration logic
+            const pickupInput = document.getElementById('pickupDate');
+            const returnInput = document.getElementById('returnDate');
+            const durationDisplay = document.querySelector('.duration-text');
+
+            function updateDuration() {
+                if (!pickupInput.value || !returnInput.value) return;
+
+                const start = new Date(pickupInput.value);
+                const end = new Date(returnInput.value);
+
+                if (end <= start) {
+                    durationDisplay.textContent = 'Return must be after pickup';
+                    durationDisplay.style.color = '#ef4444';
+                    return;
+                }
+
+                durationDisplay.style.color = '#2b3990';
+                const diffMs = end - start;
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+                let text = 'Duration ';
+                if (diffDays > 0) text += `${diffDays} Day${diffDays > 1 ? 's' : ''} `;
+                if (diffHours > 0) text += `${diffHours} Hour${diffHours > 1 ? 's' : ''}`;
+                if (diffDays === 0 && diffHours === 0) text = 'Duration less than 1 hour';
+
+                durationDisplay.textContent = text.trim();
+            }
+
+            if (pickupInput && returnInput) {
+                pickupInput.addEventListener('change', updateDuration);
+                returnInput.addEventListener('change', updateDuration);
+                updateDuration(); // Initial calculation
+            }
+
+            loadFeaturedCars();
+            loadReviews();
+        });
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', function () {
+                this.classList.toggle('active');
+                mainNav.classList.toggle('active');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!menuToggle.contains(e.target) && !mainNav.contains(e.target)) {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                }
+            });
+
+            // Close menu when clicking on a nav link
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function () {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                });
+            });
+        }
+
+        // Set auth action cookie before redirecting
+        function setAuthAction(action, event) {
+            if (action === 'signup') {
+                event.preventDefault();
+                // Show terms modal first
+                showTermsModal();
+                // Store the action for when terms are accepted
+                window.pendingAuthAction = action;
+            } else {
+                // For login, set cookie and allow default redirect
+                document.cookie = `auth_action=login; path=/; max-age=300`; // 5 minutes
+            }
+        }
+
+        // Terms and Conditions Modal
+        function showTermsModal(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            const modal = document.getElementById('termsModal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeTermsModal() {
+            const modal = document.getElementById('termsModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function acceptTermsAndSignup() {
+            const checkbox = document.getElementById('termsCheckbox');
+            if (!checkbox.checked) {
+                showNotification('Please accept the Terms and Conditions to continue', 'warning');
+                return;
+            }
+            // Set auth action cookie for signup
+            document.cookie = `auth_action=signup; path=/; max-age=300`; // 5 minutes
+            // Get the signup URL from the signup button
+            const signupBtn = document.querySelector('.signup-btn');
+            if (signupBtn) {
+                const signupUrl = signupBtn.getAttribute('href');
+                if (signupUrl) {
+                    closeTermsModal();
+                    window.location.href = signupUrl;
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function (e) {
+            const modal = document.getElementById('termsModal');
+            if (modal && e.target === modal) {
+                closeTermsModal();
+            }
+        });
+
+        // Notification System
+        function showNotification(message, type = 'error') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notif => notif.remove());
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+
+            let icon = '';
+            if (type === 'success') {
+                icon = '<svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+            } else if (type === 'warning') {
+                icon = '<svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+            } else if (type === 'info') {
+                icon = '<svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+            } else {
+                icon = '<svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+            }
+
+            notification.innerHTML = `
+                ${icon}
+                <div class="notification-message">${message}</div>
+                <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.classList.add('hiding');
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // Check for error messages in URL parameters
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            if (error === 'user_not_found') {
+                showNotification('User not found. Please sign up first.', 'error');
+                // Logout immediately
+                setTimeout(() => {
+                    window.location.href = '/auth/logout';
+                }, 2000);
+            } else if (error === 'auth_failed') {
+                showNotification('Authentication failed. Please try again.', 'error');
+            } else if (error === 'token_invalid') {
+                showNotification('Invalid authentication token. Please try again.', 'error');
+            } else if (error === 'server_error') {
+                showNotification('Server error occurred. Please try again later.', 'error');
+            }
+        });
+    </script>
+
+    <!-- Terms and Conditions Modal -->
+    <div id="termsModal" class="terms-modal">
+        <div class="terms-modal-content">
+            <div class="terms-modal-header">
+                <h2 class="terms-modal-title">GoGo Cars – Terms and Conditions & Risk Declaration</h2>
+                <button class="terms-modal-close" onclick="closeTermsModal()">&times;</button>
+            </div>
+            <div class="terms-modal-body">
+                <div
+                    style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #e2e8f0;">
+                    <h1 style="font-size: 28px; font-weight: 700; color: #1a202c; margin-bottom: 10px;">GoGo Cars –
+                        Terms and Conditions & Risk Declaration</h1>
+                    <p style="font-size: 16px; color: #64748b; margin: 5px 0;">(operated by GoGo enterprises)</p>
+                    <p style="font-size: 14px; color: #475569; margin: 5px 0;">Phone: 8121765714 | Email:
+                        gogocars5477@gmail.com | GSTIN: 36BTQPG9657M1ZO</p>
+                </div>
+
+                <h2>1. Eligibility & Documentation</h2>
+                <p>Minimum driver age is 21 years (25 years for premium vehicles). A valid Indian Driving Licence held
+                    for at least one year is mandatory. Original ID proof is required. Learner licences are not
+                    accepted. Aadhar or passport is mandatory for renting a car.</p>
+
+                <h2>2. Rental Period</h2>
+                <p>Rental starts at pickup time and ends at return time. Late returns may attract hourly or full-day
+                    charges. Extensions require prior approval.</p>
+                <h3>PENALTY FOR VEHICLE EXTENSION</h3>
+                <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <thead>
+                        <tr style="background: #f1f5f9;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">CAR TYPE</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">PRICE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0;">Hatchback</td>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0;">Rs.80/hour</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0;">Sedan & MUV</td>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0;">Rs.100/hour</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0;">SUV</td>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0;">Rs.160/hour</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>3. Authorized Use</h2>
+                <p>The rented vehicle shall be operated strictly and exclusively by the renter whose details are
+                    recorded in the agreement. No sharing, delegation, or substitution is permitted under any
+                    circumstances. The vehicle shall not be used for any illegal, immoral, or unlawful activity like:
+                </p>
+                <ul>
+                    <li>Racing, rallies, speed testing, or off-road driving</li>
+                    <li>Commercial use including taxi, delivery, or sub-rental</li>
+                    <li>Driving under influence of alcohol, drugs, or intoxicants</li>
+                </ul>
+                <p>Any violation or breach of this clause shall result in immediate termination of rental, forfeiture of
+                    all paid amounts and deposits, and full civil and criminal liability on the renter, without
+                    prejudice to the GoGo cars right to initiate legal proceedings.</p>
+
+                <h2>4. Vehicle Responsibility</h2>
+                <p>Vehicle must be returned in the same condition (normal wear excepted). Smoking or tobacco use inside
+                    the vehicle is prohibited.</p>
+                <p><strong>Clutch problems and clutch plates burn and car break down due to clutch plates need be taken
+                        care by the renter only.</strong> Before renting a car need to check car condition complete
+                    responsibility by renter only.</p>
+
+                <h2>5. Fuel & Mileage</h2>
+                <p>Fuel level must be returned as provided. Mileage limits and excess charges apply as per booking. No
+                    refund for extra fuel and no refund for fastag.</p>
+
+                <h2>6. Payments & Deposits</h2>
+                <p>All charges must be paid in advance. Security deposit refund will be processed within 7–10 working
+                    days post inspection. Bike + RC or laptop or cash (minimum 10000rs for small cars and it will change
+                    depends on the car model premium cars – 30000rs min).</p>
+                <p>In the event that the vehicle is damaged during the rental period, the cost of repairs shall be
+                    determined by GoGo Cars, and the security deposit shall be retained until all repairs have been
+                    fully completed.</p>
+
+                <h2>7. Insurance & Liability</h2>
+                <ul>
+                    <li>Vehicles are covered under basic motor insurance as per Indian law.</li>
+                    <li>The renter is fully responsible for:
+                        <ul>
+                            <li>Insurance excess/deductible</li>
+                            <li>Damage not covered by insurance</li>
+                            <li>Damage caused by negligence or rule violations</li>
+                        </ul>
+                    </li>
+                    <li>Insurance becomes void if:
+                        <ul>
+                            <li>Vehicle is driven by an unauthorized person</li>
+                            <li>Driving under influence</li>
+                            <li>Illegal or reckless use</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h2>8. Traffic Violations</h2>
+                <p>The renter shall be solely and absolutely responsible for all traffic violations, challans, tolls,
+                    parking charges, fines, penalties, and court summons, or statutory liabilities arising during the
+                    rental period irrespective of when such notices are received. The GoGo cars is authorized to recover
+                    such amounts from the security deposit or directly from the renter and impose administrative and
+                    processing charges and also share renter details with authorities without prior notice. In case of
+                    failure to settle such liabilities shall constitute material breach of this agreement and may result
+                    in legal recovery proceedings.</p>
+
+                <h2>9. Downtime / Loss of Use Charges</h2>
+                <p>If the vehicle is damaged, seized, or unavailable due to renter's fault, a minimum downtime charge of
+                    1,000 per day shall apply until the vehicle is roadworthy, in addition to repair and other costs.
+                    Premium cars 2000rs per day.</p>
+
+                <h2>10. Governing Law & Jurisdiction</h2>
+                <p>This agreement shall be governed by and construed exclusively in accordance with the laws of India.
+                    Subject to arbitration clause herein, all courts, tribunals, and authorities other than those
+                    situated within Andhra Pradesh are expressly excluded and exclusive jurisdiction shall vest only
+                    within the jurisdiction of the Courts which are situated in GoGo Cars. The renter irrevocably waives
+                    any objection to jurisdiction, forum non conveniens or territorial competence.</p>
+
+                <h2>11. Cancellation Policy</h2>
+                <ul>
+                    <li>Cancellation 48 hours before pickup: partial or full refund (as per booking policy).</li>
+                    <li>Late cancellations or no-shows may result in forfeiture of booking amount.</li>
+                    <li>If the id proofs submitted by the renter at the time of pick up is not satisfactory or if the
+                        renter forgets to bring the ids mentioned in the terms during pick up, the booking will be
+                        considered as last minute cancellation and no refund of the advance paid will be given.</li>
+                    <li>If the renter is found to be drunk or under any kind of intoxication at the time of pick up, the
+                        booking will automatically be cancelled and no refund will be provided.</li>
+                    <li>Any changes in the date of booking should be informed to us at least 48 hours before the trip
+                        timing otherwise a 20% charge would be applied for changing the booking.</li>
+                    <li>In case the renter needs to cancel the booking, the same has to be informed 48 hours before the
+                        time of pickup and the booking will be cancelled with a charge of 30%. In case of the
+                        cancellation being done within 48 hours prior to the time of pickup no refund will be given.
+                    </li>
+                    <li>If the renter needs to cancel or modify the booking within 24 hours from the time of pickup no
+                        changes can be done to the same and no refund will be processed.</li>
+                </ul>
+
+                <h2>12. Termination of Rental</h2>
+                <p>GoGo Cars reserves the right to terminate the rental without refund if:</p>
+                <ul>
+                    <li>Terms are violated</li>
+                    <li>False information is provided</li>
+                    <li>Vehicle is misused or abused</li>
+                </ul>
+
+                <h2>13. Personal Belongings</h2>
+                <p>GoGo Cars is not responsible for loss or damage to personal items left in the vehicle.</p>
+
+                <h2>14. Absolute Ownership & Prohibition of Illegal Mortgage</h2>
+                <p>The vehicle shall remain at all times the absolute, exclusive and undisputed property of GoGo Cars.
+                    The renter holds the vehicle purely in trust and custody without acquiring any right, title interest
+                    or claim of any nature. Any act or attempt of sale, pledge, mortgage, creation of third party rights
+                    shall constitute criminal breach of trust and cheating, punishable under Section 406 and 420 of IPC
+                    in addition to other applicable laws. GoGo Cars reserves the right to initiate immediate criminal
+                    prosecution and civil recovery proceedings.</p>
+
+                <h2>15. Zero Tolerance for Illegal Use</h2>
+                <p>Use of the vehicle for any illegal, immoral, or unlawful purpose including smuggling, transportation
+                    of contraband, criminal activities, or absconding shall result in immediate termination and legal
+                    action. All losses, penalties, and legal consequences shall be borne solely by the renter.</p>
+
+                <h2>16. Damage, Abuse & Negligence Policy</h2>
+                <p>The renter is fully responsible for all damages including mechanical, electrical, body, tyre, wheel,
+                    interior, and cosmetic damages irrespective of fault. Damage assessment by GoGo Cars shall be final
+                    and binding. Insurance does not cover damages caused due to rash driving, negligence, water logging,
+                    clutch abuse, or misuse.</p>
+
+                <h2>17. Cheque Bounce & Financial Recovery Clause</h2>
+                <p>In case any cheque issued by the renter towards rental charges, damages, downtime, or recovery costs
+                    is dishonoured, the renter shall be liable for prosecution under Section 138 of the Negotiable
+                    Instruments Act, 1881. All legal costs, interest, and recovery expenses shall be borne by the
+                    renter, without prejudice to GoGo Cars' right to recover dues by other legal means.</p>
+
+                <h2>18. Accident, Injury & Death – Complete Indemnity</h2>
+                <p>The renter acknowledges that the vehicle is operated entirely at the renters own risk. GoGo Cars, its
+                    proprietor, employees, agents or representatives shall bear no liability whatsoever for accidents,
+                    injury, disability, death or third party claims. The renter agrees to fully indemnify and hold
+                    harmless GoGo cars from all claims, compensation, damages, costs and legal proceedings whether
+                    civil, criminal or statutory including third party and governmental claims.</p>
+
+                <h2>19. Seizure, Police Case & Legal Costs</h2>
+                <p>If the vehicle is seized, impounded, detained or involved in any police, criminal, regulatory or
+                    court proceedings due to the renter acts or omissions, the renter shall be solely responsible for
+                    legal representation and advocate fees, Court costs, penalties, fines and settlements, loss of
+                    business, downtime and reputational damage. The renter shall reimburse GoGo cars on demand, and
+                    failure to do so shall entitle GoGo cars to initiate recovery and prosecution proceedings.</p>
+
+                <h2>20. Arbitration Clause (Fast Recovery)</h2>
+                <p>All disputes, claims, or differences arising out of or relating to this agreement shall be referred
+                    to sole arbitration under the Arbitration and Conciliation Act, 1996. The arbitrator shall be
+                    appointed exclusively by GoGo cars. The seat and Venue of arbitration shall be Mangalagiri or
+                    Guntur. The arbitral award shall be final, binding, enforceable, and non appealable except as
+                    permitted under law.</p>
+
+                <h2>21. Jurisdiction</h2>
+                <p>Subject to the arbitration clause, all legal proceedings shall lie exclusively within the
+                    jurisdiction of the Andhra Pradesh High Court, Amaravati only. The renter expressly waives any right
+                    to initiate proceedings in any other court or forum and agrees that such action shall be void and
+                    unenforceable.</p>
+                <p><strong>Or</strong></p>
+                <p>All legal proceedings shall lie exclusively within the jurisdiction of the corporate office location.
+                    The renter expressly waives any right to initiate proceedings in any other court or forum and agrees
+                    that such action shall be void and unenforceable.</p>
+
+                <div
+                    style="margin-top: 40px; padding: 25px; background: #fff5f2; border-left: 4px solid #ff6b35; border-radius: 8px;">
+                    <h2 style="color: #1a202c; margin-top: 0;">Risk & Liability Declaration</h2>
+                    <p>I, the undersigned renter, acknowledge that I am renting and operating the vehicle from GoGo Cars
+                        entirely at my own risk.</p>
+                    <p>I agree that in case of any accident, injury, disability, or death involving the rented vehicle,
+                        GoGo Cars, its owner, employees, or staff shall not be held responsible under any circumstances.
+                    </p>
+                    <p>I accept full civil, criminal, and legal liability for all consequences arising from use of the
+                        vehicle.</p>
+                    <p>I further agree to pay downtime / loss-of-use charges of minimum 1,000 per day if the vehicle
+                        becomes unusable due to accident, negligence, seizure, or misuse during my rental period.</p>
+                    <p>I confirm that I possess a valid driving licence, am medically fit to drive, and will comply with
+                        all traffic laws.</p>
+                    <p><strong>I have read and accepted this agreement voluntarily and without coercion.</strong></p>
+                </div>
+
+                <div
+                    style="margin-top: 40px; padding: 20px; background: #f7fafc; border-radius: 8px; font-size: 14px; color: #475569;">
+                    <h3 style="color: #1a202c; margin-top: 0;">Corporate Office Locations:</h3>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 15px;">
+                        <div>
+                            <p><strong>Parking - 1</strong></p>
+                            <p>Flot No -406, Block No-1<br>
+                                Srinivasam Apartments,<br>
+                                KLU Road, Kunchanapalli,<br>
+                                Tadepalli, Guntur, A. P -522501</p>
+                            <p>+91 8121765714</p>
+                        </div>
+                        <div>
+                            <p><strong>Parking - 2</strong></p>
+                            <p>Road No – 8, plot no 146,<br>
+                                Ayyappa Society, Madhapur,<br>
+                                Hyderabad, Telangana - 500081</p>
+                            <p>+91 9052775477</p>
+                        </div>
+                        <div>
+                            <p><strong>Corporate office</strong></p>
+                            <p>5 – 307/3, Opp Power sub station<br>
+                                Rtc, colony, Chilakaluripeta,<br>
+                                Guntur, Andrapradesh - 522616</p>
+                            <p>+91 9133135477</p>
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px; text-align: center;">
+                        <strong>GST – 36BTQPG9657M1ZO</strong><br>
+                        gogocars5477@gmail.com | +91 8121765714 | www.gogocar.in
+                    </p>
+                </div>
+            </div>
+            <div class="terms-modal-footer">
+                <div class="terms-checkbox-container">
+                    <input type="checkbox" id="termsCheckbox" class="terms-checkbox">
+                    <label for="termsCheckbox" class="terms-checkbox-label">I have read and agree to the Terms and
+                        Conditions</label>
+                </div>
+                <button class="btn-modal-secondary" onclick="closeTermsModal()">Cancel</button>
+                <button class="btn-modal-primary" onclick="acceptTermsAndSignup()">Accept & Continue</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

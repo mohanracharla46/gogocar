@@ -1,0 +1,185 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Support Tickets - Admin Panel{% endblock %}
+
+{% block page_title %}Support Tickets{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3><i class="fas fa-ticket-alt" style="color: var(--primary); margin-right: 10px;"></i>All Support Tickets</h3>
+    </div>
+    <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
+        <select id="filterStatus" class="form-control" style="max-width: 200px;">
+            <option value="">All Status</option>
+            <option value="OPEN">Open</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="RESOLVED">Resolved</option>
+            <option value="CLOSED">Closed</option>
+        </select>
+        <select id="filterPriority" class="form-control" style="max-width: 200px;">
+            <option value="">All Priorities</option>
+            <option value="LOW">Low</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">High</option>
+            <option value="URGENT">Urgent</option>
+        </select>
+        <button onclick="loadTickets()" class="btn btn-primary">
+            <i class="fas fa-filter"></i> Filter
+        </button>
+    </div>
+    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ticket #</th>
+                    <th>Subject</th>
+                    <th>User</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="ticketsTable">
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--gray);">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function waitForBaseScripts(callback, maxAttempts = 50) {
+        if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
+            callback();
+        } else if (maxAttempts > 0) {
+            setTimeout(() => waitForBaseScripts(callback, maxAttempts - 1), 100);
+        } else {
+            console.error('Base scripts failed to load');
+        }
+    }
+
+    let currentPage = 1;
+    const pageSize = 20;
+
+    async function loadTickets(resetPage = false) {
+        if (resetPage) {
+            currentPage = 1;
+        }
+
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const ticketsTable = document.getElementById('ticketsTable');
+        
+        loadingSpinner.style.display = 'block';
+        
+        try {
+            const statusFilter = document.getElementById('filterStatus').value;
+            const priorityFilter = document.getElementById('filterPriority').value;
+            
+            let url = `/tickets?page=${currentPage}&page_size=${pageSize}`;
+            if (statusFilter) {
+                url += `&status=${statusFilter}`;
+            }
+            if (priorityFilter) {
+                url += `&priority=${priorityFilter}`;
+            }
+            
+            const data = await apiCall(url);
+            
+            if (data.items && data.items.length > 0) {
+                ticketsTable.innerHTML = data.items.map(ticket => {
+                    // Handle status - it might be a string or an object with .value
+                    const statusValue = typeof ticket.status === 'string' ? ticket.status : (ticket.status?.value || ticket.status || 'UNKNOWN');
+                    const statusClass = `status-${statusValue.toLowerCase().replace('_', '-')}`;
+                    const priorityValue = ticket.priority || 'MEDIUM';
+                    const priorityClass = priorityValue.toLowerCase();
+                    
+                    let userName = `User #${ticket.user_id}`;
+                    if (ticket.user_firstname || ticket.user_lastname) {
+                        const firstname = ticket.user_firstname || '';
+                        const lastname = ticket.user_lastname || '';
+                        userName = `${firstname} ${lastname}`.trim() || userName;
+                    }
+                    
+                    return `
+                        <tr>
+                            <td>
+                                <a href="/admin/tickets/${ticket.id}" style="color: var(--primary); text-decoration: none; font-weight: 500;">
+                                    ${ticket.ticket_number}
+                                </a>
+                            </td>
+                            <td>${ticket.subject || 'N/A'}</td>
+                            <td>
+                                <a href="/admin/users/${ticket.user_id}" style="color: var(--primary); text-decoration: none; font-weight: 500;">
+                                    ${userName}
+                                </a>
+                            </td>
+                            <td><span class="badge ${statusClass}">${statusValue}</span></td>
+                            <td><span class="badge badge-${priorityClass}">${priorityValue}</span></td>
+                            <td>${ticket.created_at ? formatDate(ticket.created_at) : 'N/A'}</td>
+                            <td>
+                                <a href="/admin/tickets/${ticket.id}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                // Update pagination if needed
+                if (data.total_pages > 1) {
+                    // Add pagination controls if not present
+                    updatePagination(data);
+                }
+            } else {
+                ticketsTable.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--gray);">No tickets found</td></tr>';
+            }
+        } catch (error) {
+            console.error('Error loading tickets:', error);
+            const errorMessage = error.message || 'Unknown error occurred';
+            ticketsTable.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--danger); padding: 40px;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                        <p>Error loading tickets</p>
+                        <small>${errorMessage}</small>
+                        <br><br>
+                        <button onclick="loadTickets(false)" class="btn btn-outline" style="margin-top: 10px;">Retry</button>
+                    </td>
+                </tr>
+            `;
+        } finally {
+            loadingSpinner.style.display = 'none';
+        }
+    }
+
+    function updatePagination(data) {
+        // Simple pagination - can be enhanced later
+        const paginationHtml = `
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; align-items: center;">
+                ${data.has_prev ? `<button onclick="currentPage = ${data.page - 1}; loadTickets();" class="btn btn-outline">Previous</button>` : ''}
+                <span>Page ${data.page} of ${data.total_pages}</span>
+                ${data.has_next ? `<button onclick="currentPage = ${data.page + 1}; loadTickets();" class="btn btn-outline">Next</button>` : ''}
+            </div>
+        `;
+        // Append to card or replace existing pagination
+        const card = document.querySelector('.card');
+        const existingPagination = card.querySelector('.pagination');
+        if (existingPagination) {
+            existingPagination.outerHTML = paginationHtml;
+        } else {
+            card.insertAdjacentHTML('beforeend', paginationHtml);
+        }
+    }
+
+    waitForBaseScripts(() => {
+        loadTickets();
+    });
+</script>
+{% endblock %}
+

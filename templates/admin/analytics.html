@@ -1,0 +1,486 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Analytics & Reports - Admin Panel{% endblock %}
+
+{% block page_title %}Analytics & Reports{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-top: 25px;">
+    <div class="card-header">
+        <h3><i class="fas fa-chart-line" style="color: var(--primary); margin-right: 10px;"></i>Analytics Dashboard</h3>
+        <div style="display: flex; gap: 10px;">
+            <select id="periodSelect" class="form-control" style="max-width: 200px;">
+                <option value="7">Last 7 days</option>
+                <option value="30" selected>Last 30 days</option>
+                <option value="90">Last 90 days</option>
+                <option value="365">Last year</option>
+            </select>
+            <button onclick="loadAnalytics()" class="btn btn-primary">
+                <i class="fas fa-sync"></i> Refresh
+            </button>
+        </div>
+    </div>
+    <div id="analyticsContent">
+        <div style="text-align: center; padding: 40px; color: var(--gray);">
+            <i class="fas fa-chart-bar" style="font-size: 48px; margin-bottom: 20px; opacity: 0.3;"></i>
+            <p>Analytics data loading...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Container -->
+<div id="chartsContainer" style="display: none;">
+    <!-- Row 1: Bookings and Revenue Overview -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-calendar-check" style="color: var(--primary); margin-right: 10px;"></i>Bookings by Status</h3>
+            </div>
+            <div style="position: relative; height: 300px;">
+                <canvas id="bookingsStatusChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-rupee-sign" style="color: var(--success); margin-right: 10px;"></i>Revenue Breakdown</h3>
+            </div>
+            <div style="position: relative; height: 300px;">
+                <canvas id="revenueBreakdownChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: Time Series Charts -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-line" style="color: var(--info); margin-right: 10px;"></i>Bookings Over Time</h3>
+            </div>
+            <div style="position: relative; height: 300px;">
+                <canvas id="bookingsTimeChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-area" style="color: var(--warning); margin-right: 10px;"></i>Revenue Over Time</h3>
+            </div>
+            <div style="position: relative; height: 300px;">
+                <canvas id="revenueTimeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Performance Charts -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-trophy" style="color: var(--success); margin-right: 10px;"></i>Top Performing Cars</h3>
+            </div>
+            <div style="position: relative; height: 300px;">
+                <canvas id="topCarsChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-tags" style="color: var(--info); margin-right: 10px;"></i>Category Performance</h3>
+            </div>
+            <div style="position: relative; height: 300px;">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 4: User Growth -->
+    <div class="card" style="margin-top: 25px;">
+        <div class="card-header">
+            <h3><i class="fas fa-users" style="color: var(--primary); margin-right: 10px;"></i>User Growth</h3>
+        </div>
+        <div style="position: relative; height: 300px;">
+            <canvas id="userGrowthChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    let charts = {};
+    let currentPeriod = 30;
+
+    function waitForBaseScripts(maxAttempts = 50) {
+        return new Promise((resolve, reject) => {
+            function check() {
+                if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
+                    resolve();
+                } else if (maxAttempts > 0) {
+                    setTimeout(() => {
+                        maxAttempts--;
+                        check();
+                    }, 100);
+                } else {
+                    console.error('Base scripts failed to load');
+                    reject(new Error('Base scripts failed to load'));
+                }
+            }
+            check();
+        });
+    }
+
+    function destroyCharts() {
+        Object.values(charts).forEach(chart => {
+            if (chart) chart.destroy();
+        });
+        charts = {};
+    }
+
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+    }
+
+    function createBookingsStatusChart(data) {
+        const ctx = document.getElementById('bookingsStatusChart');
+        if (charts.bookingsStatus) charts.bookingsStatus.destroy();
+        
+        charts.bookingsStatus = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Approved', 'Booked', 'Ongoing', 'Completed', 'Cancelled'],
+                datasets: [{
+                    data: [
+                        data.bookings_summary.pending,
+                        data.bookings_summary.approved,
+                        data.bookings_summary.booked,
+                        data.bookings_summary.ongoing,
+                        data.bookings_summary.completed,
+                        data.bookings_summary.cancelled
+                    ],
+                    backgroundColor: [
+                        '#fbbf24', // yellow - pending
+                        '#3b82f6', // blue - approved
+                        '#10b981', // green - booked
+                        '#8b5cf6', // purple - ongoing
+                        '#059669', // dark green - completed
+                        '#ef4444'  // red - cancelled
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return `${context.label}: ${context.parsed} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function createRevenueBreakdownChart(data) {
+        const ctx = document.getElementById('revenueBreakdownChart');
+        if (charts.revenueBreakdown) charts.revenueBreakdown.destroy();
+        
+        const revenue = data.revenue_summary;
+        charts.revenueBreakdown = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Advance Collected', 'Balance Pending', 'Deposits Held', 'Refunds Processed'],
+                datasets: [{
+                    data: [
+                        revenue.advance_collected,
+                        revenue.balance_pending,
+                        revenue.deposits_held,
+                        revenue.refunds_processed
+                    ],
+                    backgroundColor: [
+                        '#10b981', // green
+                        '#f59e0b', // amber
+                        '#3b82f6', // blue
+                        '#ef4444'  // red
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ₹${parseFloat(context.parsed).toLocaleString('en-IN')}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function createBookingsTimeChart(data) {
+        const ctx = document.getElementById('bookingsTimeChart');
+        if (charts.bookingsTime) charts.bookingsTime.destroy();
+        
+        const timeseries = data.booking_timeseries || {};
+        const dates = Object.keys(timeseries).sort();
+        const values = dates.map(date => timeseries[date] || 0);
+        
+        charts.bookingsTime = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates.map(formatDate),
+                datasets: [{
+                    label: 'Bookings',
+                    data: values,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function createRevenueTimeChart(data) {
+        const ctx = document.getElementById('revenueTimeChart');
+        if (charts.revenueTime) charts.revenueTime.destroy();
+        
+        const timeseries = data.revenue_timeseries || {};
+        const dates = Object.keys(timeseries).sort();
+        const values = dates.map(date => timeseries[date] || 0);
+        
+        charts.revenueTime = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates.map(formatDate),
+                datasets: [{
+                    label: 'Revenue (₹)',
+                    data: values,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₹' + parseFloat(value).toLocaleString('en-IN');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function createTopCarsChart(data) {
+        const ctx = document.getElementById('topCarsChart');
+        if (charts.topCars) charts.topCars.destroy();
+        
+        const cars = data.top_performing_cars || [];
+        charts.topCars = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: cars.map(car => car.car_name),
+                datasets: [{
+                    label: 'Bookings',
+                    data: cars.map(car => car.total_bookings),
+                    backgroundColor: '#3b82f6',
+                    borderColor: '#2563eb',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function createCategoryChart(data) {
+        const ctx = document.getElementById('categoryChart');
+        if (charts.category) charts.category.destroy();
+        
+        const categories = data.category_performance || {};
+        const labels = Object.keys(categories);
+        const bookings = labels.map(cat => categories[cat].bookings || 0);
+        
+        charts.category = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Bookings',
+                    data: bookings,
+                    backgroundColor: '#10b981',
+                    borderColor: '#059669',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function createUserGrowthChart(data) {
+        const ctx = document.getElementById('userGrowthChart');
+        if (charts.userGrowth) charts.userGrowth.destroy();
+        
+        const growth = data.user_growth || {};
+        const dates = Object.keys(growth).sort();
+        const values = dates.map(date => growth[date] || 0);
+        
+        charts.userGrowth = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates.map(formatDate),
+                datasets: [{
+                    label: 'New Users',
+                    data: values,
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    async function loadAnalytics() {
+        try {
+            currentPeriod = parseInt(document.getElementById('periodSelect').value) || 30;
+            const stats = await apiCall(`/dashboard/stats?days=${currentPeriod}`);
+            
+            // Hide loading, show charts
+            document.getElementById('analyticsContent').style.display = 'none';
+            document.getElementById('chartsContainer').style.display = 'block';
+            
+            // Destroy existing charts
+            destroyCharts();
+            
+            // Create all charts
+            createBookingsStatusChart(stats);
+            createRevenueBreakdownChart(stats);
+            createBookingsTimeChart(stats);
+            createRevenueTimeChart(stats);
+            createTopCarsChart(stats);
+            createCategoryChart(stats);
+            createUserGrowthChart(stats);
+            
+        } catch (error) {
+            console.error('Error loading analytics:', error);
+            document.getElementById('analyticsContent').innerHTML = `
+                <div style="text-align: center; padding: 40px; color: var(--danger);">
+                    <i class="fas fa-exclamation-circle" style="font-size: 48px; margin-bottom: 20px;"></i>
+                    <p>Error loading analytics data</p>
+                </div>
+            `;
+            document.getElementById('analyticsContent').style.display = 'block';
+            document.getElementById('chartsContainer').style.display = 'none';
+            showAlert('Error loading analytics: ' + error.message, 'danger');
+        }
+    }
+
+    // Wait for base scripts to load before initializing
+    waitForBaseScripts().then(() => {
+        loadAnalytics();
+    });
+</script>
+{% endblock %}

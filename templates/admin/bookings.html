@@ -1,0 +1,265 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Bookings Management - Admin Panel{% endblock %}
+
+{% block page_title %}Bookings Management{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3><i class="fas fa-calendar-check" style="color: var(--primary); margin-right: 10px;"></i>All Bookings</h3>
+    </div>
+    <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+        <select id="filterStatus" class="form-control" style="max-width: 200px;">
+            <option value="">All Status</option>
+            <option value="PENDING">Pending</option>
+            <option value="APPROVED">Approved</option>
+            <option value="ONGOING">Ongoing</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="CANCELLED">Cancelled</option>
+        </select>
+        <input type="number" id="filterUserId" class="form-control" placeholder="User ID" style="max-width: 150px;">
+        <input type="number" id="filterCarId" class="form-control" placeholder="Car ID" style="max-width: 150px;">
+        <button onclick="loadBookings()" class="btn btn-primary">
+            <i class="fas fa-filter"></i> Filter
+        </button>
+        <button onclick="resetFilters()" class="btn btn-outline">
+            <i class="fas fa-redo"></i> Reset
+        </button>
+    </div>
+    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Car</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="bookingsTable">
+                <tr>
+                    <td colspan="8" style="text-align: center; color: var(--gray);">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination" id="pagination"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentPage = 1;
+    const pageSize = 20;
+
+    async function loadBookings() {
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const bookingsTable = document.getElementById('bookingsTable');
+        
+        loadingSpinner.style.display = 'block';
+        bookingsTable.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading...</td></tr>';
+
+        try {
+            const statusFilter = document.getElementById('filterStatus').value;
+            const userIdFilter = document.getElementById('filterUserId').value;
+            const carIdFilter = document.getElementById('filterCarId').value;
+
+            let url = `/bookings?page=${currentPage}&page_size=${pageSize}`;
+            if (statusFilter) url += `&status=${statusFilter}`;
+            if (userIdFilter) url += `&user_id=${userIdFilter}`;
+            if (carIdFilter) url += `&car_id=${carIdFilter}`;
+
+            const data = await apiCall(url);
+            
+            if (data.items && data.items.length > 0) {
+                bookingsTable.innerHTML = data.items.map(booking => {
+                    // Build user name - show firstname and lastname with space
+                    let userName = `User #${booking.user_id}`;
+                    if (booking.user_firstname || booking.user_lastname) {
+                        const first = booking.user_firstname || '';
+                        const last = booking.user_lastname || '';
+                        userName = `${first} ${last}`.trim() || userName;
+                    }
+                    
+                    // Build car name
+                    let carName = `Car #${booking.car_id}`;
+                    if (booking.car_brand || booking.car_model) {
+                        const brand = booking.car_brand || '';
+                        const model = booking.car_model || '';
+                        carName = `${brand} ${model}`.trim() || carName;
+                    }
+                    
+                    return `
+                    <tr>
+                        <td>#${booking.id}</td>
+                        <td>
+                            <a href="/admin/users/${booking.user_id}" style="color: var(--primary); text-decoration: none; font-weight: 500;" 
+                               onmouseover="this.style.textDecoration='underline'" 
+                               onmouseout="this.style.textDecoration='none'">
+                                ${userName}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/admin/cars/${booking.car_id}/edit" style="color: var(--primary); text-decoration: none; font-weight: 500;" 
+                               onmouseover="this.style.textDecoration='underline'" 
+                               onmouseout="this.style.textDecoration='none'">
+                                ${carName}
+                            </a>
+                        </td>
+                        <td>${formatDate(booking.start_time)}</td>
+                        <td>${formatDate(booking.end_time)}</td>
+                        <td>${formatCurrency(booking.total_amount)}</td>
+                        <td><span class="badge badge-${getStatusColor(booking.order_status)}">${booking.order_status}</span></td>
+                        <td>
+                            <div style="display: flex; gap: 5px;">
+                                <a href="/admin/bookings/${booking.id}" class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                ${booking.order_status === 'PENDING' ? `
+                                    <button onclick="updateStatus(${booking.id}, 'APPROVED')" class="btn btn-success" 
+                                            style="padding: 5px 10px; font-size: 12px;">
+                                        <i class="fas fa-check"></i> Approve
+                                    </button>
+                                ` : ''}
+                                ${['PENDING', 'APPROVED', 'BOOKED'].includes(booking.order_status) ? `
+                                    <button onclick="cancelBooking(${booking.id})" class="btn btn-danger" 
+                                            style="padding: 5px 10px; font-size: 12px;">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                }).join('');
+
+                updatePagination(data);
+            } else {
+                bookingsTable.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-calendar-times" style="font-size: 48px; color: var(--gray); margin-bottom: 15px; display: block;"></i>
+                            <p style="color: var(--gray); font-size: 16px; margin: 0;">No bookings yet</p>
+                            <p style="color: var(--gray); font-size: 14px; margin-top: 5px;">Bookings will appear here once customers start renting cars</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading bookings:', error);
+            bookingsTable.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--danger);">Error loading bookings</td></tr>';
+            showAlert('Error loading bookings: ' + error.message, 'danger');
+        } finally {
+            loadingSpinner.style.display = 'none';
+        }
+    }
+
+    function getStatusColor(status) {
+        const colors = {
+            'PENDING': 'warning',
+            'APPROVED': 'info',
+            'BOOKED': 'success',
+            'ONGOING': 'primary',
+            'COMPLETED': 'success',
+            'CANCELLED': 'danger'
+        };
+        return colors[status] || 'info';
+    }
+
+    function updatePagination(data) {
+        const pagination = document.getElementById('pagination');
+        const totalPages = data.total_pages || 1;
+        
+        let html = '';
+        
+        html += `<button onclick="changePage(${currentPage - 1})" ${!data.has_prev ? 'disabled' : ''}>
+            <i class="fas fa-chevron-left"></i> Previous
+        </button>`;
+
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                html += `<button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                html += '<span>...</span>';
+            }
+        }
+
+        html += `<button onclick="changePage(${currentPage + 1})" ${!data.has_next ? 'disabled' : ''}>
+            Next <i class="fas fa-chevron-right"></i>
+        </button>`;
+
+        pagination.innerHTML = html;
+    }
+
+    function changePage(page) {
+        currentPage = page;
+        loadBookings();
+    }
+
+    async function updateStatus(bookingId, status) {
+        if (!confirm(`Are you sure you want to ${status.toLowerCase()} this booking?`)) return;
+
+        try {
+            await apiCall(`/bookings/${bookingId}`, {
+                method: 'PUT',
+                body: JSON.stringify({ order_status: status }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            showAlert(`Booking ${status.toLowerCase()} successfully`, 'success');
+            loadBookings();
+        } catch (error) {
+            showAlert('Error updating booking: ' + error.message, 'danger');
+        }
+    }
+
+    async function cancelBooking(bookingId) {
+        const reason = prompt('Please provide cancellation reason:');
+        if (!reason) return;
+
+        if (!confirm('Are you sure you want to cancel this booking? Refund will be processed according to policy.')) return;
+
+        try {
+            await apiCall(`/bookings/${bookingId}/cancel`, {
+                method: 'POST',
+                body: JSON.stringify({ cancellation_reason: reason }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            showAlert('Booking cancelled successfully. Refund initiated if applicable.', 'success');
+            loadBookings();
+        } catch (error) {
+            showAlert('Error cancelling booking: ' + error.message, 'danger');
+        }
+    }
+
+    function resetFilters() {
+        document.getElementById('filterStatus').value = '';
+        document.getElementById('filterUserId').value = '';
+        document.getElementById('filterCarId').value = '';
+        currentPage = 1;
+        loadBookings();
+    }
+
+    // Wait for base template scripts to be available
+    function waitForBaseScripts(callback, maxAttempts = 50) {
+        if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined' && typeof formatDate !== 'undefined' && typeof formatCurrency !== 'undefined') {
+            callback();
+        } else if (maxAttempts > 0) {
+            setTimeout(() => waitForBaseScripts(callback, maxAttempts - 1), 100);
+        } else {
+            console.error('Base template scripts failed to load');
+        }
+    }
+
+    // Initialize when scripts are ready
+    waitForBaseScripts(loadBookings);
+</script>
+{% endblock %}
+

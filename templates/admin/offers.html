@@ -1,0 +1,443 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Offers & Coupons - Admin Panel{% endblock %}
+
+{% block page_title %}Offers & Coupons Management{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3><i class="fas fa-tags" style="color: var(--primary); margin-right: 10px;"></i>All Offers & Coupons</h3>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="searchInput" placeholder="Search by code or description..." 
+                   class="form-control" style="max-width: 300px;" onkeyup="handleSearch()">
+            <select id="statusFilter" class="form-control" style="max-width: 150px;" onchange="loadOffers(true)">
+                <option value="">All Status</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+            <button class="btn btn-primary" onclick="showCreateModal()">
+                <i class="fas fa-plus"></i> Create Offer
+            </button>
+        </div>
+    </div>
+    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Discount</th>
+                    <th>Type</th>
+                    <th>Usage</th>
+                    <th>Valid Until</th>
+                    <th>Min Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="offersTable">
+                <tr>
+                    <td colspan="8" style="text-align: center; color: var(--gray);">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    <div id="pagination" style="margin-top: 20px; display: none;"></div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div id="offerModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 id="modalTitle">Create Offer</h3>
+            <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray);">&times;</button>
+        </div>
+        <form id="offerForm">
+            <input type="hidden" id="offerId" name="offer_id">
+            
+            <div class="form-group">
+                <label for="couponCode">Coupon Code *</label>
+                <input type="text" id="couponCode" name="coupon_code" class="form-control" required 
+                       placeholder="e.g., SUMMER20" style="text-transform: uppercase;">
+                <small style="color: var(--gray);">Code will be automatically converted to uppercase</small>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label for="discount">Discount Value *</label>
+                    <input type="number" id="discount" name="discount" class="form-control" required min="0" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="discountType">Discount Type *</label>
+                    <select id="discountType" name="discount_type" class="form-control" required>
+                        <option value="PERCENTAGE">Percentage (%)</option>
+                        <option value="FIXED">Fixed Amount (₹)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="expirationTime">Expiration Date & Time *</label>
+                <input type="datetime-local" id="expirationTime" name="expiration_time" class="form-control" required>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label for="usageLimit">Usage Limit</label>
+                    <input type="number" id="usageLimit" name="usage_limit" class="form-control" min="1" 
+                           placeholder="Leave empty for unlimited">
+                </div>
+                
+                <div class="form-group">
+                    <label for="minAmount">Minimum Order Amount (₹)</label>
+                    <input type="number" id="minAmount" name="min_amount" class="form-control" min="0" step="0.01"
+                           placeholder="Optional">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="maxDiscount">Maximum Discount (₹) - For Percentage Only</label>
+                <input type="number" id="maxDiscount" name="max_discount" class="form-control" min="0" step="0.01"
+                       placeholder="Optional">
+            </div>
+            
+            <div class="form-group">
+                <label for="carTypes">Applicable Car Types (Optional)</label>
+                <select id="carTypes" name="applicable_to_car_type" class="form-control" multiple style="height: 100px;">
+                    <option value="SUV">SUV</option>
+                    <option value="SEDAN">SEDAN</option>
+                    <option value="HATCHBACK">HATCHBACK</option>
+                </select>
+                <small style="color: var(--gray);">Hold Ctrl/Cmd to select multiple. Leave empty for all types.</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3" 
+                          placeholder="Optional description for this offer"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="isActive" name="is_active" checked>
+                    <span>Active (Offer is currently available)</span>
+                </label>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 25px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button type="button" onclick="closeModal()" class="btn btn-outline">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    #offerModal {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let editingOfferId = null;
+    let currentPage = 1;
+    let currentSearch = '';
+    let currentStatus = '';
+
+    function waitForBaseScripts(maxAttempts = 50) {
+        return new Promise((resolve, reject) => {
+            function check() {
+                if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
+                    resolve();
+                } else if (maxAttempts > 0) {
+                    setTimeout(() => {
+                        maxAttempts--;
+                        check();
+                    }, 100);
+                } else {
+                    console.error('Base scripts failed to load');
+                    reject(new Error('Base scripts failed to load'));
+                }
+            }
+            check();
+        });
+    }
+
+    async function loadOffers(resetPage = false) {
+        if (resetPage) currentPage = 1;
+        
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const offersTable = document.getElementById('offersTable');
+        
+        loadingSpinner.style.display = 'block';
+        offersTable.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading...</td></tr>';
+
+        try {
+            const params = new URLSearchParams({
+                page: currentPage,
+                page_size: 20
+            });
+            
+            if (currentSearch) params.append('search', currentSearch);
+            if (currentStatus) params.append('is_active', currentStatus);
+            
+            const data = await apiCall(`/offers?${params.toString()}`);
+            
+            if (data.items && data.items.length > 0) {
+                offersTable.innerHTML = data.items.map(offer => {
+                    const usageText = offer.usage_limit 
+                        ? `${offer.usage_count}/${offer.usage_limit}` 
+                        : `${offer.usage_count}/∞`;
+                    const discountText = offer.discount_type === 'PERCENTAGE' 
+                        ? `${offer.discount}%` 
+                        : `₹${offer.discount}`;
+                    const validUntil = new Date(offer.expiration_time).toLocaleDateString('en-IN', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    return `
+                        <tr>
+                            <td><strong>${offer.coupon_code}</strong></td>
+                            <td>${discountText}</td>
+                            <td><span class="badge badge-info">${offer.discount_type}</span></td>
+                            <td>${usageText}</td>
+                            <td>${validUntil}</td>
+                            <td>${offer.min_amount ? '₹' + offer.min_amount : '-'}</td>
+                            <td>
+                                <span class="badge ${offer.is_active ? 'badge-success' : 'badge-danger'}">
+                                    ${offer.is_active ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 5px;">
+                                    <button onclick="editOffer(${offer.id})" 
+                                            class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button onclick="toggleOffer(${offer.id}, ${offer.is_active})" 
+                                            class="btn ${offer.is_active ? 'btn-warning' : 'btn-success'}" 
+                                            style="padding: 5px 10px; font-size: 12px;">
+                                        <i class="fas fa-${offer.is_active ? 'pause' : 'play'}"></i>
+                                    </button>
+                                    <button onclick="deleteOffer(${offer.id})" 
+                                            class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                // Update pagination
+                updatePagination(data);
+            } else {
+                offersTable.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-tags" style="font-size: 48px; color: var(--gray); margin-bottom: 15px; display: block;"></i>
+                            <p style="color: var(--gray); font-size: 16px; margin: 0;">No offers found</p>
+                            <p style="color: var(--gray); font-size: 14px; margin-top: 5px;">Click "Create Offer" to add your first coupon</p>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('pagination').style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error loading offers:', error);
+            offersTable.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--danger);">Error loading offers</td></tr>';
+            showAlert('Error loading offers: ' + error.message, 'danger');
+        } finally {
+            loadingSpinner.style.display = 'none';
+        }
+    }
+
+    function updatePagination(data) {
+        const paginationDiv = document.getElementById('pagination');
+        if (data.total_pages > 1) {
+            let html = '<div style="display: flex; justify-content: center; gap: 10px; align-items: center;">';
+            
+            if (data.has_prev) {
+                html += `<button onclick="goToPage(${data.page - 1})" class="btn btn-outline">Previous</button>`;
+            }
+            
+            html += `<span>Page ${data.page} of ${data.total_pages}</span>`;
+            
+            if (data.has_next) {
+                html += `<button onclick="goToPage(${data.page + 1})" class="btn btn-outline">Next</button>`;
+            }
+            
+            html += '</div>';
+            paginationDiv.innerHTML = html;
+            paginationDiv.style.display = 'block';
+        } else {
+            paginationDiv.style.display = 'none';
+        }
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        loadOffers();
+    }
+
+    function handleSearch() {
+        const searchInput = document.getElementById('searchInput');
+        currentSearch = searchInput.value.trim();
+        clearTimeout(window.searchTimeout);
+        window.searchTimeout = setTimeout(() => loadOffers(true), 500);
+    }
+
+    function showCreateModal() {
+        editingOfferId = null;
+        document.getElementById('modalTitle').textContent = 'Create Offer';
+        document.getElementById('offerForm').reset();
+        document.getElementById('offerId').value = '';
+        document.getElementById('isActive').checked = true;
+        document.getElementById('offerModal').style.display = 'flex';
+    }
+
+    async function editOffer(id) {
+        try {
+            const offer = await apiCall(`/offers/${id}`);
+            editingOfferId = id;
+            
+            document.getElementById('modalTitle').textContent = 'Edit Offer';
+            document.getElementById('offerId').value = offer.id;
+            document.getElementById('couponCode').value = offer.coupon_code;
+            document.getElementById('discount').value = offer.discount;
+            document.getElementById('discountType').value = offer.discount_type;
+            
+            // Format datetime for input
+            const expDate = new Date(offer.expiration_time);
+            const expDateStr = expDate.toISOString().slice(0, 16);
+            document.getElementById('expirationTime').value = expDateStr;
+            
+            document.getElementById('usageLimit').value = offer.usage_limit || '';
+            document.getElementById('minAmount').value = offer.min_amount || '';
+            document.getElementById('maxDiscount').value = offer.max_discount || '';
+            document.getElementById('description').value = offer.description || '';
+            document.getElementById('isActive').checked = offer.is_active;
+            
+            // Set car types
+            const carTypesSelect = document.getElementById('carTypes');
+            Array.from(carTypesSelect.options).forEach(option => {
+                option.selected = offer.applicable_to_car_type && offer.applicable_to_car_type.includes(option.value);
+            });
+            
+            document.getElementById('offerModal').style.display = 'flex';
+        } catch (error) {
+            showAlert('Error loading offer: ' + error.message, 'danger');
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('offerModal').style.display = 'none';
+        editingOfferId = null;
+        document.getElementById('offerForm').reset();
+    }
+
+    async function toggleOffer(id, currentStatus) {
+        try {
+            await apiCall(`/offers/${id}/toggle`, { method: 'POST' });
+            showAlert(`Offer ${currentStatus ? 'deactivated' : 'activated'} successfully`, 'success');
+            loadOffers();
+        } catch (error) {
+            showAlert('Error toggling offer: ' + error.message, 'danger');
+        }
+    }
+
+    async function deleteOffer(id) {
+        if (!confirm('Are you sure you want to delete this offer? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            await apiCall(`/offers/${id}`, { method: 'DELETE' });
+            showAlert('Offer deleted successfully', 'success');
+            loadOffers();
+        } catch (error) {
+            showAlert('Error deleting offer: ' + error.message, 'danger');
+        }
+    }
+
+    // Wait for base scripts to load before initializing
+    waitForBaseScripts().then(() => {
+        // Set up form submit handler
+        document.getElementById('offerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                coupon_code: document.getElementById('couponCode').value.trim(),
+                discount: parseFloat(document.getElementById('discount').value),
+                discount_type: document.getElementById('discountType').value,
+                expiration_time: new Date(document.getElementById('expirationTime').value).toISOString(),
+                usage_limit: document.getElementById('usageLimit').value ? parseInt(document.getElementById('usageLimit').value) : null,
+                min_amount: document.getElementById('minAmount').value ? parseFloat(document.getElementById('minAmount').value) : null,
+                max_discount: document.getElementById('maxDiscount').value ? parseFloat(document.getElementById('maxDiscount').value) : null,
+                description: document.getElementById('description').value.trim() || null,
+                is_active: document.getElementById('isActive').checked
+            };
+
+            // Get selected car types
+            const carTypesSelect = document.getElementById('carTypes');
+            const selectedCarTypes = Array.from(carTypesSelect.selectedOptions).map(opt => opt.value);
+            if (selectedCarTypes.length > 0) {
+                formData.applicable_to_car_type = selectedCarTypes;
+            }
+
+            try {
+                if (editingOfferId) {
+                    await apiCall(`/offers/${editingOfferId}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(formData),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    showAlert('Offer updated successfully!', 'success');
+                } else {
+                    await apiCall('/offers', {
+                        method: 'POST',
+                        body: JSON.stringify(formData),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    showAlert('Offer created successfully!', 'success');
+                }
+                
+                closeModal();
+                loadOffers();
+            } catch (error) {
+                showAlert('Error saving offer: ' + error.message, 'danger');
+            }
+        });
+
+        // Update status filter
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            currentStatus = this.value;
+            loadOffers(true);
+        });
+
+        // Close modal on background click
+        document.getElementById('offerModal').addEventListener('click', (e) => {
+            if (e.target.id === 'offerModal') {
+                closeModal();
+            }
+        });
+
+        // Load offers on page load
+        loadOffers();
+    });
+</script>
+{% endblock %}

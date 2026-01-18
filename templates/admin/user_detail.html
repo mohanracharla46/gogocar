@@ -1,0 +1,278 @@
+{% extends "admin/base.html" %}
+
+{% block title %}User #{{ user.id }} - Admin Panel{% endblock %}
+
+{% block page_title %}User Details #{{ user.id }}{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
+    <!-- Main Info -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-user" style="color: var(--primary); margin-right: 10px;"></i>User Information</h3>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span class="badge badge-{{ 'success' if user.is_active else 'danger' }}">
+                    {{ 'Active' if user.is_active else 'Inactive' }}
+                </span>
+                {% if user.isadmin %}
+                <span class="badge badge-primary">Admin</span>
+                {% endif %}
+                <span class="badge badge-{{ 'success' if user.kyc_status.value == 'APPROVED' else 'warning' if user.kyc_status.value == 'PENDING' else 'danger' if user.kyc_status.value == 'REJECTED' else 'info' }}">
+                    KYC: {{ user.kyc_status.value }}
+                </span>
+            </div>
+        </div>
+        
+        <form id="userForm" onsubmit="saveUser(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>User ID</label>
+                    <div style="font-size: 18px; font-weight: 600;">#{{ user.id }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <div>{{ user.username }}</div>
+                </div>
+                <div class="form-group">
+                    <label>First Name *</label>
+                    <input type="text" id="firstname" class="form-control" value="{{ user.firstname }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name *</label>
+                    <input type="text" id="lastname" class="form-control" value="{{ user.lastname }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="email" class="form-control" value="{{ user.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" id="phone" class="form-control" value="{{ user.phone or '' }}" maxlength="12">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Permanent Address</label>
+                    <textarea id="permanentaddress" class="form-control" rows="3">{{ user.permanentaddress or '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Account Status</label>
+                    <select id="is_active" class="form-control">
+                        <option value="true" {{ 'selected' if user.is_active else '' }}>Active</option>
+                        <option value="false" {{ 'selected' if not user.is_active else '' }}>Inactive</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>KYC Status</label>
+                    <select id="kyc_status" class="form-control">
+                        <option value="NOT_SUBMITTED" {{ 'selected' if user.kyc_status.value == 'NOT_SUBMITTED' else '' }}>Not Submitted</option>
+                        <option value="PENDING" {{ 'selected' if user.kyc_status.value == 'PENDING' else '' }}>Pending</option>
+                        <option value="APPROVED" {{ 'selected' if user.kyc_status.value == 'APPROVED' else '' }}>Approved</option>
+                        <option value="REJECTED" {{ 'selected' if user.kyc_status.value == 'REJECTED' else '' }}>Rejected</option>
+                    </select>
+                </div>
+                <div class="form-group" id="rejectionReasonGroup" style="grid-column: 1 / -1; display: {{ 'block' if user.kyc_status.value == 'REJECTED' or user.kyc_rejection_reason else 'none' }};">
+                    <label>KYC Rejection Reason</label>
+                    <textarea id="kyc_rejection_reason" class="form-control" rows="2">{{ user.kyc_rejection_reason or '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Created At</label>
+                    <div>{{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') if user.created_at else '-' }}</div>
+                </div>
+                {% if user.kyc_approved_at %}
+                <div class="form-group">
+                    <label>KYC Approved At</label>
+                    <div>{{ user.kyc_approved_at.strftime('%Y-%m-%d %H:%M:%S') }}</div>
+                    {% if user.kyc_approved_by %}
+                    <small style="color: var(--gray);">Approved by Admin ID: {{ user.kyc_approved_by }}</small>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="/admin/users" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Users
+                </a>
+                {% if user.kyc_status.value == 'PENDING' %}
+                <button type="button" onclick="approveKYC()" class="btn btn-success">
+                    <i class="fas fa-check"></i> Approve KYC
+                </button>
+                <button type="button" onclick="rejectKYC()" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Reject KYC
+                </button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <!-- KYC Documents -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-id-card" style="color: var(--primary); margin-right: 10px;"></i>KYC Documents</h3>
+        </div>
+        
+        <div style="display: grid; gap: 20px;">
+            <!-- Aadhaar Front -->
+            <div class="form-group">
+                <label>Aadhaar Front</label>
+                {% if user.aadhaar_front %}
+                <div style="margin-bottom: 10px;">
+                    <img src="{{ user.aadhaar_front }}" alt="Aadhaar Front" style="max-width: 100%; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;" onclick="window.open('{{ user.aadhaar_front }}', '_blank')">
+                </div>
+                <input type="text" id="aadhaar_front" class="form-control" value="{{ user.aadhaar_front }}" placeholder="Document URL">
+                {% else %}
+                <input type="text" id="aadhaar_front" class="form-control" value="" placeholder="Document URL">
+                <small style="color: var(--gray);">No document uploaded</small>
+                {% endif %}
+            </div>
+
+            <!-- Aadhaar Back -->
+            <div class="form-group">
+                <label>Aadhaar Back</label>
+                {% if user.aadhaar_back %}
+                <div style="margin-bottom: 10px;">
+                    <img src="{{ user.aadhaar_back }}" alt="Aadhaar Back" style="max-width: 100%; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;" onclick="window.open('{{ user.aadhaar_back }}', '_blank')">
+                </div>
+                <input type="text" id="aadhaar_back" class="form-control" value="{{ user.aadhaar_back }}" placeholder="Document URL">
+                {% else %}
+                <input type="text" id="aadhaar_back" class="form-control" value="" placeholder="Document URL">
+                <small style="color: var(--gray);">No document uploaded</small>
+                {% endif %}
+            </div>
+
+            <!-- Driving License Front -->
+            <div class="form-group">
+                <label>Driving License Front</label>
+                {% if user.drivinglicense_front %}
+                <div style="margin-bottom: 10px;">
+                    <img src="{{ user.drivinglicense_front }}" alt="DL Front" style="max-width: 100%; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;" onclick="window.open('{{ user.drivinglicense_front }}', '_blank')">
+                </div>
+                <input type="text" id="drivinglicense_front" class="form-control" value="{{ user.drivinglicense_front }}" placeholder="Document URL">
+                {% else %}
+                <input type="text" id="drivinglicense_front" class="form-control" value="" placeholder="Document URL">
+                <small style="color: var(--gray);">No document uploaded</small>
+                {% endif %}
+            </div>
+
+            <!-- Driving License Back -->
+            <div class="form-group">
+                <label>Driving License Back</label>
+                {% if user.drivinglicense_back %}
+                <div style="margin-bottom: 10px;">
+                    <img src="{{ user.drivinglicense_back }}" alt="DL Back" style="max-width: 100%; border: 2px solid var(--border); border-radius: 8px; cursor: pointer;" onclick="window.open('{{ user.drivinglicense_back }}', '_blank')">
+                </div>
+                <input type="text" id="drivinglicense_back" class="form-control" value="{{ user.drivinglicense_back }}" placeholder="Document URL">
+                {% else %}
+                <input type="text" id="drivinglicense_back" class="form-control" value="" placeholder="Document URL">
+                <small style="color: var(--gray);">No document uploaded</small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    async function saveUser(event) {
+        event.preventDefault();
+        
+        const userData = {
+            firstname: document.getElementById('firstname').value,
+            lastname: document.getElementById('lastname').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value || null,
+            permanentaddress: document.getElementById('permanentaddress').value || null,
+            is_active: document.getElementById('is_active').value === 'true',
+            kyc_status: document.getElementById('kyc_status').value,
+            aadhaar_front: document.getElementById('aadhaar_front').value || null,
+            aadhaar_back: document.getElementById('aadhaar_back').value || null,
+            drivinglicense_front: document.getElementById('drivinglicense_front').value || null,
+            drivinglicense_back: document.getElementById('drivinglicense_back').value || null
+        };
+
+        const kycRejectionReason = document.getElementById('kyc_rejection_reason');
+        if (kycRejectionReason) {
+            userData.kyc_rejection_reason = kycRejectionReason.value || null;
+        }
+
+        try {
+            await apiCall(`/users/{{ user.id }}`, {
+                method: 'PUT',
+                body: JSON.stringify(userData),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            showAlert('User information updated successfully', 'success');
+            // Reload page to show updated data
+            setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+            showAlert('Error updating user: ' + error.message, 'danger');
+        }
+    }
+
+    async function approveKYC() {
+        if (!confirm('Are you sure you want to approve this user\'s KYC?')) return;
+
+        try {
+            await apiCall(`/users/{{ user.id }}/kyc/approve`, {
+                method: 'POST'
+            });
+            
+            showAlert('KYC approved successfully', 'success');
+            setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+            showAlert('Error approving KYC: ' + error.message, 'danger');
+        }
+    }
+
+    async function rejectKYC() {
+        const reason = prompt('Please provide rejection reason:');
+        if (!reason) return;
+
+        if (!confirm('Are you sure you want to reject this user\'s KYC?')) return;
+
+        try {
+            await apiCall(`/users/{{ user.id }}/kyc/reject`, {
+                method: 'POST',
+                body: JSON.stringify({ rejection_reason: reason }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            showAlert('KYC rejected successfully', 'success');
+            setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+            showAlert('Error rejecting KYC: ' + error.message, 'danger');
+        }
+    }
+
+    // Wait for base template scripts to be available
+    function waitForBaseScripts(callback, maxAttempts = 50) {
+        if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
+            callback();
+        } else if (maxAttempts > 0) {
+            setTimeout(() => waitForBaseScripts(callback, maxAttempts - 1), 100);
+        } else {
+            console.error('Base template scripts failed to load');
+        }
+    }
+
+    // Show/hide rejection reason based on KYC status
+    document.getElementById('kyc_status').addEventListener('change', function() {
+        const rejectionReasonGroup = document.getElementById('rejectionReasonGroup');
+        if (this.value === 'REJECTED') {
+            rejectionReasonGroup.style.display = 'block';
+        } else {
+            rejectionReasonGroup.style.display = 'none';
+        }
+    });
+
+    // Initialize when scripts are ready
+    waitForBaseScripts(() => {
+        console.log('User detail page loaded');
+    });
+</script>
+{% endblock %}
+

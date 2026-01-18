@@ -1,0 +1,229 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard - Admin Panel{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <h4>Total Bookings</h4>
+        <div class="value">{{ stats.bookings_summary.total if stats else 0 }}</div>
+        <div class="change">
+            <i class="fas fa-arrow-up"></i> All time
+        </div>
+    </div>
+    <div class="stat-card" style="border-left-color: var(--success);">
+        <h4>Completed Bookings</h4>
+        <div class="value">{{ stats.bookings_summary.completed if stats else 0 }}</div>
+        <div class="change" style="color: var(--success);">
+            <i class="fas fa-check-circle"></i> Completed
+        </div>
+    </div>
+    <div class="stat-card" style="border-left-color: var(--warning);">
+        <h4>Ongoing Bookings</h4>
+        <div class="value">{{ stats.bookings_summary.ongoing if stats else 0 }}</div>
+        <div class="change" style="color: var(--warning);">
+            <i class="fas fa-clock"></i> Active now
+        </div>
+    </div>
+    <div class="stat-card" style="border-left-color: var(--info);">
+        <h4>Pending Bookings</h4>
+        <div class="value">{{ stats.bookings_summary.pending if stats else 0 }}</div>
+        <div class="change" style="color: var(--info);">
+            <i class="fas fa-hourglass-half"></i> Awaiting approval
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card" style="border-left-color: var(--success);">
+        <h4>Total Revenue</h4>
+        <div class="value">₹{{ "{:,.0f}".format(stats.revenue_summary.total_revenue if stats and stats.revenue_summary else 0) }}</div>
+        <div class="change" style="color: var(--success);">
+            <i class="fas fa-rupee-sign"></i> Total income
+        </div>
+    </div>
+    <div class="stat-card" style="border-left-color: var(--primary);">
+        <h4>Advance Collected</h4>
+        <div class="value">₹{{ "{:,.0f}".format(stats.revenue_summary.advance_collected if stats and stats.revenue_summary else 0) }}</div>
+        <div class="change">
+            <i class="fas fa-money-bill-wave"></i> Upfront payments
+        </div>
+    </div>
+    <div class="stat-card" style="border-left-color: var(--warning);">
+        <h4>Balance Pending</h4>
+        <div class="value">₹{{ "{:,.0f}".format(stats.revenue_summary.balance_pending if stats and stats.revenue_summary else 0) }}</div>
+        <div class="change" style="color: var(--warning);">
+            <i class="fas fa-exclamation-circle"></i> To be collected
+        </div>
+    </div>
+    <div class="stat-card" style="border-left-color: var(--info);">
+        <h4>Cars Currently Rented</h4>
+        <div class="value">{{ stats.cars_currently_rented if stats else 0 }}</div>
+        <div class="change" style="color: var(--info);">
+            <i class="fas fa-car"></i> Active rentals
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
+    <!-- Top Performing Cars -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-trophy" style="color: var(--secondary); margin-right: 10px;"></i>Top Performing Cars</h3>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Car</th>
+                        <th>Bookings</th>
+                        <th>Revenue</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody id="topCarsTable">
+                    {% if stats and stats.top_performing_cars %}
+                        {% for car in stats.top_performing_cars[:5] %}
+                        <tr>
+                            <td>{{ car.car_name }}</td>
+                            <td><span class="badge badge-info">{{ car.total_bookings }}</span></td>
+                            <td>₹{{ "{:,.0f}".format(car.total_revenue) }}</td>
+                            <td>
+                                {% if car.average_rating %}
+                                    <span style="color: var(--secondary);">
+                                        {% for i in range(car.average_rating|int) %}
+                                            <i class="fas fa-star"></i>
+                                        {% endfor %}
+                                        {{ "%.1f"|format(car.average_rating) }}
+                                    </span>
+                                {% else %}
+                                    <span style="color: var(--gray);">No ratings</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--gray);">No data available</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-calendar-alt" style="color: var(--primary); margin-right: 10px;"></i>Recent Bookings</h3>
+            <a href="/admin/bookings" class="btn btn-outline">View All</a>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="recentBookingsTable">
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--gray);">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 25px;">
+    <div class="card-header">
+        <h3><i class="fas fa-chart-pie" style="color: var(--info); margin-right: 10px;"></i>Category Performance</h3>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Total Bookings</th>
+                    <th>Total Revenue</th>
+                    <th>Average Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if stats and stats.category_performance %}
+                    {% for category, data in stats.category_performance.items() %}
+                    <tr>
+                        <td><strong>{{ category }}</strong></td>
+                        <td>{{ data.bookings }}</td>
+                        <td>₹{{ "{:,.0f}".format(data.revenue) }}</td>
+                        <td>
+                            {% if data.average_rating %}
+                                <span style="color: var(--secondary);">
+                                    {% for i in range(data.average_rating|int) %}
+                                        <i class="fas fa-star"></i>
+                                    {% endfor %}
+                                    {{ "%.1f"|format(data.average_rating) }}
+                                </span>
+                            {% else %}
+                                <span style="color: var(--gray);">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--gray);">No data available</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Load recent bookings
+    async function loadRecentBookings() {
+        try {
+            const data = await apiCall('/bookings?page=1&page_size=5');  // Uses API_BASE from base.html
+            const tbody = document.getElementById('recentBookingsTable');
+            
+            if (data.items && data.items.length > 0) {
+                tbody.innerHTML = data.items.map(booking => `
+                    <tr>
+                        <td>#${booking.id}</td>
+                        <td>${booking.user_id}</td>
+                        <td><span class="badge badge-${getStatusColor(booking.order_status)}">${booking.order_status}</span></td>
+                        <td>₹${parseFloat(booking.total_amount || 0).toLocaleString('en-IN')}</td>
+                    </tr>
+                `).join('');
+            } else {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--gray);">No recent bookings</td></tr>';
+            }
+        } catch (error) {
+            console.error('Error loading recent bookings:', error);
+            document.getElementById('recentBookingsTable').innerHTML = 
+                '<tr><td colspan="4" style="text-align: center; color: var(--danger);">Error loading data</td></tr>';
+        }
+    }
+
+    function getStatusColor(status) {
+        const colors = {
+            'PENDING': 'warning',
+            'APPROVED': 'info',
+            'ONGOING': 'primary',
+            'COMPLETED': 'success',
+            'CANCELLED': 'danger'
+        };
+        return colors[status] || 'info';
+    }
+
+    // Load data on page load
+    loadRecentBookings();
+</script>
+{% endblock %}
+

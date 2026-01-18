@@ -1,0 +1,681 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Maintenance Management - Admin Panel{% endblock %}
+
+{% block page_title %}Maintenance & Damage Management{% endblock %}
+
+{% block content %}
+<style>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1100;
+        padding: 20px;
+    }
+    .modal-overlay.active {
+        display: flex;
+    }
+    .modal {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        width: 100%;
+        max-width: 620px;
+        box-shadow: 0 20px 45px rgba(15,23,42,0.25);
+        position: relative;
+    }
+    .modal h3 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 22px;
+        color: #0f172a;
+    }
+    .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        border: none;
+        background: transparent;
+        font-size: 22px;
+        cursor: pointer;
+        color: #64748b;
+    }
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .form-group label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #475569;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: inherit;
+    }
+    .modal-actions {
+        margin-top: 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    .car-search-inline {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .car-search-inline input {
+        flex: 1;
+    }
+    .form-group small {
+        color: #94a3b8;
+        font-size: 12px;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <h3><i class="fas fa-tools" style="color: var(--primary); margin-right: 10px;"></i>Maintenance Logs</h3>
+        <button class="btn btn-primary" onclick="openMaintenanceModal()">
+            <i class="fas fa-plus"></i> Add Maintenance Log
+        </button>
+    </div>
+    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Car</th>
+                    <th>Type</th>
+                    <th>Title</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Cost</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="maintenanceTable">
+                <tr>
+                    <td colspan="8" style="text-align: center; color: var(--gray);">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="maintenancePagination" class="pagination-controls" style="margin-top: 15px;"></div>
+</div>
+
+<div class="card" style="margin-top: 25px;">
+    <div class="card-header">
+        <h3><i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-right: 10px;"></i>Damage Reports</h3>
+        <button class="btn btn-outline" onclick="openDamageModal()">
+            <i class="fas fa-plus"></i> Add Damage Report
+        </button>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Car</th>
+                    <th>Order</th>
+                    <th>Description</th>
+                    <th>Repair Cost</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="damageTable">
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--gray);">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="damagePagination" class="pagination-controls" style="margin-top: 15px;"></div>
+</div>
+
+<!-- Maintenance Modal -->
+<div id="maintenanceModal" class="modal-overlay">
+    <div class="modal">
+        <button class="modal-close" onclick="closeMaintenanceModal()">&times;</button>
+        <h3 id="maintenanceModalTitle">Add Maintenance Log</h3>
+        <form id="maintenanceForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="maintenanceCar">Car *</label>
+                    <select id="maintenanceCar" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Search Car by Registration</label>
+                    <div class="car-search-inline">
+                        <input type="text" id="maintenanceCarSearch" placeholder="Enter registration number">
+                        <button type="button" class="btn btn-outline" onclick="searchCarsByRegistration('maintenanceCarSearch', 'maintenanceCar')">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <small>Type registration number (or brand/model) and search to narrow results</small>
+                </div>
+                <div class="form-group">
+                    <label for="maintenanceType">Type *</label>
+                    <select id="maintenanceType" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="maintenanceTitle">Title *</label>
+                    <input type="text" id="maintenanceTitle" required placeholder="E.g., Periodic Service">
+                </div>
+                <div class="form-group">
+                    <label for="maintenanceCost">Cost (₹)</label>
+                    <input type="number" step="0.01" id="maintenanceCost" placeholder="Optional">
+                </div>
+                <div class="form-group">
+                    <label for="maintenanceStart">Start Date *</label>
+                    <input type="datetime-local" id="maintenanceStart" required>
+                </div>
+                <div class="form-group">
+                    <label for="maintenanceEnd">End Date</label>
+                    <input type="datetime-local" id="maintenanceEnd">
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label for="maintenanceProvider">Service Provider</label>
+                    <input type="text" id="maintenanceProvider" placeholder="Workshop / Vendor details">
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label for="maintenanceDescription">Description</label>
+                    <textarea id="maintenanceDescription" rows="3" placeholder="Add additional notes"></textarea>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeMaintenanceModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Log</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Damage Modal -->
+<div id="damageModal" class="modal-overlay">
+    <div class="modal">
+        <button class="modal-close" onclick="closeDamageModal()">&times;</button>
+        <h3 id="damageModalTitle">Add Damage Report</h3>
+        <form id="damageForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="damageCar">Car *</label>
+                    <select id="damageCar" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Search Car by Registration</label>
+                    <div class="car-search-inline">
+                        <input type="text" id="damageCarSearch" placeholder="Enter registration number">
+                        <button type="button" class="btn btn-outline" onclick="searchCarsByRegistration('damageCarSearch', 'damageCar')">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <small>Search to quickly find a car by registration or name</small>
+                </div>
+                <div class="form-group">
+                    <label for="damageOrder">Order ID</label>
+                    <input type="number" id="damageOrder" placeholder="Optional">
+                </div>
+                <div class="form-group">
+                    <label for="damageCost">Estimated Repair Cost (₹)</label>
+                    <input type="number" step="0.01" id="damageCost" placeholder="Optional">
+                </div>
+                <div class="form-group" id="damageStatusGroup" style="display: none;">
+                    <label for="damageStatus">Repair Status</label>
+                    <select id="damageStatus">
+                        <option value="PENDING">PENDING</option>
+                        <option value="IN_REPAIR">IN_REPAIR</option>
+                        <option value="REPAIRED">REPAIRED</option>
+                    </select>
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label for="damageDescription">Damage Description *</label>
+                    <textarea id="damageDescription" rows="4" required placeholder="Describe the damage in detail"></textarea>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeDamageModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Report</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    const maintenanceState = { page: 1, pageSize: 10, totalPages: 1 };
+    const damageState = { page: 1, pageSize: 10, totalPages: 1 };
+    const maintenanceTypes = ['ROUTINE', 'REPAIR', 'DAMAGE', 'SERVICE'];
+    let carOptions = [];
+    let maintenanceModalMode = 'create';
+    let editingMaintenanceId = null;
+    let editingDamageId = null;
+
+    function waitForBaseScripts(callback) {
+        if (typeof showAlert !== 'undefined' && typeof apiCall !== 'undefined' && typeof formatDate !== 'undefined') {
+            callback();
+        } else {
+            setTimeout(() => waitForBaseScripts(callback), 100);
+        }
+    }
+
+    function formatCurrency(amount) {
+        if (!amount && amount !== 0) return '—';
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+    }
+
+    function buildPagination(state, containerId, onChange) {
+        const container = document.getElementById(containerId);
+        if (!container || state.totalPages <= 1) {
+            if (container) container.innerHTML = '';
+            return;
+        }
+
+        let html = '';
+        if (state.page > 1) {
+            html += `<button class="btn btn-outline" onclick="${onChange}(${state.page - 1})">Previous</button>`;
+        }
+        html += `<span style="margin: 0 10px;">Page ${state.page} of ${state.totalPages}</span>`;
+        if (state.page < state.totalPages) {
+            html += `<button class="btn btn-outline" onclick="${onChange}(${state.page + 1})">Next</button>`;
+        }
+
+        container.innerHTML = html;
+    }
+
+    function populateSelect(selectId, optionsList = null) {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+        const sourceList = optionsList || carOptions;
+        const options = sourceList.map(car => {
+            const label = `${car.brand} ${car.car_model} (${car.registration_number || 'N/A'})`.trim();
+            return `<option value="${car.id}">${label}</option>`;
+        });
+        select.innerHTML = '<option value="">Select car</option>' + options.join('');
+    }
+
+    function ensureCarOption(selectId, car) {
+        if (!car) return;
+        const select = document.getElementById(selectId);
+        if (!select) return;
+        const exists = Array.from(select.options).some(opt => parseInt(opt.value, 10) === car.id);
+        if (!exists) {
+            const option = document.createElement('option');
+            option.value = car.id;
+            const label = `${car.brand || ''} ${car.car_model || ''} (${car.registration_number || 'N/A'})`.trim();
+            option.textContent = label;
+            select.appendChild(option);
+        }
+    }
+
+    async function loadCarOptions() {
+        if (carOptions.length) {
+            populateSelect('maintenanceCar');
+            populateSelect('damageCar');
+            return;
+        }
+        try {
+            const data = await apiCall('/cars?page=1&page_size=100&active_only=true');
+            carOptions = data.items || [];
+            populateSelect('maintenanceCar');
+            populateSelect('damageCar');
+        } catch (error) {
+            console.error('Error loading cars:', error);
+            showAlert('Failed to load cars list', 'danger');
+        }
+    }
+
+    async function searchCarsByRegistration(inputId, selectId) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        const query = input.value.trim();
+        if (!query) {
+            showAlert('Enter a registration number or keyword before searching', 'warning');
+            return;
+        }
+        try {
+            const data = await apiCall(`/cars?page=1&page_size=50&active_only=true&search=${encodeURIComponent(query)}`);
+            const items = data.items || [];
+            if (!items.length) {
+                showAlert('No cars found for that search', 'info');
+            }
+            populateSelect(selectId, items);
+        } catch (error) {
+            console.error('Error searching cars:', error);
+            showAlert('Failed to search cars: ' + (error.message || 'Unknown error'), 'danger');
+        }
+    }
+
+    async function fetchMaintenance() {
+        const maintenanceTable = document.getElementById('maintenanceTable');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        loadingSpinner.style.display = 'block';
+        try {
+            const data = await apiCall(`/maintenance/logs?page=${maintenanceState.page}&page_size=${maintenanceState.pageSize}`);
+            maintenanceState.totalPages = data.total_pages || 0;
+
+            if (!data.items || data.items.length === 0) {
+                maintenanceTable.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--gray);">No maintenance logs found</td></tr>';
+            } else {
+                maintenanceTable.innerHTML = data.items.map(log => {
+                    const carName = log.car_brand || log.car_model ? `${log.car_brand || ''} ${log.car_model || ''}`.trim() : `Car #${log.car_id}`;
+                    return `
+                        <tr>
+                            <td>#${log.id}</td>
+                            <td>${carName}<br><span style="color: var(--gray); font-size: 12px;">${log.car_registration || ''}</span></td>
+                            <td><span class="badge badge-info">${log.maintenance_type}</span></td>
+                            <td>${log.title}</td>
+                            <td>${formatDate(log.start_date)}</td>
+                            <td>${log.end_date ? formatDate(log.end_date) : '<span style="color: var(--warning);">Ongoing</span>'}</td>
+                            <td>${formatCurrency(log.cost)}</td>
+                            <td>
+                                <div style="display: flex; gap: 6px; align-items: center;">
+                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;" onclick="openMaintenanceModal('${log.id}')">
+                                        <i class="fas fa-pen"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteMaintenanceLog(${log.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            buildPagination(maintenanceState, 'maintenancePagination', 'changeMaintenancePage');
+        } catch (error) {
+            console.error('Error loading maintenance:', error);
+            maintenanceTable.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--danger);">${error.message || 'Failed to load maintenance data'}</td></tr>`;
+        } finally {
+            loadingSpinner.style.display = 'none';
+        }
+    }
+
+    async function fetchDamageReports() {
+        const damageTable = document.getElementById('damageTable');
+        damageTable.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--gray);">Loading...</td></tr>';
+        try {
+            const data = await apiCall(`/maintenance/damages?page=${damageState.page}&page_size=${damageState.pageSize}`);
+            damageState.totalPages = data.total_pages || 0;
+
+            if (!data.items || data.items.length === 0) {
+                damageTable.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--gray);">No damage reports found</td></tr>';
+            } else {
+                damageTable.innerHTML = data.items.map(report => {
+                    const carName = report.car_brand || report.car_model ? `${report.car_brand || ''} ${report.car_model || ''}`.trim() : `Car #${report.car_id}`;
+                    const statusColors = {
+                        'PENDING': 'warning',
+                        'IN_REPAIR': 'info',
+                        'REPAIRED': 'success'
+                    };
+                    const status = report.repair_status || 'PENDING';
+                    return `
+                        <tr>
+                            <td>#${report.id}</td>
+                            <td>${carName}</td>
+                            <td>${report.order_reference || report.order_id ? `Order #${report.order_id}` : '—'}</td>
+                            <td style="max-width: 280px;">${report.damage_description}</td>
+                            <td>${formatCurrency(report.repair_cost)}</td>
+                            <td>
+                                <select class="status-select" onchange="updateDamageStatus(${report.id}, this.value)" 
+                                        style="padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; background: white; cursor: pointer;">
+                                    <option value="PENDING" ${status === 'PENDING' ? 'selected' : ''}>PENDING</option>
+                                    <option value="IN_REPAIR" ${status === 'IN_REPAIR' ? 'selected' : ''}>IN_REPAIR</option>
+                                    <option value="REPAIRED" ${status === 'REPAIRED' ? 'selected' : ''}>REPAIRED</option>
+                                </select>
+                            </td>
+                    <td>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;" onclick="openDamageEditModal(${report.id})">
+                                <i class="fas fa-pen"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteDamageReport(${report.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            buildPagination(damageState, 'damagePagination', 'changeDamagePage');
+        } catch (error) {
+            console.error('Error loading damage reports:', error);
+            damageTable.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--danger);">${error.message || 'Failed to load damage reports'}</td></tr>`;
+        }
+    }
+
+    function changeMaintenancePage(page) {
+        maintenanceState.page = page;
+        fetchMaintenance();
+    }
+
+    function changeDamagePage(page) {
+        damageState.page = page;
+        fetchDamageReports();
+    }
+
+    function openMaintenanceModal(id = null) {
+        maintenanceModalMode = id ? 'edit' : 'create';
+        editingMaintenanceId = id;
+        document.getElementById('maintenanceModalTitle').textContent = id ? 'Edit Maintenance Log' : 'Add Maintenance Log';
+        resetMaintenanceForm();
+        if (id) {
+            showAlert('Editing existing maintenance logs will be supported soon.', 'info');
+        }
+        populateSelect('maintenanceCar');
+        loadCarOptions();
+        document.getElementById('maintenanceModal').classList.add('active');
+    }
+
+    function closeMaintenanceModal() {
+        document.getElementById('maintenanceModal').classList.remove('active');
+        editingMaintenanceId = null;
+    }
+
+    function resetMaintenanceForm() {
+        document.getElementById('maintenanceForm').reset();
+        const typeSelect = document.getElementById('maintenanceType');
+        typeSelect.innerHTML = maintenanceTypes.map(type => `<option value="${type}">${type.replace('_', ' ')}</option>`).join('');
+    }
+
+    function openDamageModal(id = null) {
+        editingDamageId = id;
+        const isEdit = id !== null;
+        document.getElementById('damageModalTitle').textContent = isEdit ? 'Edit Damage Report' : 'Add Damage Report';
+        document.getElementById('damageStatusGroup').style.display = isEdit ? 'block' : 'none';
+        document.getElementById('damageModal').classList.add('active');
+        document.getElementById('damageForm').reset();
+        populateSelect('damageCar');
+        loadCarOptions();
+        
+        if (id) {
+            // Load existing damage report data
+            loadDamageReportForEdit(id);
+        }
+    }
+
+    function openDamageEditModal(id) {
+        openDamageModal(id);
+    }
+
+    async function loadDamageReportForEdit(id) {
+        try {
+            const report = await apiCall(`/maintenance/damages/${id}`);
+            ensureCarOption('damageCar', {
+                id: report.car_id,
+                brand: report.car_brand,
+                car_model: report.car_model,
+                registration_number: report.car_registration || ''
+            });
+            document.getElementById('damageCar').value = report.car_id;
+            if (report.order_id) {
+                document.getElementById('damageOrder').value = report.order_id;
+            }
+            if (report.repair_cost) {
+                document.getElementById('damageCost').value = report.repair_cost;
+            }
+            document.getElementById('damageDescription').value = report.damage_description || '';
+            if (report.repair_status) {
+                document.getElementById('damageStatus').value = report.repair_status;
+            }
+        } catch (error) {
+            console.error('Error loading damage report:', error);
+            showAlert('Failed to load damage report details', 'error');
+        }
+    }
+
+    async function updateDamageStatus(reportId, newStatus) {
+        try {
+            await apiCall(`/maintenance/damages/${reportId}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    repair_status: newStatus
+                })
+            });
+            showAlert(`Damage report status updated to ${newStatus}`, 'success');
+            fetchDamageReports();
+        } catch (error) {
+            console.error('Error updating damage status:', error);
+            showAlert('Failed to update damage report status: ' + (error.message || 'Unknown error'), 'error');
+            fetchDamageReports(); // Reload to reset dropdown
+        }
+    }
+
+    function closeDamageModal() {
+        document.getElementById('damageModal').classList.remove('active');
+        editingDamageId = null;
+    }
+
+    async function submitMaintenanceForm(event) {
+        event.preventDefault();
+        const payload = {
+            car_id: parseInt(document.getElementById('maintenanceCar').value, 10),
+            maintenance_type: document.getElementById('maintenanceType').value,
+            title: document.getElementById('maintenanceTitle').value,
+            description: document.getElementById('maintenanceDescription').value || null,
+            cost: document.getElementById('maintenanceCost').value ? parseFloat(document.getElementById('maintenanceCost').value) : null,
+            start_date: new Date(document.getElementById('maintenanceStart').value).toISOString(),
+            end_date: document.getElementById('maintenanceEnd').value ? new Date(document.getElementById('maintenanceEnd').value).toISOString() : null,
+            service_provider: document.getElementById('maintenanceProvider').value || null
+        };
+
+        try {
+            await apiCall('/maintenance/logs', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+            showAlert('Maintenance log saved successfully', 'success');
+            closeMaintenanceModal();
+            fetchMaintenance();
+        } catch (error) {
+            showAlert(error.message || 'Failed to save maintenance log', 'danger');
+        }
+    }
+
+    async function deleteMaintenanceLog(id) {
+        if (!confirm('Delete this maintenance log?')) return;
+        try {
+            await apiCall(`/maintenance/logs/${id}`, { method: 'DELETE' });
+            showAlert('Maintenance log deleted', 'success');
+            fetchMaintenance();
+        } catch (error) {
+            showAlert(error.message || 'Failed to delete maintenance log', 'danger');
+        }
+    }
+
+    async function submitDamageForm(event) {
+        event.preventDefault();
+        const isEdit = editingDamageId !== null;
+        const payload = {
+            car_id: parseInt(document.getElementById('damageCar').value, 10),
+            order_id: document.getElementById('damageOrder').value ? parseInt(document.getElementById('damageOrder').value, 10) : null,
+            damage_description: document.getElementById('damageDescription').value,
+            repair_cost: document.getElementById('damageCost').value ? parseFloat(document.getElementById('damageCost').value) : null
+        };
+        
+        if (isEdit) {
+            // For edit, include status if available
+            const statusSelect = document.getElementById('damageStatus');
+            if (statusSelect && statusSelect.value) {
+                payload.repair_status = statusSelect.value;
+            }
+            
+            // For edit, use update endpoint
+            try {
+                await apiCall(`/maintenance/damages/${editingDamageId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(payload)
+                });
+                showAlert('Damage report updated successfully', 'success');
+                closeDamageModal();
+                fetchDamageReports();
+            } catch (error) {
+                console.error('Error updating damage report:', error);
+                showAlert('Failed to update damage report: ' + (error.message || 'Unknown error'), 'error');
+            }
+            return;
+        }
+
+        try {
+            await apiCall('/maintenance/damages', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+            showAlert('Damage report saved successfully', 'success');
+            closeDamageModal();
+            fetchDamageReports();
+        } catch (error) {
+            showAlert(error.message || 'Failed to save damage report', 'danger');
+        }
+    }
+
+    async function deleteDamageReport(id) {
+        if (!confirm('Delete this damage report?')) return;
+        try {
+            await apiCall(`/maintenance/damages/${id}`, { method: 'DELETE' });
+            showAlert('Damage report deleted', 'success');
+            fetchDamageReports();
+        } catch (error) {
+            showAlert(error.message || 'Failed to delete damage report', 'danger');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('maintenanceForm').addEventListener('submit', submitMaintenanceForm);
+        document.getElementById('damageForm').addEventListener('submit', submitDamageForm);
+    });
+
+    waitForBaseScripts(() => {
+        resetMaintenanceForm();
+        loadCarOptions().then(() => {
+            fetchMaintenance();
+            fetchDamageReports();
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}
+

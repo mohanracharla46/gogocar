@@ -1,0 +1,281 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Ticket {{ ticket.ticket_number }} - Admin Panel{% endblock %}
+
+{% block page_title %}Ticket {{ ticket.ticket_number }}{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
+    <!-- Main Info -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-ticket-alt" style="color: var(--primary); margin-right: 10px;"></i>Ticket Information</h3>
+            <span class="badge badge-{{ 'success' if ticket.status.value == 'RESOLVED' else 'warning' if ticket.status.value == 'IN_PROGRESS' else 'danger' if ticket.status.value == 'CLOSED' else 'info' }}">
+                {{ ticket.status.value }}
+            </span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label>Ticket Number</label>
+                <div style="font-size: 18px; font-weight: 600;">{{ ticket.ticket_number }}</div>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <div>{{ ticket.status.value }}</div>
+            </div>
+            <div class="form-group">
+                <label>Priority</label>
+                <div>{{ ticket.priority }}</div>
+            </div>
+            <div class="form-group">
+                <label>Created</label>
+                <div>{{ ticket.created_at.strftime('%Y-%m-%d %H:%M') if ticket.created_at else '-' }}</div>
+            </div>
+            <div class="form-group">
+                <label>User</label>
+                <div>
+                    {% if ticket.user %}
+                        <a href="/admin/users/{{ ticket.user.id }}" style="color: var(--primary); text-decoration: none;">
+                            {{ ticket.user.firstname }} {{ ticket.user.lastname }} ({{ ticket.user.email }})
+                        </a>
+                    {% else %}
+                        Guest
+                    {% endif %}
+                </div>
+            </div>
+            {% if ticket.order_id %}
+            <div class="form-group">
+                <label>Related Order</label>
+                <div>
+                    <a href="/admin/bookings/{{ ticket.order_id }}" style="color: var(--primary); text-decoration: none;">
+                        Order #{{ ticket.order_id }}
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group" style="margin-top: 20px;">
+            <label>Subject</label>
+            <div style="font-size: 16px; font-weight: 600;">{{ ticket.subject }}</div>
+        </div>
+        
+        <div class="form-group">
+            <label>Initial Description</label>
+            <div style="background: #f9fafb; padding: 15px; border-radius: 6px; white-space: pre-wrap;">{{ ticket.description }}</div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-cog" style="color: var(--secondary); margin-right: 10px;"></i>Actions</h3>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <select id="statusSelect" class="form-control" onchange="updateStatus()">
+                <option value="OPEN" {% if ticket.status.value == 'OPEN' %}selected{% endif %}>Open</option>
+                <option value="IN_PROGRESS" {% if ticket.status.value == 'IN_PROGRESS' %}selected{% endif %}>In Progress</option>
+                <option value="RESOLVED" {% if ticket.status.value == 'RESOLVED' %}selected{% endif %}>Resolved</option>
+                <option value="CLOSED" {% if ticket.status.value == 'CLOSED' %}selected{% endif %}>Closed</option>
+            </select>
+            
+            <select id="prioritySelect" class="form-control" onchange="updatePriority()">
+                <option value="LOW" {% if ticket.priority == 'LOW' %}selected{% endif %}>Low</option>
+                <option value="MEDIUM" {% if ticket.priority == 'MEDIUM' %}selected{% endif %}>Medium</option>
+                <option value="HIGH" {% if ticket.priority == 'HIGH' %}selected{% endif %}>High</option>
+                <option value="URGENT" {% if ticket.priority == 'URGENT' %}selected{% endif %}>Urgent</option>
+            </select>
+            
+            <a href="/admin/tickets" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Tickets
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Conversation Thread -->
+<div class="card" style="margin-top: 25px;">
+    <div class="card-header">
+        <h3><i class="fas fa-comments" style="color: var(--primary); margin-right: 10px;"></i>Conversation</h3>
+    </div>
+    <div style="padding: 20px; max-height: 500px; overflow-y: auto;">
+        {% if ticket.messages %}
+            {% for message in ticket.messages %}
+            <div style="display: flex; {% if message.is_admin %}justify-content: flex-end{% else %}justify-content: flex-start{% endif %}; margin-bottom: 16px;">
+                <div style="max-width: 70%; background: {% if message.is_admin %}#eff6ff{% else %}#f9fafb{% endif %}; 
+                            padding: 16px; border-radius: 12px; 
+                            border-left: {% if message.is_admin %}none; border-right: 4px solid #3b82f6{% else %}4px solid #ff6b35; border-right: none{% endif %};">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="font-weight: 600; color: {% if message.is_admin %}#1e40af{% else %}#ff6b35{% endif %}; font-size: 14px;">
+                            {% if message.is_admin %}
+                                {% if message.sender %}
+                                    {{ message.sender.firstname }} {{ message.sender.lastname }} (Admin)
+                                {% else %}
+                                    Support Team
+                                {% endif %}
+                            {% else %}
+                                {% if message.sender %}
+                                    {{ message.sender.firstname }} {{ message.sender.lastname }}
+                                {% else %}
+                                    Customer
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div style="font-size: 12px; color: var(--gray);">
+                            {{ message.created_at.strftime('%b %d, %Y at %I:%M %p') if message.created_at else 'N/A' }}
+                        </div>
+                    </div>
+                    <div style="color: #1a202c; white-space: pre-wrap; line-height: 1.6;">{{ message.message }}</div>
+                    {% if message.attachment_url %}
+                    <div style="margin-top: 12px;">
+                        <a href="{{ message.attachment_url }}" target="_blank" 
+                           style="color: #3b82f6; text-decoration: none; font-size: 14px;">
+                            <i class="fas fa-image"></i> View Attachment
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; color: var(--gray); padding: 40px;">
+                No messages yet
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Reply Section -->
+<div class="card" style="margin-top: 25px;">
+    <div class="card-header">
+        <h3><i class="fas fa-reply" style="color: var(--primary); margin-right: 10px;"></i>Reply to Customer</h3>
+    </div>
+    <form id="replyForm" onsubmit="submitReply(event)">
+        <div class="form-group">
+            <label for="replyMessage">Message *</label>
+            <textarea id="replyMessage" name="message" rows="6" required 
+                      placeholder="Enter your reply message here..." 
+                      style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 6px; font-family: inherit; resize: vertical;"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="replyFile">Attach Image (Optional, Max 5MB)</label>
+            <input type="file" id="replyFile" name="file" accept="image/*" 
+                   style="width: 100%; padding: 8px; border: 2px solid var(--border); border-radius: 6px;">
+            <small style="color: var(--gray);">Allowed: JPG, PNG, GIF, WEBP. Maximum size: 5MB</small>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Send Reply
+            </button>
+            <button type="button" class="btn btn-outline" onclick="document.getElementById('replyForm').reset()">
+                <i class="fas fa-times"></i> Clear
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function waitForBaseScripts(callback, maxAttempts = 50) {
+        if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
+            callback();
+        } else if (maxAttempts > 0) {
+            setTimeout(() => waitForBaseScripts(callback, maxAttempts - 1), 100);
+        } else {
+            console.error('Base scripts failed to load');
+        }
+    }
+
+    async function updateStatus() {
+        const status = document.getElementById('statusSelect').value;
+        const ticketId = {{ ticket.id }};
+        
+        try {
+            await apiCall(`/tickets/${ticketId}`, {
+                method: 'PUT',
+                body: JSON.stringify({ status: status })
+            });
+            showAlert('Ticket status updated successfully', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } catch (error) {
+            console.error('Error updating status:', error);
+            showAlert('Error updating status: ' + (error.message || 'Unknown error'), 'error');
+        }
+    }
+
+    async function updatePriority() {
+        const priority = document.getElementById('prioritySelect').value;
+        const ticketId = {{ ticket.id }};
+        
+        try {
+            await apiCall(`/tickets/${ticketId}`, {
+                method: 'PUT',
+                body: JSON.stringify({ priority: priority })
+            });
+            showAlert('Ticket priority updated successfully', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } catch (error) {
+            console.error('Error updating priority:', error);
+            showAlert('Error updating priority: ' + (error.message || 'Unknown error'), 'error');
+        }
+    }
+
+    async function submitReply(event) {
+        event.preventDefault();
+        const ticketId = {{ ticket.id }};
+        const message = document.getElementById('replyMessage').value;
+        const fileInput = document.getElementById('replyFile');
+        const file = fileInput.files[0];
+        
+        if (!message.trim()) {
+            showAlert('Please enter a message', 'error');
+            return;
+        }
+        
+        // Check file size if file is selected
+        if (file) {
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            if (file.size > maxSize) {
+                showAlert('File size exceeds 5MB limit', 'error');
+                return;
+            }
+        }
+        
+        try {
+            const formData = new FormData();
+            formData.append('message', message);
+            if (file) {
+                formData.append('file', file);
+            }
+            
+            const response = await fetch(`/admin/api/tickets/${ticketId}/reply`, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+                throw new Error(error.detail || 'Failed to send reply');
+            }
+            
+            const result = await response.json();
+            showAlert('Reply sent successfully! Email has been sent to the customer.', 'success');
+            document.getElementById('replyForm').reset();
+            
+            // Optionally reload page after a delay
+            setTimeout(() => {
+                // Could reload or show a success message
+            }, 2000);
+        } catch (error) {
+            showAlert('Error sending reply: ' + (error.message || 'Unknown error'), 'error');
+        }
+    }
+
+    waitForBaseScripts(() => {
+        // Any initialization code
+    });
+</script>
+{% endblock %}
+

@@ -1,0 +1,215 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Booking #{{ booking.id }} - Admin Panel{% endblock %}
+
+{% block page_title %}Booking Details #{{ booking.id }}{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
+    <!-- Main Info -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 10px;"></i>Booking Information</h3>
+            <span class="badge badge-{{ 'success' if booking.order_status.value in ['COMPLETED', 'BOOKED'] else 'warning' if booking.order_status.value == 'PENDING' else 'primary' if booking.order_status.value == 'ONGOING' else 'danger' if booking.order_status.value == 'CANCELLED' else 'info' }}">
+                {{ booking.order_status.value }}
+            </span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label>Booking ID</label>
+                <div style="font-size: 18px; font-weight: 600;">#{{ booking.id }}</div>
+            </div>
+            <div class="form-group">
+                <label>Order ID</label>
+                <div>{{ booking.order_id or '-' }}</div>
+            </div>
+            <div class="form-group">
+                <label>User</label>
+                <div>
+                    {% if booking.user %}
+                    <a href="/admin/users/{{ booking.user_id }}" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                        {{ booking.user.firstname }} {{ booking.user.lastname }}
+                    </a>
+                    <div style="font-size: 12px; color: var(--gray); margin-top: 2px;">ID: #{{ booking.user_id }}</div>
+                    {% else %}
+                    <div>#{{ booking.user_id }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Car</label>
+                <div>
+                    {% if booking.car %}
+                    <a href="/admin/cars/{{ booking.car_id }}/edit" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                        {{ booking.car.brand }} {{ booking.car.car_model }}
+                    </a>
+                    <div style="font-size: 12px; color: var(--gray); margin-top: 2px;">ID: #{{ booking.car_id }} | Reg: {{ booking.car.registration_number }}</div>
+                    {% else %}
+                    <div>#{{ booking.car_id }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Start Date</label>
+                <div>{{ booking.start_time.strftime('%Y-%m-%d %H:%M') if booking.start_time else '-' }}</div>
+            </div>
+            <div class="form-group">
+                <label>End Date</label>
+                <div>{{ booking.end_time.strftime('%Y-%m-%d %H:%M') if booking.end_time else '-' }}</div>
+            </div>
+            <div class="form-group">
+                <label>Actual Start</label>
+                <div>{{ booking.actual_start_time.strftime('%Y-%m-%d %H:%M') if booking.actual_start_time else '-' }}</div>
+            </div>
+            <div class="form-group">
+                <label>Actual End</label>
+                <div>{{ booking.actual_end_time.strftime('%Y-%m-%d %H:%M') if booking.actual_end_time else '-' }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-cog" style="color: var(--secondary); margin-right: 10px;"></i>Actions</h3>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            {% if booking.order_status.value == 'PENDING' %}
+            <button onclick="updateStatus('APPROVED')" class="btn btn-success">
+                <i class="fas fa-check"></i> Approve Booking
+            </button>
+            {% elif booking.order_status.value in ['APPROVED', 'BOOKED'] %}
+            <button onclick="updateStatus('ONGOING')" class="btn btn-primary">
+                <i class="fas fa-play"></i> Mark as Ongoing
+            </button>
+            {% elif booking.order_status.value == 'ONGOING' %}
+            <button onclick="updateStatus('COMPLETED')" class="btn btn-success">
+                <i class="fas fa-check-circle"></i> Mark as Completed
+            </button>
+            {% endif %}
+            
+            {% if booking.order_status.value in ['PENDING', 'APPROVED', 'BOOKED'] %}
+            <button onclick="cancelBooking()" class="btn btn-danger">
+                <i class="fas fa-times"></i> Cancel Booking
+            </button>
+            {% endif %}
+            
+            {% if booking.home_delivery and booking.delivery_latitude and booking.delivery_longitude %}
+            <a href="https://www.google.com/maps?q={{ booking.delivery_latitude }},{{ booking.delivery_longitude }}" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="btn btn-primary"
+               style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fas fa-map-marker-alt"></i> Go to Delivery Location
+            </a>
+            {% endif %}
+            
+            <a href="/admin/bookings" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Bookings
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Delivery Information -->
+{% if booking.home_delivery %}
+<div class="card">
+    <div class="card-header">
+        <h3><i class="fas fa-truck" style="color: var(--primary); margin-right: 10px;"></i>Home Delivery Information</h3>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+            <label>Delivery Address</label>
+            <div style="font-size: 14px; color: #4a5568; word-break: break-word;">
+                {{ booking.delivery_address or 'Not provided' }}
+            </div>
+        </div>
+        {% if booking.delivery_latitude and booking.delivery_longitude %}
+        <div class="form-group">
+            <label>Coordinates</label>
+            <div style="font-size: 14px; color: #4a5568;">
+                {{ booking.delivery_latitude }}, {{ booking.delivery_longitude }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Payment Info -->
+<div class="card">
+    <div class="card-header">
+        <h3><i class="fas fa-rupee-sign" style="color: var(--success); margin-right: 10px;"></i>Payment Information</h3>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+        <div>
+            <label>Advance Amount</label>
+            <div style="font-size: 20px; font-weight: 600; color: var(--primary);">
+                ₹{{ "{:,.0f}".format(booking.pay_advance_amount) }}
+            </div>
+            <small style="color: var(--gray);">{{ booking.advance_amount_status.value }}</small>
+        </div>
+        <div>
+            <label>Total Amount</label>
+            <div style="font-size: 20px; font-weight: 600; color: var(--success);">
+                ₹{{ "{:,.0f}".format(booking.total_amount or 0) }}
+            </div>
+        </div>
+        <div>
+            <label>Pay at Car</label>
+            <div style="font-size: 20px; font-weight: 600;">
+                ₹{{ "{:,.0f}".format(booking.pay_at_car or 0) }}
+            </div>
+        </div>
+        <div>
+            <label>Refund Amount</label>
+            <div style="font-size: 20px; font-weight: 600; color: var(--danger);">
+                ₹{{ "{:,.0f}".format(booking.refund_amount or 0) }}
+            </div>
+            {% if booking.refund_status %}
+            <small style="color: var(--gray);">{{ booking.refund_status.value }}</small>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    async function updateStatus(status) {
+        if (!confirm(`Are you sure you want to update booking status to ${status}?`)) return;
+
+        try {
+            await apiCall(`/bookings/{{ booking.id }}`, {
+                method: 'PUT',
+                body: JSON.stringify({ order_status: status }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            showAlert(`Booking status updated to ${status}`, 'success');
+            setTimeout(() => window.location.reload(), 1500);
+        } catch (error) {
+            showAlert('Error updating status: ' + error.message, 'danger');
+        }
+    }
+
+    async function cancelBooking() {
+        const reason = prompt('Please provide cancellation reason:');
+        if (!reason) return;
+
+        if (!confirm('Are you sure you want to cancel this booking? Refund will be processed according to policy.')) return;
+
+        try {
+            await apiCall(`/bookings/{{ booking.id }}/cancel`, {
+                method: 'POST',
+                body: JSON.stringify({ cancellation_reason: reason }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            showAlert('Booking cancelled successfully. Refund initiated if applicable.', 'success');
+            setTimeout(() => window.location.reload(), 1500);
+        } catch (error) {
+            showAlert('Error cancelling booking: ' + error.message, 'danger');
+        }
+    }
+</script>
+{% endblock %}
+

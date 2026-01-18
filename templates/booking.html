@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed - GoGo Self Drive Cars</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background: #f7fafc;
+            color: #1a202c;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 50px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ff6b35;
+            letter-spacing: -1px;
+        }
+
+        .logo-sub {
+            font-size: 12px;
+            color: #1e3a8a;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 600px;
+            margin: 120px auto 40px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Booking Confirmation Header */
+        .confirmation-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .confirmation-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .confirmation-title h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .confetti-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confetti-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .confetti-icon svg circle[fill] {
+            fill: #fbbf24;
+        }
+
+        .confetti-icon svg path[stroke="white"] {
+            stroke: white;
+        }
+
+        .confetti-icon svg circle[fill="#f59e0b"] {
+            fill: #f59e0b;
+        }
+
+        .confirmation-message {
+            font-size: 16px;
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+
+        .booking-id {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        /* Pick-up Location Card */
+        .pickup-location-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .location-icon-container {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            position: relative;
+        }
+
+        .buildings-icon {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 3px;
+            padding: 5px;
+            background: #f7fafc;
+            border-radius: 4px;
+        }
+
+        .building {
+            height: 10px;
+            border-radius: 2px;
+        }
+
+        .building-1 {
+            background: #3b82f6;
+            width: 55%;
+            align-self: flex-end;
+        }
+
+        .building-2 {
+            background: #10b981;
+            width: 75%;
+            align-self: flex-start;
+        }
+
+        .building-3 {
+            background: #fbbf24;
+            width: 65%;
+            align-self: flex-end;
+        }
+
+        .building-4 {
+            background: #ff6b35;
+            width: 45%;
+            align-self: flex-start;
+        }
+
+        .map-pin {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            color: #ef4444;
+            background: white;
+            border-radius: 50%;
+            padding: 2px;
+        }
+
+        .location-info {
+            flex: 1;
+        }
+
+        .location-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 5px;
+        }
+
+        .location-address {
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .mini-map-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            color: #64748b;
+        }
+
+        /* Car Details Section */
+        .car-details-section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .car-display {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .car-image-container {
+            flex-shrink: 0;
+            width: 150px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f7fafc;
+            position: relative;
+        }
+
+        .car-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .deluxe-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+
+        .car-info {
+            flex: 1;
+        }
+
+        .car-model {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .rental-period {
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        /* Payment Summary Section */
+        .payment-summary {
+            margin-bottom: 30px;
+        }
+
+        .payment-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkmark-icon {
+            width: 24px;
+            height: 24px;
+            color: #3b82f6;
+            flex-shrink: 0;
+        }
+
+        .payment-text {
+            font-size: 16px;
+            color: #1a202c;
+            flex: 1;
+        }
+
+        .payment-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .balance-payment {
+            font-size: 14px;
+            color: #4a5568;
+            margin-left: 34px;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+
+        .additional-charge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .charge-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .car-icon {
+            width: 20px;
+            height: 20px;
+            color: #64748b;
+        }
+
+        .charge-label {
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .charge-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        /* Back to Home Button */
+        .back-button {
+            width: 100%;
+            background: #1e3a8a;
+            color: #ffffff;
+            padding: 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            margin-bottom: 30px;
+        }
+
+        .back-button:hover {
+            background: #1e40af;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+        }
+
+        .back-button:active {
+            transform: translateY(0);
+        }
+
+        /* Disclaimer Box */
+        .disclaimer-box {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 12px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .main-container {
+                margin: 100px auto 20px;
+                padding: 20px;
+            }
+
+            .confirmation-title h1 {
+                font-size: 24px;
+            }
+
+            .car-display {
+                flex-direction: column;
+            }
+
+            .car-image-container {
+                width: 100%;
+                height: 200px;
+            }
+
+            .pickup-location-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .main-container {
+                margin: 80px auto 20px;
+                padding: 15px;
+            }
+
+            .confirmation-title h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <div class="logo-main">GoGo</div>
+            <div class="logo-sub">SELF DRIVE CARS</div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Booking Confirmation Header -->
+        <div class="confirmation-header">
+            <div class="confirmation-title">
+                <h1>Booking Confirmed</h1>
+                <div class="confetti-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" fill="#fbbf24" opacity="0.3"/>
+                        <circle cx="12" cy="12" r="8" fill="#fbbf24" opacity="0.5"/>
+                        <circle cx="12" cy="12" r="6" fill="#fbbf24"/>
+                        <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5"/>
+                        <circle cx="6" cy="6" r="1.5" fill="#fbbf24"/>
+                        <circle cx="18" cy="6" r="1.5" fill="#fbbf24"/>
+                        <circle cx="6" cy="18" r="1.5" fill="#fbbf24"/>
+                        <circle cx="18" cy="18" r="1.5" fill="#fbbf24"/>
+                        <circle cx="12" cy="4" r="1" fill="#f59e0b"/>
+                        <circle cx="12" cy="20" r="1" fill="#f59e0b"/>
+                        <circle cx="4" cy="12" r="1" fill="#f59e0b"/>
+                        <circle cx="20" cy="12" r="1" fill="#f59e0b"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="confirmation-message">Thank you! Your booking has been confirmed.</p>
+            <div class="booking-id">Booking ID: <span id="bookingId">49583721</span></div>
+        </div>
+
+        <!-- Pick-up Location Card -->
+        <div class="pickup-location-card">
+            <div class="location-icon-container">
+                <div class="buildings-icon">
+                    <div class="building building-1"></div>
+                    <div class="building building-2"></div>
+                    <div class="building building-3"></div>
+                    <div class="building building-4"></div>
+                </div>
+                <svg class="map-pin" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+            </div>
+            <div class="location-info">
+                <div class="location-label">Pick-up location</div>
+                <div class="location-address" id="pickupAddress">1234 Main St, Hyderabad</div>
+            </div>
+            <svg class="mini-map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <path d="M12 8v4M8 12h4"/>
+            </svg>
+        </div>
+
+        <!-- Car Details Section -->
+        <div class="car-details-section">
+            <div class="car-display">
+                <div class="car-image-container">
+                    <img src="/static/img/landing.png" alt="Car" class="car-image" id="carImage">
+                    <div class="deluxe-badge">DELUXE</div>
+                </div>
+                <div class="car-info">
+                    <h2 class="car-model" id="carModel">Swift Dzire</h2>
+                    <div class="rental-period" id="rentalPeriod">Tue, 26 Mar, 11:00 - Fri, 29 Mar, 16:00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Summary Section -->
+        <div class="payment-summary">
+            <div class="payment-item">
+                <svg class="checkmark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <span class="payment-text">One <span class="payment-amount" id="advanceAmount">₹728</span> payment online</span>
+            </div>
+            <div class="balance-payment">Pay the balance of <strong id="balanceAmount">₹6,559</strong> at car pickup.</div>
+            
+            <div class="additional-charge">
+                <div class="charge-item">
+                    <svg class="car-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                    </svg>
+                    <span class="charge-label">Car pareda</span>
+                </div>
+                <span class="charge-amount" id="carParedaAmount">₹728</span>
+            </div>
+        </div>
+
+        <!-- Back to Home Button -->
+        <button class="back-button" id="backButton" onclick="window.location.href='/'">Back to Home</button>
+
+        <!-- Disclaimer Box -->
+        <div class="disclaimer-box">
+            Damage up to ₹1L covered; below ₹50K you pay note in neutral box.
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = urlParams.get('booking_id') || sessionStorage.getItem('bookingId');
+        const pickupDate = urlParams.get('pickup_date') || sessionStorage.getItem('pickupDate');
+        const endDate = urlParams.get('end_date') || sessionStorage.getItem('endDate');
+        const advance = urlParams.get('advance') || sessionStorage.getItem('advance');
+        const subtotal = urlParams.get('subtotal') || sessionStorage.getItem('subtotal');
+        const carName = urlParams.get('car_name') || sessionStorage.getItem('carName');
+        const pickupAddress = urlParams.get('pickup_address') || sessionStorage.getItem('pickupAddress');
+
+        // Update booking ID
+        if (bookingId) {
+            document.getElementById('bookingId').textContent = bookingId;
+            sessionStorage.setItem('bookingId', bookingId);
+        }
+
+        // Update car model
+        if (carName) {
+            document.getElementById('carModel').textContent = carName;
+            sessionStorage.setItem('carName', carName);
+        }
+
+        // Update pickup address
+        if (pickupAddress) {
+            document.getElementById('pickupAddress').textContent = pickupAddress;
+            sessionStorage.setItem('pickupAddress', pickupAddress);
+        }
+
+        // Format dates
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const day = days[date.getDay()];
+            const month = months[date.getMonth()];
+            const dayNum = date.getDate();
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            const formattedHours = hours.toString().padStart(2, '0');
+            const formattedMinutes = minutes.toString().padStart(2, '0');
+            return `${day}, ${dayNum} ${month}, ${formattedHours}:${formattedMinutes}`;
+        }
+
+        // Update rental period
+        if (pickupDate && endDate) {
+            const pickupFormatted = formatDate(pickupDate);
+            const endFormatted = formatDate(endDate);
+            if (pickupFormatted && endFormatted) {
+                document.getElementById('rentalPeriod').textContent = `${pickupFormatted} - ${endFormatted}`;
+            }
+        }
+
+        // Update payment amounts
+        if (advance) {
+            const advanceAmount = parseInt(advance) || 728;
+            document.getElementById('advanceAmount').textContent = `₹${advanceAmount.toLocaleString('en-IN')}`;
+            document.getElementById('carParedaAmount').textContent = `₹${advanceAmount.toLocaleString('en-IN')}`;
+            sessionStorage.setItem('advance', advance);
+        }
+
+        if (subtotal && advance) {
+            const subtotalAmount = parseInt(subtotal) || 7287;
+            const advanceAmount = parseInt(advance) || 728;
+            const balanceAmount = subtotalAmount - advanceAmount;
+            document.getElementById('balanceAmount').textContent = `₹${balanceAmount.toLocaleString('en-IN')}`;
+            sessionStorage.setItem('subtotal', subtotal);
+        } else {
+            // Default calculation: if subtotal is 7287 and advance is 728, balance is 6559
+            const balanceAmount = 6559;
+            document.getElementById('balanceAmount').textContent = `₹${balanceAmount.toLocaleString('en-IN')}`;
+        }
+
+        // Load car data from sessionStorage
+        function loadCarData() {
+            const carData = sessionStorage.getItem('selectedCar');
+            if (carData) {
+                try {
+                    const car = JSON.parse(carData);
+                    if (car.model) {
+                        document.getElementById('carModel').textContent = car.model;
+                    }
+                    if (car.image) {
+                        document.getElementById('carImage').src = car.image;
+                    }
+                } catch (e) {
+                    console.error('Error parsing car data:', e);
+                }
+            }
+
+            // Load booking data from sessionStorage
+            const bookingData = sessionStorage.getItem('bookingData');
+            if (bookingData) {
+                try {
+                    const booking = JSON.parse(bookingData);
+                    if (booking.pickupDate && booking.endDate) {
+                        const pickupFormatted = formatDate(booking.pickupDate);
+                        const endFormatted = formatDate(booking.endDate);
+                        if (pickupFormatted && endFormatted) {
+                            document.getElementById('rentalPeriod').textContent = `${pickupFormatted} - ${endFormatted}`;
+                        }
+                    }
+                    if (booking.advance) {
+                        const advanceAmount = parseInt(booking.advance) || 728;
+                        document.getElementById('advanceAmount').textContent = `₹${advanceAmount.toLocaleString('en-IN')}`;
+                        document.getElementById('carParedaAmount').textContent = `₹${advanceAmount.toLocaleString('en-IN')}`;
+                    }
+                    if (booking.subtotal && booking.advance) {
+                        const subtotalAmount = parseInt(booking.subtotal) || 7287;
+                        const advanceAmount = parseInt(booking.advance) || 728;
+                        const balanceAmount = subtotalAmount - advanceAmount;
+                        document.getElementById('balanceAmount').textContent = `₹${balanceAmount.toLocaleString('en-IN')}`;
+                    }
+                } catch (e) {
+                    console.error('Error parsing booking data:', e);
+                }
+            }
+        }
+
+        // Load car data on page load
+        loadCarData();
+    </script>
+</body>
+</html>
+
