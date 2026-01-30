@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - GoGo Self Drive Cars</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #e8ebf3;
+            color: #1e293b;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Header From index.html */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 80px;
+            background: #ffffff;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            background: #2b3990;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-img img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            justify-self: start;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2b3990;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: #475569;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+            justify-self: center;
+        }
+
+        nav a {
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #2b3990;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff6b35;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #2b3990;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .host-btn {
+            padding: 10px 25px;
+            border: 2px solid #061a40;
+            color: #061a40;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .host-btn:hover {
+            background: #061a40;
+            color: #ffffff;
+        }
+
+        .login-btn-new {
+            background: #061a40;
+            color: #ffffff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6, 26, 64, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 26, 64, 0.3);
+            background: #0a295c;
+        }
+
+        /* Footer Styles from index.html */
+        .main-footer {
+            background-color: #1e293b;
+            background-image:
+                linear-gradient(rgba(30, 41, 59, 0.95), rgba(30, 41, 59, 0.95)),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.83L.83 55.457l-.83-.83L54.627 0zm-53.797 0l.83.83L.83 1.66l-.83-.83L.83 0zm58.337 0l.83.83-58.337 58.337-.83-.83L59.167 0zM.83 60l-.83-.83L59.167 0l.83.83L.83 60z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            padding: 80px 50px 30px;
+            color: #ffffff;
+            margin-top: 80px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1.2fr 1.3fr;
+            gap: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-img-footer {
+            width: 60px;
+            height: 60px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 5px;
+        }
+
+        .logo-img-footer img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-main-footer {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-sub-footer {
+            font-size: 10px;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .footer-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-col-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #3b82f6;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+            padding-left: 5px;
+        }
+
+        .footer-gallery {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer-gallery img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-icons-wrapper {
+            margin-top: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #ffffff;
+        }
+
+        .social-icon img {
+            width: 25px;
+            height: 25px;
+        }
+
+        .contact-info {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact-info li {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        .contact-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            color: #3b82f6;
+        }
+
+        /* Terms and Conditions Modal */
+        .terms-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+        }
+
+        .terms-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .terms-modal-content {
+            background: #ffffff;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .terms-modal-header {
+            position: sticky;
+            top: 0;
+            background: #ffffff;
+            padding: 25px 30px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .terms-modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
+        }
+
+        .terms-modal-close {
+            background: transparent;
+            border: none;
+            font-size: 32px;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .terms-modal-close:hover {
+            background: #f1f5f9;
+            color: #1a202c;
+        }
+
+        .terms-modal-body {
+            padding: 30px;
+            color: #1a202c;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        .terms-modal-body h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .terms-modal-body h2:first-child {
+            margin-top: 0;
+        }
+
+        .terms-modal-body h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #334155;
+            margin: 20px 0 10px 0;
+        }
+
+        .terms-modal-body p {
+            margin-bottom: 15px;
+            color: #475569;
+        }
+
+        .terms-modal-body ul,
+        .terms-modal-body ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .terms-modal-body li {
+            margin-bottom: 10px;
+            color: #475569;
+        }
+
+        .terms-modal-footer {
+            position: sticky;
+            bottom: 0;
+            background: #ffffff;
+            padding: 20px 30px;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .terms-checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terms-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .terms-checkbox-label {
+            font-size: 14px;
+            color: #475569;
+            cursor: pointer;
+        }
+
+        .btn-modal-primary {
+            padding: 14px 32px;
+            background: #ff6b35;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-modal-primary:hover {
+            background: #e55a2b;
+        }
+
+        .btn-modal-secondary {
+            padding: 10px 20px;
+            background: #f1f5f9;
+            color: #1a202c;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-modal-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* Contact Page */
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 140px 40px 80px;
+        }
+
+        .contact-title {
+            text-align: center;
+            font-size: 42px;
+            font-weight: 800;
+            color: #2b3990;
+            margin-bottom: 60px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Location Cards Section */
+        .location-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 50px;
+            margin-bottom: 80px;
+        }
+
+        .location-card-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .location-card-white {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            min-height: 280px;
+            /* Ensure white boxes are same height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .location-card-blue {
+            background: #394892;
+            /* More vibrant navy from image */
+            border-radius: 25px;
+            padding: 45px 20px 25px;
+            /* Increased top padding to show more blue */
+            margin-top: -40px;
+            /* Overlap to tuck under the white card */
+            width: 92%;
+            /* Slightly narrower than white card */
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Center numbers vertically */
+            height: 160px;
+            /* Fixed height to ensure both are identical */
+        }
+
+        .location-card-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #394892;
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+        }
+
+        .location-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .location-icon svg {
+            width: 45px;
+            height: 45px;
+            fill: #394892;
+        }
+
+        .location-address {
+            font-size: 18px;
+            color: #394892;
+            line-height: 1.4;
+            font-weight: 500;
+            margin-bottom: 0;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .location-phone {
+            display: block;
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .location-phone:hover {
+            transform: scale(1.03);
+            opacity: 0.9;
+        }
+
+        /* Newsletter Section */
+        .newsletter-section {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2b3990 50%, #3b4ba0 100%);
+            border-radius: 25px;
+            padding: 60px 80px;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            box-shadow: 0 20px 60px rgba(43, 57, 144, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative Pattern */
+        .newsletter-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .newsletter-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .newsletter-illustration {
+            flex-shrink: 0;
+            width: 280px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .newsletter-illustration img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
+        }
+
+        .newsletter-content {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .newsletter-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+        }
+
+        .newsletter-subtitle {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: #ffffff;
+            padding: 8px 8px 8px 20px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .newsletter-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: #1e293b;
+            padding: 10px 0;
+            background: transparent;
+        }
+
+        .newsletter-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .newsletter-btn {
+            background: #2b3990;
+            color: #ffffff;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .newsletter-btn:hover {
+            background: #1e296a;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(43, 57, 144, 0.3);
+        }
+
+        /* Email Icon */
+        .email-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .email-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #94a3b8;
+        }
+
+        /* Consolidated Media Queries for contact.html */
+        @media (max-width: 1024px) {
+            .contact-container {
+                padding: 120px 30px 60px;
+            }
+
+            .newsletter-section {
+                gap: 40px;
+                padding: 50px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #ffffff;
+                flex-direction: column;
+                padding: 20px;
+                gap: 5px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                color: #1e293b;
+                padding: 12px 0;
+                width: 100%;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .auth-buttons {
+                display: none;
+            }
+
+            .contact-title {
+                font-size: 32px;
+                margin-bottom: 40px;
+            }
+
+            .location-cards {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .newsletter-section {
+                flex-direction: column;
+                padding: 40px 30px;
+                gap: 30px;
+                text-align: center;
+            }
+
+            .newsletter-illustration {
+                width: 200px;
+            }
+
+            .newsletter-subtitle {
+                font-size: 28px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .newsletter-input {
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+            }
+
+            .newsletter-btn {
+                width: 100%;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .contact-container {
+                padding: 100px 20px 40px;
+            }
+
+            .contact-title {
+                font-size: 28px;
+            }
+
+            .location-card-title {
+                font-size: 24px;
+            }
+
+            .location-phone {
+                font-size: 22px;
+            }
+
+            .location-card-white {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-main {
+                font-size: 20px;
+            }
+
+            .newsletter-subtitle {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-img">
+                <img src="/static/img/logo.png" alt="GOGO CARS">
+            </div>
+            <div class="logo">
+                <div class="logo-main">GOGO CARS</div>
+                <div class="logo-sub">RENT A BUDGET CARS</div>
+            </div>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav id="mainNav">
+            <a href="/cars">Car Rentals <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg></a>
+            <a href="/#why-choose-us">About Us</a>
+            <a href="/contact" class="active">Contact Us</a>
+        </nav>
+
+        <div class="auth-buttons">
+            <a href="/host" class="host-btn">Become a HOST</a>
+            {% if is_authenticated %}
+            <a href="/auth/logout" class="login-btn-new">Logout</a>
+            {% else %}
+            <a href="{{ login_url }}" class="login-btn-new" onclick="setAuthAction('login', event)">
+                Login or Signup
+            </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Contact Page Content -->
+    <div class="contact-container">
+        <h1 class="contact-title">We are Available 24x7</h1>
+
+        <!-- Location Cards -->
+        <div class="location-cards">
+            <!-- Hyderabad Card -->
+            <div class="location-card-wrapper">
+                <div class="location-card-white">
+                    <h2 class="location-card-title">HYDERABAD</h2>
+                    <div class="location-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                    </div>
+                    <div class="location-address">
+                        146, Road No.8, Road, Ayyappa Society,
+                        Madhapur, Hyderabad,
+                        Telangana 500081
+                    </div>
+                </div>
+                <div class="location-card-blue">
+                    <a href="tel:9052775477" class="location-phone">9052775477</a>
+                    <a href="tel:8121765714" class="location-phone">8121765714</a>
+                </div>
+            </div>
+
+            <!-- Chilakaluripet Card -->
+            <div class="location-card-wrapper">
+                <div class="location-card-white">
+                    <h2 class="location-card-title">CHILAKALURIPET</h2>
+                    <div class="location-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                        </svg>
+                    </div>
+                    <div class="location-address">
+                        Opp Current office,
+                        CR Colony, Chilakaluripet,
+                        Andhra Pradesh 522616
+                    </div>
+                </div>
+                <div class="location-card-blue">
+                    <a href="tel:9133135477" class="location-phone">9133135477</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div class="newsletter-section">
+            <div class="newsletter-illustration">
+                <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Email notification illustration -->
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff8787;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Large envelope -->
+                    <g transform="translate(80, 100)">
+                        <rect x="0" y="20" width="140" height="100" rx="10" fill="white" opacity="0.95" />
+                        <path d="M 0 30 L 70 80 L 140 30" stroke="#2b3990" stroke-width="3" fill="none"
+                            stroke-linecap="round" />
+                        <circle cx="120" cy="35" r="20" fill="url(#grad1)" />
+                        <path d="M 110 35 L 118 43 L 130 28" stroke="white" stroke-width="3" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+
+                    <!-- Person 1 - Left -->
+                    <g transform="translate(30, 160)">
+                        <circle cx="20" cy="15" r="12" fill="#6366f1" />
+                        <rect x="8" y="27" width="24" height="30" rx="5" fill="#4f46e5" />
+                        <rect x="0" y="35" width="12" height="20" rx="3" fill="#818cf8" />
+                        <!-- Email icon -->
+                        <rect x="25" y="10" width="30" height="20" rx="3" fill="white" opacity="0.9" />
+                        <path d="M 25 13 L 40 20 L 55 13" stroke="#2b3990" stroke-width="1.5" fill="none" />
+                    </g>
+
+                    <!-- Person 2 - Right -->
+                    <g transform="translate(220, 180)">
+                        <circle cx="20" cy="15" r="12" fill="#6366f1" />
+                        <rect x="8" y="27" width="24" height="30" rx="5" fill="#4f46e5" />
+                        <rect x="32" y="35" width="12" height="20" rx="3" fill="#818cf8" />
+                    </g>
+
+                    <!-- Floating email icons -->
+                    <g opacity="0.8">
+                        <rect x="50" y="80" width="25" height="18" rx="3" fill="white" />
+                        <path d="M 50 83 L 62.5 90 L 75 83" stroke="#2b3990" stroke-width="1.5" fill="none" />
+                    </g>
+
+                    <g opacity="0.8">
+                        <rect x="210" y="100" width="25" height="18" rx="3" fill="white" />
+                        <path d="M 210 103 L 222.5 110 L 235 103" stroke="#2b3990" stroke-width="1.5" fill="none" />
+                    </g>
+
+                    <!-- Decorative circles -->
+                    <circle cx="40" cy="120" r="3" fill="white" opacity="0.6" />
+                    <circle cx="250" cy="140" r="4" fill="white" opacity="0.6" />
+                    <circle cx="90" cy="60" r="2.5" fill="white" opacity="0.6" />
+                </svg>
+            </div>
+            <div class="newsletter-content">
+                <div class="newsletter-title">Would you like to receive</div>
+                <div class="newsletter-subtitle">special offers by your email?</div>
+                <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
+                    <div class="email-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                        </svg>
+                    </div>
+                    <input type="email" class="newsletter-input" placeholder="Enter Your Mail" required>
+                    <button type="submit" class="newsletter-btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer" id="footer">
+        <div class="footer-container">
+            <!-- Column 1: Logo & Desc -->
+            <div class="footer-col" id="about-us">
+                <div class="footer-logo">
+                    <div class="logo-img-footer">
+                        <img src="/static/img/logo.png" alt="GOGO CARS">
+                    </div>
+                    <div class="logo-text-footer">
+                        <div class="logo-main-footer">GOGO CARS</div>
+                        <div class="logo-sub-footer">RENT A BUDGET CARS</div>
+                    </div>
+                </div>
+                <p class="footer-desc">
+                    GoGo Cars offers reliable car rentals with well-maintained vehicles, flexible plans, and complete
+                    freedom for every journey.
+                </p>
+            </div>
+
+            <!-- Column 2: Quick Links -->
+            <div class="footer-col">
+                <h3 class="footer-col-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/cars">Car Rentals</a></li>
+                    <li><a href="#" onclick="showTermsModal(event)">Privacy Policy</a></li>
+                    <li><a href="#" onclick="showTermsModal(event)">Terms & Conditions</a></li>
+                    <li><a href="#" onclick="showTermsModal(event)">Refund Policy</a></li>
+                    <li><a href="/#faqs">FAQs</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Social & Gallery -->
+            <div class="footer-col">
+                <div class="footer-gallery">
+                    <img src="/static/img/car-suv.png" alt="Car 1">
+                    <img src="/static/img/toggle-car.png" alt="Car 2">
+                    <img src="/static/img/image.png" alt="Car 3">
+                </div>
+                <div class="social-icons-wrapper">
+                    <h3 class="footer-col-title" style="margin-bottom: 20px;">Social Links</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon instagram">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
+                                alt="Instagram">
+                        </a>
+                        <a href="#" class="social-icon facebook">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg"
+                                alt="Facebook">
+                        </a>
+                        <a href="#" class="social-icon youtube">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
+                                alt="YouTube">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 4: Contact -->
+            <div class="footer-col">
+                <h3 class="footer-col-title">Contact Us</h3>
+                <ul class="contact-info">
+                    <li>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>146, Road No.8, Road, Ayyappa Society, Madhapur, Hyderabad, Telangana 500081</span>
+                    </li>
+                    <li>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.83 12.83 0 0 0 .62 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.62A2 2 0 0 1 22 16.92z">
+                            </path>
+                        </svg>
+                        <span>8121765714 - 9052775477</span>
+                    </li>
+                    <li>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                            </path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>gogocars5477@gmail.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GoGo Cars. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Terms and Conditions Modal -->
+    <div id="termsModal" class="terms-modal">
+        <div class="terms-modal-content">
+            <div class="terms-modal-header">
+                <h2 class="terms-modal-title">GoGo Cars – Terms and Conditions</h2>
+                <button class="terms-modal-close" onclick="closeTermsModal()">&times;</button>
+            </div>
+            <div class="terms-modal-body">
+                <div
+                    style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #e2e8f0;">
+                    <h1 style="font-size: 28px; font-weight: 700; color: #1a202c; margin-bottom: 10px;">GoGo Cars –
+                        Terms and Conditions</h1>
+                    <p style="font-size: 16px; color: #64748b;">(operated by GoGo enterprises)</p>
+                </div>
+
+                <h2>1. Eligibility & Documentation</h2>
+                <p>Minimum driver age is 21 years. A valid Indian Driving Licence held for at least one year is
+                    mandatory. Original ID proof is required.</p>
+
+                <h2>2. Rental Period</h2>
+                <p>Rental starts at pickup time and ends at return time. Late returns may attract hourly or full-day
+                    charges.</p>
+
+                <h2>3. Authorized Use</h2>
+                <p>The rented vehicle shall be operated strictly by the renter. No sharing or substitution is permitted.
+                    Illegal activities are strictly prohibited.</p>
+
+                <h2>4. Vehicle Responsibility</h2>
+                <p>Vehicle must be returned in the same condition. Smoking or tobacco use inside the vehicle is
+                    prohibited.</p>
+
+                <h2>5. Fuel & Mileage</h2>
+                <p>Fuel level must be returned as provided. Mileage limits apply as per booking.</p>
+
+                <h2>6. Payments & Deposits</h2>
+                <p>All charges must be paid in advance. Security deposit refund will be processed within 7–10 working
+                    days post inspection.</p>
+
+                <h2>7. Accident & Liability</h2>
+                <p>The renter acknowledges that the vehicle is operated entirely at their own risk. GoGo Cars shall bear
+                    no liability for accidents, injury, or death.</p>
+            </div>
+            <div class="terms-modal-footer">
+                <div class="terms-checkbox-container">
+                    <input type="checkbox" id="termsCheckbox" class="terms-checkbox">
+                    <label for="termsCheckbox" class="terms-checkbox-label">I have read and agree to the Terms and
+                        Conditions</label>
+                </div>
+                <div style="display: flex; gap: 10px; width: 100%;">
+                    <button class="btn-modal-secondary" style="flex: 1;" onclick="closeTermsModal()">Cancel</button>
+                    <button class="btn-modal-primary" style="flex: 2;" onclick="acceptTermsAndSignup()">Accept &
+                        Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleNewsletterSubmit(event) {
+            event.preventDefault();
+            const input = event.target.querySelector('.newsletter-input');
+            const email = input.value;
+
+            if (email) {
+                alert('Thank you for subscribing! We will send you special offers to ' + email);
+                input.value = '';
+            }
+        }
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', function () {
+                this.classList.toggle('active');
+                mainNav.classList.toggle('active');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!menuToggle.contains(e.target) && !mainNav.contains(e.target)) {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                }
+            });
+
+            // Close menu when clicking on a nav link
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function () {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                });
+            });
+        }
+
+        // Terms Modal Functions
+        function showTermsModal(event) {
+            if (event) event.preventDefault();
+            const modal = document.getElementById('termsModal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeTermsModal() {
+            const modal = document.getElementById('termsModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function acceptTermsAndSignup() {
+            const checkbox = document.getElementById('termsCheckbox');
+            if (checkbox && !checkbox.checked) {
+                alert('Please accept the Terms and Conditions to continue');
+                return;
+            }
+            // If signup URL exists, redirect
+            const signupUrl = '{{ login_url }}';
+            if (signupUrl) {
+                document.cookie = `auth_action=signup; path=/; max-age=300`;
+                window.location.href = signupUrl;
+            } else {
+                closeTermsModal();
+            }
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function (e) {
+            const modal = document.getElementById('termsModal');
+            if (modal && e.target === modal) {
+                closeTermsModal();
+            }
+        });
+
+        // Auth action cookie helper
+        function setAuthAction(action, event) {
+            document.cookie = `auth_action=${action}; path=/; max-age=300`;
+        }
+    </script>
+</body>
+
+</html>

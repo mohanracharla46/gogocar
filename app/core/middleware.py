@@ -31,6 +31,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         "/cars",
         "/payment",
         "/booking",
+        "/contact",  # Contact page is public
         "/admin/login",  # Admin login page
     ]
     

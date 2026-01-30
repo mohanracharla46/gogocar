@@ -452,6 +452,98 @@ async def cars_page(
         )
 
 
+@app.get("/cars/{car_id}")
+async def car_detail_page(
+    request: Request,
+    car_id: int,
+    db: Session = Depends(get_db)
+):
+    """Car detail page - render car_detail.html with car information"""
+    from app.db.models import Cars, Reviews, Location
+    from sqlalchemy import func
+    from sqlalchemy.orm import joinedload
+    
+    logger.info(f"Car detail page accessed for car_id: {car_id}")
+    
+    try:
+        # Get the car
+        car = db.query(Cars).filter(Cars.id == car_id, Cars.active == True).first()
+        if not car:
+            logger.warning(f"Car with ID {car_id} not found")
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/cars", status_code=302)
+        
+        # Get car location
+        location = db.query(Location).filter(Location.id == car.location_id).first()
+        
+        # Get car reviews
+        reviews = db.query(Reviews).options(
+            joinedload(Reviews.user)
+        ).filter(
+            Reviews.car_id == car_id,
+            Reviews.is_approved == True,
+            Reviews.is_hidden == False
+        ).order_by(Reviews.created_at.desc()).all()
+        
+        # Calculate average rating
+        result = db.query(
+            func.avg(Reviews.rating).label('avg_rating'),
+            func.count(Reviews.id).label('review_count')
+        ).filter(
+            Reviews.car_id == car_id,
+            Reviews.is_approved == True,
+            Reviews.is_hidden == False
+        ).first()
+        
+        avg_rating = float(result.avg_rating) if result.avg_rating else 0.0
+        review_count = result.review_count or 0
+        
+        # Get similar cars (same type, different car)
+        similar_cars = db.query(Cars).filter(
+            Cars.car_type == car.car_type,
+            Cars.id != car_id,
+            Cars.active == True
+        ).limit(3).all()
+        
+        # Check authentication
+        access_token = request.cookies.get('access_token')
+        is_authenticated = access_token is not None and access_token != ''
+        
+        # Convert reviews to dict format
+        reviews_data = []
+        for review in reviews:
+            review_dict = {
+                "id": review.id,
+                "rating": review.rating,
+                "comment": review.review_text or "",
+                "user_firstname": review.user.firstname if review.user else "Anonymous",
+                "user_lastname": review.user.lastname if review.user else "",
+                "created_at": review.created_at.isoformat() if review.created_at else None
+            }
+            reviews_data.append(review_dict)
+        
+        logger.debug(f"Rendering car_detail.html for car {car.brand} {car.car_model}")
+        
+        return templates.TemplateResponse(
+            "car_detail.html",
+            {
+                "request": request,
+                "car": car,
+                "location": location,
+                "reviews": reviews_data,
+                "avg_rating": round(avg_rating, 2),
+                "review_count": review_count,
+                "similar_cars": similar_cars,
+                "is_authenticated": is_authenticated,
+                "login_url": settings.LOGIN_URL
+            }
+        )
+    except Exception as e:
+        logger.error(f"Error rendering car detail page: {str(e)}", exc_info=True)
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(url="/cars", status_code=302)
+
+
 @app.get("/payment")
 async def payment_page(
     request: Request,
@@ -613,6 +705,33 @@ async def booking_page(request: Request):
         logger.error(f"Error rendering booking.html: {str(e)}", exc_info=True)
         return HTMLResponse(
             content=f"<h1>Error loading booking page</h1><p>{str(e)}</p>",
+            status_code=500
+        )
+
+
+@app.get("/contact")
+async def contact_page(request: Request):
+    """Contact page - render contact.html"""
+    logger.info("Contact page accessed")
+    
+    try:
+        # Check authentication
+        access_token = request.cookies.get('access_token')
+        is_authenticated = access_token is not None and access_token != ''
+        
+        return templates.TemplateResponse(
+            "contact.html",
+            {
+                "request": request,
+                "is_authenticated": is_authenticated,
+                "login_url": settings.LOGIN_URL
+            }
+        )
+    except Exception as e:
+        logger.error(f"Error rendering contact.html: {str(e)}", exc_info=True)
+        from fastapi.responses import HTMLResponse
+        return HTMLResponse(
+            content="<h1>Error loading contact page</h1>",
             status_code=500
         )
 

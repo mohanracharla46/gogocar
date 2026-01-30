@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renault Triber 2024 - GoGo Cars</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #1e293b;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Header - Home Page Design */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 80px;
+            background: #ffffff;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            background: #2b3990;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-img img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            justify-self: start;
+        }
+
+        .logo-main {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2b3990;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: #475569;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+            justify-self: center;
+        }
+
+        nav a {
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #2b3990;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff6b35;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #2b3990;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Login Button - Home Page Design */
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .host-btn {
+            padding: 10px 25px;
+            border: 2px solid #061a40;
+            color: #061a40;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .host-btn:hover {
+            background: #061a40;
+            color: #ffffff;
+        }
+
+        .login-btn-new {
+            background: #061a40;
+            color: #ffffff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6, 26, 64, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 26, 64, 0.3);
+            background: #0a295c;
+        }
+
+        .user-icon {
+            width: 20px;
+            height: 20px;
+            fill: #2b3990;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 40px 60px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: #10b981;
+        }
+
+        .breadcrumb span {
+            color: #cbd5e0;
+        }
+
+        /* Left Column */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Car Title Section */
+        .car-title-section {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .car-title-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .car-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .car-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .share-btn {
+            background: #f1f5f9;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            transition: all 0.2s;
+        }
+
+        .share-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .rating-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 4px;
+        }
+
+        .star {
+            color: #fbbf24;
+            font-size: 20px;
+        }
+
+        .rating-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .rating-count {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Image Gallery */
+        .image-gallery {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-image-container {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #1e293b;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-nav:hover {
+            background: #ffffff;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .gallery-nav.prev {
+            left: 16px;
+        }
+
+        .gallery-nav.next {
+            right: 16px;
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+        }
+
+        .thumbnail {
+            aspect-ratio: 16/10;
+            background: #f1f5f9;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .thumbnail:hover {
+            border-color: #2b3990;
+        }
+
+        .thumbnail.active {
+            border-color: #2b3990;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .tabs-header {
+            display: flex;
+            border-bottom: 2px solid #f1f5f9;
+            background: #fafbfc;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 16px 24px;
+            background: transparent;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: #1e293b;
+            background: #f8f9fa;
+        }
+
+        .tab-btn.active {
+            color: #2b3990;
+            border-bottom-color: #2b3990;
+            background: #ffffff;
+        }
+
+        .tab-content {
+            padding: 32px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Car Details */
+        .car-details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .detail-icon {
+            width: 20px;
+            height: 20px;
+            color: #2b3990;
+        }
+
+        .detail-text {
+            font-size: 15px;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        /* Features */
+        .features-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            color: #475569;
+        }
+
+        .feature-item::before {
+            content: '✓';
+            color: #2b3990;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        /* Reviews */
+        .review-item {
+            padding: 24px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .reviewer-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .review-date {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* Similar Listings */
+        .similar-listings {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .similar-listings h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 24px;
+        }
+
+        .similar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .similar-card {
+            background: linear-gradient(135deg, #2b3990 0%, #061a40 100%);
+            border-radius: 16px;
+            padding: 20px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .similar-card:nth-child(2) {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .similar-card:nth-child(3) {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        }
+
+        .similar-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .similar-badge {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .similar-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .similar-specs {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .similar-price {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .similar-period {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Inclusion/Exclusions Section */
+        .inclusions-exclusions {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .inclusions-exclusions h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 24px;
+        }
+
+        .inclusion-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .inclusion-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .inclusion-icon {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .inclusion-icon.check {
+            border: 2px solid #10b981;
+            color: #10b981;
+        }
+
+        .inclusion-icon.cross {
+            border: 2px solid #ef4444;
+            color: #ef4444;
+        }
+
+        /* Google Reviews Section */
+        .google-reviews-section {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .google-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .google-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .google-logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .overall-rating {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .rating-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1;
+        }
+
+        .rating-stars {
+            color: #fbbf24;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        .reviews-count {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .google-reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .google-review-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .reviewer-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .reviewer-meta {
+            flex: 1;
+        }
+
+        .reviewer-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+            display: block;
+        }
+
+        .review-time {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .card-stars {
+            color: #fbbf24;
+            font-size: 12px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .review-content {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .view-all-google {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: #2b3990;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .view-all-google:hover {
+            color: #061a40;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .google-reviews-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* FAQ */
+        .faq-section {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-section h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 24px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .faq-question:hover {
+            color: #2b3990;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            margin-top: 12px;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Pricing Card */
+        .pricing-card {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 100px;
+            /* Removed overflow:auto to prevent clipping of flyout */
+        }
+
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .price-amount {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .price-period {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .price-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        /* Trip Details */
+        .trip-details {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .trip-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .trip-item:last-child {
+            border-bottom: none;
+        }
+
+        .trip-label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .trip-value {
+            font-size: 14px;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .date-input {
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+            text-align: right;
+            outline: none;
+        }
+
+        .date-input::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        .date-input::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+
+        /* Delivery Toggle */
+        .delivery-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: #eff6ff;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .delivery-toggle:hover {
+            background: #dbeafe;
+        }
+
+        .delivery-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .delivery-icon {
+            width: 24px;
+            height: 24px;
+            color: #2b3990;
+        }
+
+        .delivery-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .delivery-subtext {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .toggle-switch {
+            width: 48px;
+            height: 26px;
+            background: #2b3990;
+            border-radius: 13px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border-radius: 50%;
+            top: 3px;
+            right: 3px;
+            transition: all 0.3s;
+        }
+
+        /* Security Deposit */
+        .security-deposit-block {
+            background: #f5f3ff;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .security-deposit-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .security-deposit-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .security-deposit-main-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6d28d9;
+            margin-bottom: 4px;
+        }
+
+        .security-deposit-subtext {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .deposit-options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .deposit-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .deposit-option:hover {
+            border-color: #7c3aed;
+            background: #fdfcff;
+        }
+
+        .deposit-option.selected {
+            border-color: #7c3aed;
+            background: #fdfcff;
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.1);
+        }
+
+        .deposit-option input[type="radio"] {
+            accent-color: #7c3aed;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .deposit-option span {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .deposit-option.selected span {
+            color: #6d28d9;
+        }
+
+        /* Protection Package */
+        .protection-package {
+            background: #fffbeb;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .protection-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .protection-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .protection-desc {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .protection-options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .protection-option {
+            padding: 12px 14px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .protection-option:hover {
+            border-color: #f59e0b;
+            background: #fffcf0;
+        }
+
+        .protection-option.selected {
+            border-color: #f59e0b;
+            background: #fffdf5;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+        }
+
+        .protection-option-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+            display: block;
+        }
+
+        .protection-option.selected .protection-option-name {
+            color: #b45309;
+        }
+
+        /* Hover Flyout Styling */
+        .protection-hover-info {
+            position: absolute;
+            right: calc(100% + 15px);
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+            width: 280px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .protection-option:hover .protection-hover-info {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        .protection-hover-info::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent transparent transparent #ffffff;
+        }
+
+        .hover-info-title {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #fecaca;
+            padding-bottom: 4px;
+            width: fit-content;
+        }
+
+        .hover-info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .hover-info-list li {
+            font-size: 13px;
+            color: #475569;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hover-info-list li::before {
+            content: "•";
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        /* Total Price */
+        .total-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-top: 2px solid #e2e8f0;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .total-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .total-amount {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        /* CTA Buttons */
+        .cta-button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+
+        .cta-primary {
+            background: #2b3990;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(43, 57, 144, 0.3);
+        }
+
+        .cta-primary:hover {
+            background: #061a40;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(43, 57, 144, 0.4);
+        }
+
+        .cta-secondary {
+            background: #f8f9fa;
+            color: #1e293b;
+            border: 2px solid #e2e8f0;
+        }
+
+        .cta-secondary:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e0;
+        }
+
+        /* Host Info */
+        .host-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .host-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2b3990 0%, #061a40 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .host-details {
+            flex: 1;
+        }
+
+        .host-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 2px;
+        }
+
+        .host-rating {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .host-cta {
+            background: #2b3990;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .host-cta:hover {
+            background: #061a40;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .right-sidebar {
+                order: -1;
+            }
+
+            .pricing-card {
+                position: static;
+            }
+
+            .car-details-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .similar-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-section {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .main-container {
+                padding: 90px 20px 40px;
+            }
+
+            .car-title {
+                font-size: 24px;
+            }
+
+            .main-image-container {
+                height: 300px;
+            }
+
+            .thumbnail-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .car-details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs-header {
+                overflow-x: auto;
+            }
+
+            .tab-btn {
+                white-space: nowrap;
+            }
+
+            .faq-section {
+                padding: 20px;
+            }
+
+            .faq-section h2 {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+
+            .faq-question {
+                font-size: 15px;
+            }
+
+            .faq-answer {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-img">
+                <img src="/static/img/logo.png" alt="GOGO CARS">
+            </div>
+            <div class="logo">
+                <div class="logo-main">GOGO CARS</div>
+                <div class="logo-sub">RENT A BUDGET CARS</div>
+            </div>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav id="mainNav">
+            <a href="/cars">Car Rentals <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg></a>
+            <a href="#why-choose-us">About Us</a>
+            <a href="/contact">Contact Us</a>
+        </nav>
+        <div class="auth-buttons">
+            <a href="/host" class="host-btn">Become a HOST</a>
+            <a href="#" class="login-btn-new">
+                Login or Signup
+            </a>
+        </div>
+
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="/">Home</a>
+            <span>›</span>
+            <a href="/cars">Rentals</a>
+            <span>›</span>
+            <a href="#">Hatchback</a>
+            <span>›</span>
+            <span>Renault Triber 2024</span>
+        </div>
+
+        <!-- Left Column -->
+        <div class="left-column">
+            <!-- Car Title Section -->
+            <div class="car-title-section">
+                <div class="car-title-header">
+                    <div>
+                        <h1 class="car-title">Renault Triber 2024</h1>
+                        <p class="car-subtitle">7 Seater • Petrol • Manual</p>
+                    </div>
+                    <button class="share-btn">🔗 Share</button>
+                </div>
+                <div class="rating-section">
+                    <div class="stars">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star" style="color: #cbd5e0;">★</span>
+                    </div>
+                    <span class="rating-text">4.51</span>
+                    <span class="rating-count">Based on 742 Reviews</span>
+                </div>
+            </div>
+
+            <!-- Image Gallery -->
+            <div class="image-gallery">
+                <div class="main-image-container">
+                    <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-front-three-quarter-71.jpeg?isig=0&q=80"
+                        alt="Renault Triber 2024" class="main-image" id="mainImage">
+                    <button class="gallery-nav prev" onclick="changeImage(-1)">‹</button>
+                    <button class="gallery-nav next" onclick="changeImage(1)">›</button>
+                </div>
+                <div class="thumbnail-grid">
+                    <div class="thumbnail active" onclick="selectImage(0)">
+                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-front-three-quarter-71.jpeg?isig=0&q=80"
+                            alt="View 1">
+                    </div>
+                    <div class="thumbnail" onclick="selectImage(1)">
+                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-side-view.jpeg?isig=0&q=80"
+                            alt="View 2">
+                    </div>
+                    <div class="thumbnail" onclick="selectImage(2)">
+                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-rear-three-quarter.jpeg?isig=0&q=80"
+                            alt="View 3">
+                    </div>
+                    <div class="thumbnail" onclick="selectImage(3)">
+                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-dashboard.jpeg?isig=0&q=80"
+                            alt="Interior 1">
+                    </div>
+                    <div class="thumbnail" onclick="selectImage(4)">
+                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-front-row-seats.jpeg?isig=0&q=80"
+                            alt="Interior 2">
+                    </div>
+                    <div class="thumbnail" onclick="selectImage(5)">
+                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-steering-wheel.jpeg?isig=0&q=80"
+                            alt="Interior 3">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="switchTab('details')">Details</button>
+                    <button class="tab-btn" onclick="switchTab('reviews')">Reviews</button>
+                    <button class="tab-btn" onclick="switchTab('features')">Features</button>
+                    <button class="tab-btn" onclick="switchTab('conditions')">T&C and Conditions</button>
+                    <button class="tab-btn" onclick="switchTab('faqs')">FAQ</button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- Details Tab -->
+                    <div class="tab-pane active" id="details">
+                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Car Location</h3>
+                        <div class="car-details-grid">
+                            <div class="detail-item">
+                                <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                    </path>
+                                </svg>
+                                <span class="detail-text">7 Seater</span>
+                            </div>
+                            <div class="detail-item">
+                                <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                <span class="detail-text">Petrol</span>
+                            </div>
+                            <div class="detail-item">
+                                <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
+                                    </path>
+                                </svg>
+                                <span class="detail-text">Manual</span>
+                            </div>
+                            <div class="detail-item">
+                                <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                    </path>
+                                </svg>
+                                <span class="detail-text">ABS with EBD</span>
+                            </div>
+                            <div class="detail-item">
+                                <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z">
+                                    </path>
+                                </svg>
+                                <span class="detail-text">Air Conditioning</span>
+                            </div>
+                            <div class="detail-item">
+                                <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
+                                    </path>
+                                </svg>
+                                <span class="detail-text">Bluetooth</span>
+                            </div>
+                        </div>
+
+                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px; margin-top: 32px;">
+                            Description</h3>
+                        <p style="font-size: 15px; color: #475569; line-height: 1.7;">
+                            The Renault Triber 2024 is a versatile and spacious 7-seater hatchback that combines
+                            practicality with modern design.
+                            Perfect for family trips or group outings, this vehicle offers excellent fuel efficiency and
+                            comfortable seating.
+                            With its advanced safety features including ABS with EBD, dual airbags, and rear parking
+                            sensors, you can drive with confidence.
+                            The car comes equipped with air conditioning, power steering, and a modern infotainment
+                            system with Bluetooth connectivity.
+                        </p>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div class="tab-pane" id="reviews">
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="reviewer-name">Rajesh Kumar</span>
+                                <span class="review-date">2 days ago</span>
+                            </div>
+                            <div class="review-stars">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <p class="review-text">
+                                Excellent car for family trips! The 7-seater configuration was perfect for our weekend
+                                getaway.
+                                The car was clean, well-maintained, and the booking process was seamless. Highly
+                                recommended!
+                            </p>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="reviewer-name">Priya Sharma</span>
+                                <span class="review-date">1 week ago</span>
+                            </div>
+                            <div class="review-stars">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star" style="color: #cbd5e0;">★</span>
+                            </div>
+                            <p class="review-text">
+                                Good value for money. The car is spacious and comfortable. AC works great.
+                                Only minor issue was the pickup location was a bit hard to find, but overall great
+                                experience.
+                            </p>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="reviewer-name">Amit Patel</span>
+                                <span class="review-date">2 weeks ago</span>
+                            </div>
+                            <div class="review-stars">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <p class="review-text">
+                                Perfect for city driving and highway trips. Fuel efficient and easy to handle.
+                                The host was very responsive and helpful. Will definitely rent again!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Features Tab -->
+                    <div class="tab-pane" id="features">
+                        <div class="features-section">
+                            <h3>Safety Features</h3>
+                            <div class="features-grid">
+                                <div class="feature-item">ABS with EBD</div>
+                                <div class="feature-item">Dual Airbags</div>
+                                <div class="feature-item">Rear Parking Sensors</div>
+                                <div class="feature-item">Child Safety Locks</div>
+                                <div class="feature-item">Seat Belt Warning</div>
+                                <div class="feature-item">Engine Immobilizer</div>
+                            </div>
+                        </div>
+
+                        <div class="features-section" style="margin-top: 32px;">
+                            <h3>Comfort & Convenience</h3>
+                            <div class="features-grid">
+                                <div class="feature-item">Air Conditioning</div>
+                                <div class="feature-item">Power Steering</div>
+                                <div class="feature-item">Power Windows</div>
+                                <div class="feature-item">Central Locking</div>
+                                <div class="feature-item">Adjustable Seats</div>
+                                <div class="feature-item">Cup Holders</div>
+                            </div>
+                        </div>
+
+                        <div class="features-section" style="margin-top: 32px;">
+                            <h3>Entertainment</h3>
+                            <div class="features-grid">
+                                <div class="feature-item">Bluetooth Connectivity</div>
+                                <div class="feature-item">USB Charging Ports</div>
+                                <div class="feature-item">Aux Input</div>
+                                <div class="feature-item">Steering Mounted Controls</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms & Conditions Tab -->
+                    <div class="tab-pane" id="conditions">
+                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Terms & Conditions</h3>
+                        <div style="font-size: 15px; color: #475569; line-height: 1.8;">
+                            <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">1.
+                                Eligibility</h4>
+                            <p>The renter must be at least 21 years old and hold a valid driver's license for a minimum
+                                of 1 year.</p>
+
+                            <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">2.
+                                Security Deposit</h4>
+                            <p>A refundable security deposit of ₹5,000 is required at the time of booking. This will be
+                                refunded within 7 business days after the vehicle is returned in good condition.</p>
+
+                            <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">3. Fuel
+                                Policy</h4>
+                            <p>The vehicle will be provided with a full tank of fuel. Please return the vehicle with a
+                                full tank to avoid additional charges.</p>
+
+                            <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">4.
+                                Mileage Limit</h4>
+                            <p>The rental includes 300 km per day. Additional kilometers will be charged at ₹8/km.</p>
+
+                            <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">5.
+                                Cancellation Policy</h4>
+                            <p>Free cancellation up to 24 hours before the trip start time. Cancellations within 24
+                                hours will incur a 50% charge.</p>
+
+                            <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">6.
+                                Insurance</h4>
+                            <p>The vehicle is covered by comprehensive insurance. However, the renter is responsible for
+                                any damages caused due to negligence or violation of traffic rules.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Tab -->
+                    <div class="tab-pane" id="faqs">
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <span>What documents do I need to rent this car?</span>
+                                <span class="faq-icon">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                You will need a valid driver's license, Aadhar card or passport for identity
+                                verification,
+                                and a credit/debit card for payment and security deposit.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <span>Can I extend my rental period?</span>
+                                <span class="faq-icon">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                Yes, you can extend your rental period subject to availability. Please contact the host
+                                at least 4 hours before your scheduled return time to arrange an extension.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <span>Is the car available for outstation trips?</span>
+                                <span class="faq-icon">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                Yes, this car is available for outstation trips. Please note that additional mileage
+                                charges
+                                will apply beyond the included 300 km per day limit.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <span>What happens if I return the car late?</span>
+                                <span class="faq-icon">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                A grace period of 1 hour is provided. Beyond that, you will be charged ₹200 per hour
+                                for the delay. If the delay exceeds 3 hours, you will be charged for an additional day.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inclusion/Exclusions -->
+            <div class="inclusions-exclusions">
+                <h2>Inclusion/Exclusions</h2>
+                <div class="inclusion-list">
+                    <div class="inclusion-item">
+                        <span class="inclusion-icon check">✓</span>
+                        <span>Security deposit (if applied) will automatically be refunded within 2-3 days after the
+                            trip completion.</span>
+                    </div>
+                    <div class="inclusion-item">
+                        <span class="inclusion-icon cross">✕</span>
+                        <span>Fuel not included. Guest should return the car with the same fuel level as at
+                            start.</span>
+                    </div>
+                    <div class="inclusion-item">
+                        <span class="inclusion-icon cross">✕</span>
+                        <span>Toll/Fastag charges not included. Check with host for Fastag recharge.</span>
+                    </div>
+                    <div class="inclusion-item">
+                        <span class="inclusion-icon cross">✕</span>
+                        <span>Trip Protection excludes: Off-road use, driving under influence, over-speeding, illegal
+                            use, restricted zones.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Reviews -->
+            <div class="google-reviews-section">
+                <div class="google-header">
+                    <div class="google-brand">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png"
+                            alt="Google" class="google-logo">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-size: 18px; font-weight: 700; color: #1e293b; line-height: 1.2;">Business
+                                Reviews</span>
+                            <span
+                                style="font-size: 12px; color: #10b981; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Verified Google Listing
+                            </span>
+                        </div>
+                    </div>
+                    <div class="overall-rating">
+                        <span class="rating-number">4.9 / 5</span>
+                        <div class="rating-stars">★★★★★</div>
+                        <span class="reviews-count">Based on 1,240+ live reviews</span>
+                    </div>
+                </div>
+
+                <div class="google-reviews-grid" id="googleReviewsGrid">
+                    <!-- Reviews are loaded here -->
+                    <div class="google-review-card">
+                        <div class="reviewer-info">
+                            <div class="reviewer-photo">R</div>
+                            <div class="reviewer-meta">
+                                <span class="reviewer-name">Rahul Verma <img src="https://www.google.com/favicon.ico"
+                                        style="width: 12px; margin-left: 4px;" alt="G"></span>
+                                <span class="review-time">Verified Local Guide</span>
+                            </div>
+                        </div>
+                        <span class="card-stars">★★★★★</span>
+                        <p class="review-content">"Amazing service! The car was in perfect condition and the paperwork
+                            was handled very professionally. Best car rental experience in the city."</p>
+                    </div>
+
+                    <div class="google-review-card">
+                        <div class="reviewer-info">
+                            <div class="reviewer-photo" style="background: #fee2e2; color: #ef4444;">S</div>
+                            <div class="reviewer-meta">
+                                <span class="reviewer-name">Sneha Kapoor <img src="https://www.google.com/favicon.ico"
+                                        style="width: 12px; margin-left: 4px;" alt="G"></span>
+                                <span class="review-time">Verified Google User</span>
+                            </div>
+                        </div>
+                        <span class="card-stars">★★★★★</span>
+                        <p class="review-content">"Highly recommend GoGo Cars! Very transparent pricing and the staff is
+                            super helpful. The doorstep delivery was on time."</p>
+                    </div>
+                </div>
+
+                <div
+                    style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #f1f5f9; display: flex; justify-content: center;">
+                    <a href="https://www.google.com/maps" target="_blank" class="view-all-google"
+                        style="margin-top: 0;">Write a review on Google</a>
+                </div>
+            </div>
+
+            <!-- Similar Listings -->
+            <div class="similar-listings">
+                <h2>Similar Listings</h2>
+                <div class="similar-grid">
+                    <div class="similar-card">
+                        <div class="similar-badge">POPULAR</div>
+                        <div class="similar-name">Tata Altroz</div>
+                        <div class="similar-specs">Hatchback • Petrol • 5 Seats</div>
+                        <div class="similar-price">₹1,200</div>
+                        <div class="similar-period">Per day</div>
+                    </div>
+                    <div class="similar-card">
+                        <div class="similar-badge">FEATURED</div>
+                        <div class="similar-name">Maruti Swift</div>
+                        <div class="similar-specs">Hatchback • Petrol • 5 Seats</div>
+                        <div class="similar-price">₹1,100</div>
+                        <div class="similar-period">Per day</div>
+                    </div>
+                    <div class="similar-card">
+                        <div class="similar-badge">NEW</div>
+                        <div class="similar-name">Hyundai i20</div>
+                        <div class="similar-specs">Hatchback • Petrol • 5 Seats</div>
+                        <div class="similar-price">₹1,400</div>
+                        <div class="similar-period">Per day</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="pricing-card">
+                <div class="price-header">
+                    <div class="price-amount">₹979</div>
+                </div>
+                <div class="price-label">Per day (24 hours)</div>
+
+                <!-- Trip Details -->
+                <div class="trip-details">
+                    <div class="trip-item">
+                        <span class="trip-label">Start Date</span>
+                        <input type="datetime-local" class="date-input" id="startDate" value="2026-01-20T10:00">
+                    </div>
+                    <div class="trip-item">
+                        <span class="trip-label">End Date</span>
+                        <input type="datetime-local" class="date-input" id="endDate" value="2026-01-22T10:00">
+                    </div>
+                    <div class="trip-item">
+                        <span class="trip-label">Duration</span>
+                        <span class="trip-value" id="durationDisplay">2 Days</span>
+                    </div>
+                </div>
+
+                <!-- Delivery Toggle -->
+                <div class="delivery-toggle">
+                    <div class="delivery-info">
+                        <svg class="delivery-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4">
+                            </path>
+                        </svg>
+                        <div>
+                            <div class="delivery-text">Doorstep Delivery</div>
+                            <div class="delivery-subtext">Get car delivered to your location</div>
+                        </div>
+                    </div>
+                    <div class="toggle-switch"></div>
+                </div>
+
+                <!-- Security Deposit -->
+                <div class="security-deposit-block">
+                    <div class="security-deposit-header">
+                        <svg style="width: 20px; height: 20px; color: #7c3aed;" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                        <span class="security-deposit-title">Security Deposit</span>
+                    </div>
+
+                    <div class="deposit-options-grid">
+                        <label class="deposit-option selected">
+                            <input type="radio" name="deposit_type" value="bike" checked>
+                            <span>Bike + RC <span style="font-size: 10px;"> (Above 2018 model bikes)</span></span>
+                        </label>
+                        <label class="deposit-option">
+                            <input type="radio" name="deposit_type" value="laptop">
+                            <span>Laptop</span>
+                        </label>
+                        <label class="deposit-option">
+                            <input type="radio" name="deposit_type" value="cash">
+                            <span>10K Cash <span style="font-size: 10px;">(Instant refund after return)</span></span>
+                        </label>
+                    </div>
+
+                    <p class="security-deposit-subtext">You Pay Lakhs of Money in case of damage</p>
+                </div>
+
+                <!-- Protection Package -->
+                <div class="protection-package">
+                    <div class="protection-header">
+                        <svg style="width: 20px; height: 20px; color: #f59e0b;" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                            </path>
+                        </svg>
+                        <span class="protection-title">Protection Package</span>
+                    </div>
+
+                    <div class="protection-options-grid">
+                        <div class="protection-option selected" data-protection="basic">
+                            <span class="protection-option-name">Basic Protection</span>
+                            <div class="protection-hover-info">
+                                <span class="hover-info-title">Basic Coverage</span>
+                                <ul class="hover-info-list">
+                                    <li>Rs.177 only</li>
+                                    <li>70% of damage cost need to pay</li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="protection-option" data-protection="plus">
+                            <span class="protection-option-name">Plus Protection</span>
+                            <div class="protection-hover-info">
+                                <span class="hover-info-title" style="border-color: #fca5a5;">Plus Benefits</span>
+                                <ul class="hover-info-list">
+                                    <li>Rs.277 only</li>
+                                    <li>40% of damage cost need to pay</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="protection-option" data-protection="premium">
+                            <span class="protection-option-name">Premium Protection</span>
+                            <div class="protection-hover-info">
+                                <span class="hover-info-title" style="border-color: #f87171;">Full Premium</span>
+                                <ul class="hover-info-list">
+                                    <li>Rs.377 only</li>
+                                    <li>You need to pay only ₹10,000 out of the total damage cost of ₹1,00,000.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Price -->
+                <div class="total-price">
+                    <span class="total-label">Total Price</span>
+                    <span class="total-amount" id="totalAmountDisplay">₹1,958</span>
+                </div>
+
+                <!-- CTA Buttons -->
+                <button class="cta-button cta-primary">LOGIN TO CONTINUE</button>
+                <button class="cta-button cta-secondary">Contact Host</button>
+
+                <!-- Host Info -->
+                <div class="host-info">
+                    <div class="host-avatar">PK</div>
+                    <div class="host-details">
+                        <div class="host-name">Pradeep Kumar</div>
+                        <div class="host-rating">⭐ 4.8 • 156 trips</div>
+                    </div>
+                    <button class="host-cta">Chat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Image Gallery
+        const images = [
+            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-front-three-quarter-71.jpeg?isig=0&q=80',
+            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-side-view.jpeg?isig=0&q=80',
+            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-rear-three-quarter.jpeg?isig=0&q=80',
+            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-dashboard.jpeg?isig=0&q=80',
+            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-front-row-seats.jpeg?isig=0&q=80',
+            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-steering-wheel.jpeg?isig=0&q=80'
+        ];
+
+        let currentImageIndex = 0;
+
+        function changeImage(direction) {
+            currentImageIndex += direction;
+            if (currentImageIndex < 0) currentImageIndex = images.length - 1;
+            if (currentImageIndex >= images.length) currentImageIndex = 0;
+
+            document.getElementById('mainImage').src = images[currentImageIndex];
+            updateThumbnails();
+        }
+
+        function selectImage(index) {
+            currentImageIndex = index;
+            document.getElementById('mainImage').src = images[index];
+            updateThumbnails();
+        }
+
+        function updateThumbnails() {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                thumb.classList.toggle('active', index === currentImageIndex);
+            });
+        }
+
+        // Tabs
+        function switchTab(tabName) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // FAQ Toggle
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+
+            // Close all FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Open clicked FAQ if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Delivery Toggle
+        document.querySelector('.delivery-toggle').addEventListener('click', function () {
+            const toggle = this.querySelector('.toggle-switch');
+            toggle.classList.toggle('active');
+        });
+
+        // Security Deposit Selection
+        document.querySelectorAll('.deposit-option').forEach(option => {
+            option.addEventListener('click', function () {
+                // Remove selected class from all
+                document.querySelectorAll('.deposit-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                // Add selected class to current
+                this.classList.add('selected');
+                // The radio button inside will be automatically checked by the browser 
+                // because it's wrapped in a <label>
+            });
+        });
+
+        // Protection Selection
+        document.querySelectorAll('.protection-option').forEach(option => {
+            option.addEventListener('click', function () {
+                document.querySelectorAll('.protection-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                // Protection level updated
+                console.log('Selected protection:', this.dataset.protection);
+            });
+        });
+
+        // Date Calculation Logic
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+        const durationDisplay = document.getElementById('durationDisplay');
+        const totalAmountDisplay = document.getElementById('totalAmountDisplay');
+        const basePrice = 979; // Daily rate
+
+        function updateTripDetails() {
+            const start = new Date(startDateInput.value);
+            const end = new Date(endDateInput.value);
+
+            if (start && end && end > start) {
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                // Update Duration Display
+                durationDisplay.textContent = `${diffDays} Day${diffDays > 1 ? 's' : ''}`;
+
+                // Update Total Price
+                // Total Price = no. of days * price of 24 hrs
+                const newTotal = basePrice * diffDays;
+                totalAmountDisplay.textContent = `₹${newTotal.toLocaleString()}`;
+            } else {
+                durationDisplay.textContent = 'Invalid duration';
+            }
+        }
+
+        startDateInput.addEventListener('change', updateTripDetails);
+        endDateInput.addEventListener('change', updateTripDetails);
+
+        // Set initial values to today and tomorrow
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        function formatForInput(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
+        const todayStr = formatForInput(now);
+        const tomorrowStr = formatForInput(tomorrow);
+
+        startDateInput.value = todayStr;
+        startDateInput.min = todayStr;
+
+        endDateInput.value = tomorrowStr;
+        endDateInput.min = todayStr;
+
+        // Run calculation once to set initial state
+        updateTripDetails();
+    </script>
+</body>
+
+</html>

@@ -236,30 +236,38 @@
         }
 
         /* Mobile adjustments */
-        @media (max-width: 900px) {
-            header {
-                display: flex;
-                justify-content: space-between;
-                padding: 15px 20px;
-            }
-
-            .logo-main {
-                font-size: 24px;
-            }
-
-            nav {
-                display: none;
-            }
-
-            /* Use existing mobile menu logic if needed, or hide for now */
-            .auth-buttons {
-                display: none;
-            }
-
-            .menu-toggle {
-                display: flex;
-            }
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
         }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #2b3990;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Consolidated media queries moved to bottom */
 
         /* Hero Section Refined Design */
         /* Hero Section Redesign */
@@ -310,6 +318,10 @@
             display: block;
         }
 
+        .hrs {
+            color: white;
+        }
+
         .promo-subtext {
             font-size: 18px;
             color: rgba(255, 255, 255, 0.9);
@@ -322,9 +334,7 @@
         .hero-promo-car {
             width: 100%;
             max-width: 550px;
-            margin-top: -600px;
-            margin-left: -1950px;
-            /* Shifted significantly left */
+            margin-top: 20px;
             filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
             transition: transform 0.5s ease;
             position: relative;
@@ -540,62 +550,6 @@
             z-index: 10;
         }
 
-        /* Responsive adjustment */
-        @media (max-width: 1100px) {
-            .hero-container {
-                flex-direction: column;
-                gap: 50px;
-                text-align: center;
-                align-items: center;
-                padding-top: 50px;
-            }
-
-            .promo-headline {
-                font-size: 48px;
-            }
-
-            .hero-promo-car {
-                margin-top: 0;
-                max-width: 400px;
-            }
-
-            .hero-card {
-                width: 100%;
-                max-width: 100%;
-            }
-        }
-
-        /* Ensure text stays on top of car */
-        .promo-headline {
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Responsive adjustment */
-        @media (max-width: 1100px) {
-            .hero-container {
-                flex-direction: column;
-                gap: 50px;
-                text-align: center;
-                align-items: center;
-                padding-top: 50px;
-            }
-
-            .promo-headline {
-                font-size: 48px;
-            }
-
-            .hero-promo-car {
-                margin-top: 20px;
-                max-width: 400px;
-                position: static;
-            }
-
-            .hero-card {
-                width: 100%;
-                max-width: 550px;
-            }
-        }
 
 
         /* Location Modal */
@@ -1077,232 +1031,6 @@
             animation: slideOutRight 0.3s ease-out forwards;
         }
 
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .hero {
-                padding: 100px 30px 30px;
-            }
-
-            .hero-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .hero-left-section {
-                grid-column: 1 / -1;
-                text-align: center;
-            }
-
-            .hero-right-section {
-                grid-column: 1 / -1;
-            }
-
-            .hero-headline {
-                font-size: 48px;
-                margin-bottom: 20px;
-            }
-
-            .hero-right-image {
-                max-height: 580px;
-                transform: scale(1.05);
-            }
-
-            .hero-features {
-                font-size: 20px;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-            }
-
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 15px 20px;
-                flex-wrap: wrap;
-                gap: 15px;
-            }
-
-            .header-car-image {
-                height: 40px;
-                margin-left: 10px;
-            }
-
-            .header-right-section {
-                gap: 8px;
-            }
-
-            .menu-toggle {
-                display: flex;
-                order: 2;
-            }
-
-            nav {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(10, 25, 41, 0.98);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                gap: 0;
-                padding: 20px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-                order: 4;
-                margin-top: 0;
-            }
-
-            nav.active {
-                display: flex;
-            }
-
-            nav a {
-                padding: 12px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                width: 100%;
-                font-size: 16px;
-            }
-
-            nav a:last-child {
-                border-bottom: none;
-            }
-
-            .logo-main {
-                font-size: 24px;
-            }
-
-            .login-btn,
-            .signup-btn {
-                padding: 8px 16px;
-                font-size: 14px;
-                order: 3;
-            }
-
-            .auth-buttons {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .hero-headline {
-                font-size: 36px;
-            }
-
-            .hero-features {
-                font-size: 18px;
-            }
-
-            .hero-location {
-                font-size: 16px;
-            }
-
-            .hero-right-image {
-                max-height: 520px;
-                transform: scale(1.05);
-            }
-
-            .btn {
-                padding: 12px 30px;
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 12px 15px;
-                flex-direction: row;
-                align-items: center;
-                position: relative;
-            }
-
-            .header-car-image {
-                height: 35px;
-                margin-left: 8px;
-            }
-
-            .header-right-section {
-                gap: 6px;
-            }
-
-            .menu-toggle {
-                display: flex;
-                order: 2;
-            }
-
-            nav {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(10, 25, 41, 0.98);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                gap: 0;
-                padding: 15px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-                order: 4;
-                margin-top: 0;
-            }
-
-            nav.active {
-                display: flex;
-            }
-
-            nav a {
-                padding: 12px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                width: 100%;
-                font-size: 15px;
-            }
-
-            nav a:last-child {
-                border-bottom: none;
-            }
-
-            .logo-main {
-                font-size: 20px;
-            }
-
-            .logo-sub {
-                font-size: 10px;
-            }
-
-            .login-btn,
-            .signup-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-                order: 3;
-                margin-top: 0;
-            }
-
-            .auth-buttons {
-                flex-direction: column;
-                gap: 6px;
-            }
-
-            .hero-headline {
-                font-size: 28px;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-
-            .location-modal-content {
-                padding: 30px 20px;
-                max-width: 95%;
-            }
-
-            .location-modal-title {
-                font-size: 24px;
-            }
-
-            .btn {
-                width: 100%;
-            }
-        }
 
         /* How It Works Section Redesign */
         .how-it-works {
@@ -1502,73 +1230,12 @@
             color: #ffffff;
         }
 
-        @media (max-width: 1024px) {
-            .steps-card {
-                grid-template-columns: repeat(2, 1fr);
-            }
 
-            .step-item:nth-child(2)::after {
-                display: none;
-            }
-
-            .moments-label {
-                display: none;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .steps-card {
-                grid-template-columns: 1fr;
-            }
-
-            .step-item::after {
-                display: none;
-            }
-
-            .how-it-works-title {
-                font-size: 32px;
-            }
-        }
 
         .step-text {
             font-size: 16px;
         }
 
-        @media (max-width: 480px) {
-            .how-it-works {
-                padding: 40px 20px;
-            }
-
-            .how-it-works-title {
-                font-size: 28px;
-                margin-bottom: 30px;
-            }
-
-            .how-it-works-steps {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .step {
-                flex-direction: row;
-                align-items: center;
-                gap: 20px;
-            }
-
-            .step-icon {
-                width: 60px;
-                height: 60px;
-            }
-
-            .step-icon svg {
-                width: 30px;
-                height: 30px;
-            }
-
-            .step-text {
-                font-size: 16px;
-            }
-        }
 
         /* Why Choose Us Section */
         .why-choose-us {
@@ -1666,90 +1333,6 @@
         }
 
         /* Responsive for Why Choose Us */
-        @media (max-width: 1024px) {
-            .why-choose-us-cards {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 40px;
-            }
-
-            .why-choose-us-title {
-                font-size: 40px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .why-choose-us {
-                padding: 60px 30px;
-            }
-
-            .why-choose-us-title {
-                font-size: 36px;
-                margin-bottom: 40px;
-            }
-
-            .why-choose-us-cards {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 30px;
-            }
-
-            .benefit-icon {
-                width: 50px;
-                height: 50px;
-            }
-
-            .benefit-icon svg {
-                width: 40px;
-                height: 40px;
-            }
-
-            .benefit-heading {
-                font-size: 18px;
-            }
-
-            .benefit-text {
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .why-choose-us {
-                padding: 40px 20px;
-            }
-
-            .why-choose-us-title {
-                font-size: 28px;
-                margin-bottom: 30px;
-            }
-
-            .why-choose-us-cards {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .benefit-card {
-                flex-direction: row;
-                align-items: flex-start;
-                gap: 20px;
-            }
-
-            .benefit-icon {
-                width: 50px;
-                height: 50px;
-            }
-
-            .benefit-icon svg {
-                width: 40px;
-                height: 40px;
-            }
-
-            .benefit-heading {
-                font-size: 18px;
-            }
-
-            .benefit-text {
-                font-size: 14px;
-            }
-        }
 
         /* Featured Cars Section Redesign */
         .featured-cars {
@@ -1957,25 +1540,6 @@
         }
 
         /* Responsive for Featured Cars */
-        @media (max-width: 1024px) {
-            .car-cards-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .featured-cars {
-                padding: 60px 20px;
-            }
-
-            .car-cards-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .car-card {
-                min-height: auto;
-            }
-        }
 
         /* Offers Section */
         .offers-section {
@@ -2641,25 +2205,389 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        @media (max-width: 1024px) {
-            .footer-container {
-                grid-template-columns: 1fr 1fr;
-                gap: 50px;
-            }
+
+        /* Trending Offers Section */
+        .trending-offers-section {
+            background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+            padding: 80px 50px;
         }
 
-        @media (max-width: 768px) {
+        .trending-offers-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .trending-section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            color: #2b3990;
+            margin-bottom: 30px;
+        }
+
+        .offers-tabs-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .offers-tabs {
+            display: flex;
+            gap: 15px;
+        }
+
+        .offer-tab {
+            padding: 12px 30px;
+            border-radius: 30px;
+            border: 1px solid #e0e0e0;
+            background: #ffffff;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .offer-tab.active {
+            background: #2b3990;
+            color: #ffffff;
+            border-color: #2b3990;
+            box-shadow: 0 4px 10px rgba(43, 57, 144, 0.3);
+        }
+
+        .offer-tab:hover:not(.active) {
+            background: #f8fafc;
+        }
+
+        .trending-offers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            position: relative;
+        }
+
+        .trending-offer-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .trending-offer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .offer-card-content {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .offer-text-content {
+            flex: 1;
+            padding-right: 15px;
+        }
+
+        .offer-discount-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2b3990;
+            margin: 0 0 5px 0;
+            line-height: 1.2;
+        }
+
+        .offer-code-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+
+        .offer-desc {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .offer-note {
+            color: #ef4444;
+            /* Red asterisk */
+            font-size: 11px;
+        }
+
+        .offer-image-content {
+            width: 120px;
+            height: 100px;
+            flex-shrink: 0;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .offer-image-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .offer-nav-next {
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #2b3990;
+            z-index: 2;
+        }
+
+        .offer-nav-next:hover {
+            background: #f8fafc;
+        }
+
+
+        /* Consolidated Media Queries for index.html */
+        @media (max-width: 1024px) {
+            header {
+                padding: 15px 30px;
+            }
+
+            .hero-container {
+                flex-direction: column;
+                gap: 40px;
+                text-align: center;
+                align-items: center;
+                padding-top: 50px;
+            }
+
+            .promo-headline {
+                font-size: 48px;
+            }
+
+            .hero-promo {
+                max-width: 100%;
+            }
+
+            .hero-promo-car {
+                max-width: 500px;
+                margin: 20px auto 0;
+            }
+
+            .hero-card {
+                width: 100%;
+                max-width: 580px;
+            }
+
+            .car-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .why-choose-us-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .trending-offers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+
+            .reviews-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
             .faq-grid {
                 grid-template-columns: 1fr;
             }
 
-            .main-footer {
-                padding: 60px 20px 20px;
+            .faq-section {
+                padding: 60px 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 20px;
+            }
+
+            .logo-main {
+                font-size: 24px;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .auth-buttons {
+                display: none;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #ffffff;
+                flex-direction: column;
+                padding: 20px;
+                gap: 5px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                width: 100%;
+                padding: 12px 0;
+                border-bottom: 1px solid #f1f5f9;
+                color: #1e293b;
+            }
+
+            .nav-auth-mobile {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding-top: 15px;
+            }
+
+            .promo-headline {
+                font-size: 36px;
+            }
+
+            .car-cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .why-choose-us-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .how-it-works {
+                padding: 60px 20px;
+            }
+
+            .how-it-works-title {
+                font-size: 32px;
+            }
+
+            .steps-card {
+                flex-direction: column;
+            }
+
+            .white-steps-bar {
+                flex-direction: column;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .step-item::after {
+                display: none;
+            }
+
+            .step-item-active {
+                margin: 0;
+                border-radius: 0 0 20px 20px;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
             }
 
             .footer-container {
                 grid-template-columns: 1fr;
-                gap: 40px;
+                gap: 30px;
+            }
+
+            .trending-offers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .moments-label {
+                display: none;
+            }
+
+            .faq-title {
+                font-size: 32px;
+                margin-bottom: 30px;
+            }
+
+            .faq-section {
+                padding: 40px 20px;
+            }
+
+            .faq-item {
+                padding: 15px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-main {
+                font-size: 20px;
+            }
+
+            .logo-sub {
+                font-size: 10px;
+            }
+
+            .promo-headline {
+                font-size: 28px;
+            }
+
+            .search-card-body {
+                padding: 20px;
+            }
+
+            .search-btn {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            .car-card {
+                padding: 20px;
+            }
+
+            .car-brand {
+                font-size: 20px;
+            }
+
+            .how-it-works-title {
+                font-size: 26px;
+            }
+
+            .faq-title {
+                font-size: 28px;
+            }
+
+            .faq-item {
+                padding: 12px 20px;
+            }
+
+            .faq-question {
+                font-size: 13px;
+            }
+
+            .date-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -2685,12 +2613,12 @@
         </button>
 
         <nav id="mainNav">
-            <a href="/">Car Rentals <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <a href="/cars">Car Rentals <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg></a>
             <a href="#why-choose-us">About Us</a>
-            <a href="#footer">Contact Us</a>
+            <a href="/contact">Contact Us</a>
         </nav>
 
         <div class="auth-buttons">
@@ -2711,7 +2639,7 @@
             <!-- Promo Section (Left Side) -->
             <div class="hero-promo" id="heroPromoContent">
                 <h1 class="promo-headline">Rent a car@ <br>
-                    <span class="promo-price-highlight">Rs.1399/12hrs</span>
+                    <span class="promo-price-highlight">Rs.1399/<span class="hrs">12hrs</span></span>
                 </h1>
                 <p class="promo-subtext">Wide range of Hatchbacks, Sedans and SUV's with multiple fuel and transmission
                     options</p>
@@ -3267,7 +3195,74 @@
         </div>
     </section>
 
-    <!-- Offers Section -->
+    <!-- Trending Offers Section -->
+    <section class="trending-offers-section">
+        <div class="trending-offers-container">
+            <h2 class="trending-section-title">Trending Offers</h2>
+
+            <div class="offers-tabs-wrapper">
+                <div class="offers-tabs">
+                    <button class="offer-tab active">Daily Offers</button>
+                    <button class="offer-tab">Monthly Offers</button>
+                </div>
+            </div>
+
+            <div class="trending-offers-grid">
+                <!-- Offer Card 1 -->
+                <div class="trending-offer-card">
+                    <div class="offer-card-content">
+                        <div class="offer-text-content">
+                            <h3 class="offer-discount-text">Flat 15% off</h3>
+                            <div class="offer-code-text">Usecode: GOGOFIRST</div>
+                            <p class="offer-desc">Flat 15% off for the 1st booking <br> <span class="offer-note">*
+                                    (valid once per user)</span></p>
+                        </div>
+                        <div class="offer-image-content">
+                            <!-- Using a placeholder, ideally cropped from design -->
+                            <img src="/static/img/car-suv.png" alt="Offer Image" style="object-fit: cover;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Offer Card 2 -->
+                <div class="trending-offer-card">
+                    <div class="offer-card-content">
+                        <div class="offer-text-content">
+                            <h3 class="offer-discount-text">Flat 15% off</h3>
+                            <div class="offer-code-text">Usecode: GOGOMONDAY</div>
+                            <p class="offer-desc">Flat 15% off on Monday <br> <span class="offer-note">* (valid only for
+                                    monday bookings)</span></p>
+                        </div>
+                        <div class="offer-image-content">
+                            <img src="/static/img/toggle-car.png" alt="Offer Image" style="object-fit: contain;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Offer Card 3 -->
+                <div class="trending-offer-card">
+                    <div class="offer-card-content">
+                        <div class="offer-text-content">
+                            <h3 class="offer-discount-text">Flat 20% off</h3>
+                            <div class="offer-code-text">Usecode: GOGOTUESDAY</div>
+                            <p class="offer-desc">Flat 20% off on Tuesday <br> <span class="offer-note">* (valid only
+                                    for tuesday bookings)</span></p>
+                        </div>
+                        <div class="offer-image-content">
+                            <img src="/static/img/car-suv.png" alt="Offer Image" style="object-fit: cover;">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="offer-nav-next">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
     {% if offers and offers|length > 0 %}
     <section class="offers-section" id="offers">
         <div class="offers-container">
