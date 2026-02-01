@@ -24,8 +24,8 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
-        "postgresql+psycopg2://postgres:postgres@localhost:5432/gogocar"
-    )
+        "sqlite:///./gogocar.db"
+    ).replace("postgres://", "postgresql://", 1)
     
     # AWS Cognito
     AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")

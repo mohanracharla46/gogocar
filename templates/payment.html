@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Continue to Payment - GoGo Self Drive Cars</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
@@ -20,76 +21,218 @@
         }
 
         body {
-            background: #f7fafc;
-            color: #1a202c;
-            line-height: 1.6;
-            padding: 20px;
+            background-color: #061a40;
+            color: #ffffff;
+            overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* Header */
-        /* Consolidated media queries moved to bottom */
+        /* Updated Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(32, 76, 79, 0.1) 0%, transparent 40%),
+                linear-gradient(135deg, #061a3d 0%, #0c2a5c 40%, #1e4d4e 100%);
+            z-index: -2;
+        }
+
+        .wavy-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='1440' height='800' viewBox='0 0 1440 800' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-100 600C200 500 400 700 700 600C1000 500 1200 700 1540 600' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3Cpath d='M-100 550C200 450 400 650 700 550C1000 450 1200 650 1540 550' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3Cpath d='M-100 500C200 400 400 600 700 500C1000 400 1200 600 1540 550' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header New Design */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 80px;
+            background: #ffffff;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 200px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .logo-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         .logo {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            justify-self: start;
         }
 
         .logo-main {
             font-size: 32px;
-            font-weight: 700;
-            color: #ff6b35;
+            font-weight: 800;
+            color: #2b3990;
+            /* Dark Blue */
             letter-spacing: -1px;
+            line-height: 1;
         }
 
         .logo-sub {
-            font-size: 12px;
-            color: #4a5568;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 11px;
+            color: #475569;
+            letter-spacing: 0.5px;
+            font-weight: 500;
         }
 
-        .help-icon {
-            width: 32px;
-            height: 32px;
-            background: #e2e8f0;
-            border-radius: 50%;
+        nav {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+            justify-self: center;
+        }
+
+        nav a {
+            color: #1e293b;
+            /* Dark Slate */
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #2b3990;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff6b35;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #2b3990;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #1a202c;
-            font-weight: 600;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background 0.3s ease;
+            gap: 15px;
         }
 
-        .help-icon:hover {
-            background: #cbd5e0;
+        .host-btn {
+            padding: 10px 25px;
+            border: 2px solid #061a40;
+            color: #061a40;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .host-btn:hover {
+            background: #061a40;
+            color: #ffffff;
         }
 
         /* Main Container */
         .main-container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 120px auto 40px;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            color: #1a202c;
+            /* Reset text color for container */
         }
 
         .page-title {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 32px;
+            font-weight: 800;
             color: #1a202c;
             margin-bottom: 30px;
             text-align: center;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Car Details */
         .car-details-section {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 30px;
             padding-bottom: 30px;
             border-bottom: 1px solid #e2e8f0;
@@ -97,17 +240,19 @@
 
         .car-image-container {
             flex-shrink: 0;
-            width: 120px;
-            height: 80px;
-            border-radius: 8px;
+            width: 150px;
+            height: 100px;
+            border-radius: 12px;
             overflow: hidden;
-            background: #f7fafc;
+            background: #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .car-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            padding: 5px;
         }
 
         .car-info {
@@ -115,30 +260,34 @@
         }
 
         .car-model {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
-            color: #1a202c;
+            color: #1e293b;
             margin-bottom: 8px;
         }
 
         .car-specs {
             display: flex;
-            flex-direction: column;
-            gap: 6px;
+            gap: 15px;
             font-size: 14px;
-            color: #4a5568;
+            color: #64748b;
+            flex-wrap: wrap;
         }
 
         .car-spec {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            background: #f8fafc;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
         }
 
         .spec-icon {
             width: 16px;
             height: 16px;
-            color: #64748b;
+            color: #3b82f6;
         }
 
         /* Protection Section */
@@ -151,573 +300,338 @@
         .section-title {
             font-size: 20px;
             font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 8px;
+            color: #1e293b;
+            margin-bottom: 10px;
         }
 
         .section-description {
             font-size: 14px;
-            color: #4a5568;
+            color: #64748b;
             margin-bottom: 20px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        .damage-protection-btn {
-            position: relative;
+        /* Footer Styles */
+        .main-footer {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 80px 0 30px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 80px;
         }
 
-        .damage-protection-btn.selected {
-            border-color: #3b82f6 !important;
-            background: #eff6ff !important;
-        }
-
-        .damage-protection-btn.selected::before {
-            content: '✓';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 24px;
-            height: 24px;
-            background: #3b82f6;
-            color: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-        .deposit-option-card {
-            position: relative;
-        }
-
-        .deposit-option-card input[type="radio"]:checked~div {
-            border-color: #3b82f6;
-            background: #eff6ff;
-        }
-
-        .deposit-option-card.selected {
-            border-color: #3b82f6 !important;
-            background: #eff6ff !important;
-        }
-
-        .deposit-option-card.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 24px;
-            height: 24px;
-            background: #3b82f6;
-            color: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-        /* Pricing Summary */
-        .pricing-summary-section {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .pricing-items {
-            list-style: none;
-            margin-bottom: 15px;
-        }
-
-        .pricing-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            font-size: 14px;
-            color: #4a5568;
-        }
-
-        .pricing-item-name {
-            flex: 1;
-        }
-
-        .pricing-item-amount {
-            font-weight: 600;
-            color: #1a202c;
-        }
-
-        .pricing-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-top: 2px solid #e2e8f0;
-            margin-top: 15px;
-        }
-
-        .pricing-total-label {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a202c;
-        }
-
-        .pricing-total-amount {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a202c;
-        }
-
-        /* Deposit */
-        .deposit-section {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .deposit-card {
-            background: #f0fdf4;
-            border: 1px solid #86efac;
-            border-radius: 8px;
-            padding: 20px;
-        }
-
-        .deposit-label {
-            font-size: 16px;
-            font-weight: 600;
-            color: #166534;
-            margin-bottom: 8px;
-        }
-
-        .deposit-amount {
-            font-size: 20px;
-            font-weight: 700;
-            color: #166534;
-            margin-bottom: 8px;
-        }
-
-        .deposit-note {
-            font-size: 14px;
-            color: #15803d;
-        }
-
-        /* KYC Upload Section */
-        .kyc-section {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .kyc-warning {
-            background: #fef3c7;
-            border: 1px solid #fcd34d;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .kyc-warning-text {
-            font-size: 14px;
-            color: #92400e;
-            line-height: 1.5;
-        }
-
-        .kyc-documents {
+        .footer-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 40px;
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+            gap: 40px;
         }
 
-        .kyc-document-item {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .kyc-document-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1a202c;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .kyc-upload-area {
+        .footer-col-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 25px;
             position: relative;
+            display: inline-block;
         }
 
-        .kyc-upload-input {
+        .footer-col-title::after {
+            content: '';
             position: absolute;
-            opacity: 0;
+            left: 0;
+            bottom: -8px;
+            width: 30px;
+            height: 2px;
+            background: #ff6b35;
+            border-radius: 2px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .logo-img-footer {
+            width: 200px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-img-footer img {
             width: 100%;
             height: 100%;
-            cursor: pointer;
+            object-fit: contain;
         }
 
-        .kyc-upload-button {
-            background: #3b82f6;
-            color: #ffffff;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
+        .logo-main-footer {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2b3990;
+            line-height: 1;
+        }
+
+        .logo-sub-footer {
+            font-size: 9px;
+            color: #64748b;
+            letter-spacing: 0.5px;
             font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            transition: background 0.3s ease;
         }
 
-        .kyc-upload-button:hover {
-            background: #2563eb;
+        .footer-desc {
+            font-size: 15px;
+            color: #475569;
+            line-height: 1.7;
+            margin-bottom: 25px;
         }
 
-        .kyc-preview {
-            margin-top: 10px;
+        .footer-links {
+            list-style: none;
         }
 
-        .kyc-preview img {
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #475569;
+            text-decoration: none;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: #2b3990;
+            transform: translateX(5px);
+        }
+
+        .footer-links a::before {
+            content: '›';
+            color: #ff6b35;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .contact-info {
+            list-style: none;
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: #475569;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .contact-icon {
+            width: 20px;
+            height: 20px;
+            color: #2b3990;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .footer-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .footer-gallery img {
             width: 100%;
-            max-height: 150px;
+            height: 70px;
             object-fit: cover;
             border-radius: 6px;
-            border: 1px solid #e5e7eb;
-        }
-
-        .kyc-upload-status {
-            font-size: 12px;
-            color: #16a34a;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .kyc-upload-status.uploaded {
-            display: block;
-        }
-
-        /* Terms and Conditions Section */
-        .terms-section {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .terms-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            padding: 15px;
-            background: #f7fafc;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .terms-header:hover {
-            background: #f1f5f9;
-        }
-
-        .terms-header h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1a202c;
-            margin: 0;
-        }
-
-        .terms-toggle {
-            font-size: 20px;
-            color: #64748b;
+            border: 1px solid #e2e8f0;
             transition: transform 0.3s ease;
         }
 
-        .terms-toggle.expanded {
-            transform: rotate(180deg);
+        .footer-gallery img:hover {
+            transform: scale(1.05);
+            border-color: #2b3990;
         }
 
-        .terms-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .terms-content.expanded {
-            max-height: 2000px;
-        }
-
-        .terms-body {
-            padding: 20px;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .terms-body h2 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a202c;
+        .social-icons-wrapper {
             margin-top: 20px;
-            margin-bottom: 10px;
         }
 
-        .terms-body h2:first-child {
-            margin-top: 0;
+        .social-icons {
+            display: flex;
+            gap: 15px;
         }
 
-        .terms-body h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a202c;
-            margin-top: 15px;
-            margin-bottom: 8px;
-        }
-
-        .terms-body p {
-            font-size: 14px;
-            color: #4a5568;
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-
-        .terms-body ul {
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-
-        .terms-body li {
-            font-size: 14px;
-            color: #4a5568;
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
-
-        .terms-body table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-
-        .terms-body table th,
-        .terms-body table td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #e2e8f0;
-        }
-
-        .terms-body table th {
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             background: #f1f5f9;
-            font-weight: 600;
-        }
-
-        .terms-checkbox-container {
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-top: 20px;
-            padding: 15px;
-            background: #fff5f2;
-            border: 2px solid #ff6b35;
-            border-radius: 8px;
-        }
-
-        .terms-checkbox-container input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            margin-top: 2px;
-            flex-shrink: 0;
-        }
-
-        .terms-checkbox-container label {
-            font-size: 14px;
-            color: #1a202c;
-            cursor: pointer;
-            line-height: 1.5;
-        }
-
-        .terms-checkbox-container label a {
-            color: #ff6b35;
-            text-decoration: underline;
-        }
-
-        /* Payment Button */
-        .payment-section {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .payment-info {
-            flex: 1;
+        .social-icon img {
+            width: 18px;
+            height: 18px;
+            z-index: 1;
         }
 
-        .payment-label {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a202c;
-            margin-bottom: 6px;
-        }
-
-        .payment-description {
-            font-size: 12px;
-            color: #4a5568;
-            line-height: 1.4;
-        }
-
-        .pay-button {
-            background: #ff6b35;
-            color: #ffffff;
-            padding: 16px 40px;
-            border-radius: 8px;
-            border: none;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .pay-button:hover:not(:disabled) {
-            background: #e55a2b;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
-        }
-
-        .pay-button:disabled {
-            background: #cbd5e0;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        /* Responsive */
-        header {
-            position: fixed;
+        .social-icon::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 20px 50px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            background: #2b3990;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            border-radius: 50%;
         }
 
-        /* Consolidated Media Queries for payment.html */
+        .social-icon:hover::before {
+            transform: scale(1);
+        }
+
+        .social-icon:hover img {
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-bottom {
+            max-width: 1300px;
+            margin: 0 auto;
+            border-top: 1px solid #cbd5e1;
+            margin-top: 40px;
+            padding-top: 25px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* Styling overrides for Payment specific sections */
+        .damage-protection-btn.selected,
+        .deposit-option-card.selected,
+        .deposit-option-card input[type="radio"]:checked~div {
+            border-color: #3b82f6 !important;
+            background: #eff6ff !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .pay-button {
+            background: linear-gradient(135deg, #ff6b35 0%, #f97316 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pay-button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #e55a2b 0%, #ea580c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+        }
+
+        /* Mobile adjustments */
         @media (max-width: 1024px) {
-            .main-container {
-                margin: 110px auto 30px;
-                padding: 25px;
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            header {
+                padding: 15px 30px;
             }
         }
 
         @media (max-width: 768px) {
-            header {
-                padding: 15px 20px;
-            }
-
-            .logo-main {
-                font-size: 24px;
-            }
-
-            .main-container {
-                margin: 100px auto 20px;
-                padding: 20px;
-            }
-
-            .car-details-section {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .car-image-container {
-                width: 100%;
-                height: 200px;
-            }
-
-            .kyc-documents {
+            .footer-container {
                 grid-template-columns: 1fr;
+                gap: 30px;
             }
 
-            .payment-section {
-                flex-direction: column;
-                gap: 20px;
-                align-items: stretch;
+            .menu-toggle {
+                display: flex;
             }
 
-            .pay-button {
+            nav {
+                position: fixed;
+                top: 70px;
+                left: -100%;
                 width: 100%;
-                padding: 14px;
+                height: calc(100vh - 70px);
+                background: #ffffff;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 40px;
+                transition: left 0.3s ease;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             }
 
-            .terms-body {
-                max-height: 400px;
+            nav.active {
+                left: 0;
             }
 
-            .terms-body h2 {
-                font-size: 18px;
-            }
-
-            .terms-body h3 {
-                font-size: 15px;
-            }
-
-            .terms-body p,
-            .terms-body li {
-                font-size: 13px;
-            }
-
-            .damage-protection-btn {
-                min-width: 100%;
+            .auth-buttons {
+                display: none;
+                /* Hide desktop auth buttons on mobile */
             }
         }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 12px 15px;
-            }
-
-            .logo-main {
-                font-size: 20px;
-            }
-
-            .logo-sub {
-                font-size: 10px;
-            }
-
-            .page-title {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-
-            .section-title {
-                font-size: 18px;
-            }
-
-            .pricing-total-label {
-                font-size: 18px;
-            }
-
-            .pricing-total-amount {
-                font-size: 20px;
-            }
-        }
-    </style>
     </style>
 </head>
 
 <body>
+    <div class="wavy-pattern"></div>
+    <!-- New Header Design matching index.html -->
     <header>
-        <div class="logo">
-            <div class="logo-main">GoGo</div>
-            <div class="logo-sub">SELF DRIVE CARS</div>
+        <div class="logo-container">
+            <a href="/" class="logo-img">
+                <img src="/static/img/logo.png?v=2" alt="GoGo Cars Logo" onerror="this.style.display='none'">
+            </a>
         </div>
-        <div class="help-icon" title="Help">?</div>
+
+        <nav id="mainNav">
+            <a href="/">Home</a>
+            <a href="/cars">Rentals</a>
+            <a href="/#subscriptions">Subscriptions</a>
+            <a href="/#offers">Offers</a>
+            <a href="#footer">Contact</a>
+
+            <div class="auth-buttons">
+                {% if user and user.username %}
+                <a href="/profile" class="login-btn-new">
+                    <svg class="user-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                    {{ user.firstname }}
+                </a>
+                {% else %}
+                <a href="#" class="host-btn">Become a Host</a>
+                <a href="#" class="login-btn-new">Login / Signup</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
     <div class="main-container">
@@ -1321,6 +1235,98 @@
         </div>
     </div>
 
+    <!-- Footer Section -->
+    <footer class="main-footer" id="footer">
+        <div class="footer-container">
+            <!-- Column 1: Logo & Desc -->
+            <div class="footer-col" id="about-us">
+                <div class="footer-logo">
+                    <div class="logo-img-footer">
+                        <img src="/static/img/logo.png?v=2" alt="GOGO CARS">
+                    </div>
+                </div>
+                <p class="footer-desc">
+                    GoGo Cars offers reliable car rentals with well-maintained vehicles, flexible plans, and complete
+                    freedom for every journey.
+                </p>
+            </div>
+
+            <!-- Column 2: Quick Links -->
+            <div class="footer-col">
+                <h3 class="footer-col-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/cars">Car Rentals</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#terms-section">Terms & Conditions</a></li>
+                    <li><a href="#">Refund Policy</a></li>
+                    <li><a href="/#faqs">FAQs</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Social & Gallery -->
+            <div class="footer-col">
+                <div class="footer-gallery">
+                    <img src="/static/img/car-suv.png" alt="Car 1">
+                    <img src="/static/img/toggle-car.png" alt="Car 2">
+                    <img src="/static/img/image.png" alt="Car 3">
+                </div>
+                <div class="social-icons-wrapper">
+                    <h3 class="footer-col-title" style="margin-bottom: 20px;">Social Links</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon instagram">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
+                                alt="Instagram">
+                        </a>
+                        <a href="#" class="social-icon facebook">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg"
+                                alt="Facebook">
+                        </a>
+                        <a href="#" class="social-icon youtube">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
+                                alt="YouTube">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 4: Contact -->
+            <div class="footer-col">
+                <h3 class="footer-col-title">Contact Us</h3>
+                <ul class="contact-info">
+                    <li>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>146, Road No.8, Road, Ayyappa Society, Madhapur, Hyderabad, Telangana 500081</span>
+                    </li>
+                    <li>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.83 12.83 0 0 0 .62 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.62A2 2 0 0 1 22 16.92z">
+                            </path>
+                        </svg>
+                        <span>8121765714 - 9052775477</span>
+                    </li>
+                    <li>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                            </path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>gogocars5477@gmail.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GoGo Cars. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script>
         // Car data from server (only for display, not for calculations)
         const carId = {{ car.id if car else 'null' }};
@@ -1768,6 +1774,36 @@
         updatePricing();
         updatePayButtonState(); // Set initial button state
     </script>
+</body>
+
+<script>
+    // Mobile menu toggle logic
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+
+    if (menuToggle && mainNav) {
+        menuToggle.addEventListener('click', function () {
+            this.classList.toggle('active');
+            mainNav.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!menuToggle.contains(e.target) && !mainNav.contains(e.target)) {
+                menuToggle.classList.remove('active');
+                mainNav.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking on a nav link
+        mainNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function () {
+                menuToggle.classList.remove('active');
+                mainNav.classList.remove('active');
+            });
+        });
+    }
+</script>
 </body>
 
 </html>

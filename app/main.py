@@ -23,13 +23,23 @@ from sqlalchemy.orm import Session
 
 # Setup logging (logs directory in project root)
 from pathlib import Path
+import os
 project_root = Path(__file__).parent.parent
 logs_dir = project_root / "logs"
-logs_dir.mkdir(exist_ok=True)
+
+# Only attempt to create logs directory if not on Render
+if os.getenv("RENDER") is None:
+    try:
+        logs_dir.mkdir(exist_ok=True)
+        log_file = str(logs_dir / "app.log")
+    except Exception:
+        log_file = None
+else:
+    log_file = None
 
 setup_logging(
     log_level="DEBUG" if settings.DEBUG else "INFO",
-    log_file=str(logs_dir / "app.log") if not settings.DEBUG else None
+    log_file=log_file if not settings.DEBUG else None
 )
 
 # Initialize FastAPI app

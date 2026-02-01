@@ -1,0 +1,9 @@
+# robots.txt for GoGoCar
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /payment/
+
+# Sitemap
+Sitemap: https://www.gogocar.com/sitemap.xml

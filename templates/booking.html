@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Confirmed - GoGo Self Drive Cars</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,27 +16,55 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
         body {
-            background: #f7fafc;
-            color: #1a202c;
-            line-height: 1.6;
-            padding: 20px;
+            background-color: #061a40;
+            color: #ffffff;
+            overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* Header */
+        /* Updated Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(32, 76, 79, 0.1) 0%, transparent 40%),
+                linear-gradient(135deg, #061a3d 0%, #0c2a5c 40%, #1e4d4e 100%);
+            z-index: -2;
+        }
+
+        .wavy-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='1440' height='800' viewBox='0 0 1440 800' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-100 600C200 500 400 700 700 600C1000 500 1200 700 1540 600' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3Cpath d='M-100 550C200 450 400 650 700 550C1000 450 1200 650 1540 550' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3Cpath d='M-100 500C200 400 400 600 700 500C1000 400 1200 600 1540 550' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header New Design */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 20px 50px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            padding: 15px 80px;
+            background: #ffffff;
             z-index: 1000;
             display: flex;
             justify-content: space-between;
@@ -41,35 +72,148 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 200px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .logo-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         .logo {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            justify-self: start;
         }
 
         .logo-main {
             font-size: 32px;
-            font-weight: 700;
-            color: #ff6b35;
+            font-weight: 800;
+            color: #2b3990;
             letter-spacing: -1px;
+            line-height: 1;
         }
 
         .logo-sub {
-            font-size: 12px;
-            color: #1e3a8a;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 11px;
+            color: #475569;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+            justify-self: center;
+        }
+
+        nav a {
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 16px;
             font-weight: 600;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #2b3990;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff6b35;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #2b3990;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .host-btn {
+            padding: 10px 25px;
+            border: 2px solid #061a40;
+            color: #061a40;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .host-btn:hover {
+            background: #061a40;
+            color: #ffffff;
         }
 
         /* Main Container */
         .main-container {
             max-width: 600px;
             margin: 120px auto 40px;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            color: #1a202c;
         }
 
         /* Booking Confirmation Header */
@@ -105,27 +249,7 @@
             height: 100%;
         }
 
-        .confetti-icon svg circle[fill] {
-            fill: #fbbf24;
-        }
-
-        .confetti-icon svg path[stroke="white"] {
-            stroke: white;
-        }
-
-        .confetti-icon svg circle[fill="#f59e0b"] {
-            fill: #f59e0b;
-        }
-
-        .confirmation-message {
-            font-size: 16px;
-            color: #4a5568;
-            margin-bottom: 15px;
-        }
-
-        .booking-id {
-            font-size: 20px;
-            font-weight: 700;
+        .branding-blue {
             color: #1e3a8a;
         }
 
@@ -354,7 +478,7 @@
         /* Back to Home Button */
         .back-button {
             width: 100%;
-            background: #1e3a8a;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             color: #ffffff;
             padding: 16px;
             border-radius: 8px;
@@ -362,18 +486,14 @@
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s ease;
             margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
         }
 
         .back-button:hover {
-            background: #1e40af;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
-        }
-
-        .back-button:active {
-            transform: translateY(0);
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.5);
         }
 
         /* Disclaimer Box */
@@ -387,8 +507,236 @@
             line-height: 1.5;
         }
 
+        /* Footer Styles */
+        .main-footer {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 80px 0 30px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 80px;
+        }
+
+        .footer-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+            gap: 40px;
+        }
+
+        .footer-col-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-col-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 30px;
+            height: 2px;
+            background: #ff6b35;
+            border-radius: 2px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .logo-img-footer {
+            width: 200px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-img-footer img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-main-footer {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2b3990;
+            line-height: 1;
+        }
+
+        .logo-sub-footer {
+            font-size: 9px;
+            color: #64748b;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .footer-desc {
+            font-size: 15px;
+            color: #475569;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #475569;
+            text-decoration: none;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: #2b3990;
+            transform: translateX(5px);
+        }
+
+        .footer-links a::before {
+            content: '›';
+            color: #ff6b35;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .contact-info {
+            list-style: none;
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: #475569;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .contact-icon {
+            width: 20px;
+            height: 20px;
+            color: #2b3990;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .footer-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .footer-gallery img {
+            width: 100%;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-gallery img:hover {
+            transform: scale(1.05);
+            border-color: #2b3990;
+        }
+
+        .social-icons-wrapper {
+            margin-top: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-icon img {
+            width: 18px;
+            height: 18px;
+            z-index: 1;
+        }
+
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #2b3990;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .social-icon:hover::before {
+            transform: scale(1);
+        }
+
+        .social-icon:hover img {
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-bottom {
+            max-width: 1300px;
+            margin: 0 auto;
+            border-top: 1px solid #cbd5e1;
+            margin-top: 40px;
+            padding-top: 25px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            header {
+                padding: 15px 30px;
+            }
+        }
+
         @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
             header {
                 padding: 15px 20px;
             }
@@ -419,6 +767,32 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            nav {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: #ffffff;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 40px;
+                transition: left 0.3s ease;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            nav.active {
+                left: 0;
+            }
+
+            .auth-buttons {
+                display: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -437,13 +811,37 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
+    <div class="wavy-pattern"></div>
     <header>
-        <div class="logo">
-            <div class="logo-main">GoGo</div>
-            <div class="logo-sub">SELF DRIVE CARS</div>
+        <div class="logo-container">
+            <a href="/" class="logo-img">
+                <img src="/static/img/logo.png?v=2" alt="GoGo Cars Logo" onerror="this.style.display='none'">
+            </a>
         </div>
+
+        <nav id="mainNav">
+            <a href="/">Home</a>
+            <a href="/cars">Rentals</a>
+            <a href="/#subscriptions">Subscriptions</a>
+            <a href="/#offers">Offers</a>
+            <a href="#footer">Contact</a>
+
+            <div class="auth-buttons">
+                <!-- Static auth button for booking page -->
+                <a href="/profile" class="login-btn-new">
+                    My Booking
+                </a>
+            </div>
+        </nav>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
     <!-- Main Container -->
@@ -453,19 +851,20 @@
             <div class="confirmation-title">
                 <h1>Booking Confirmed</h1>
                 <div class="confetti-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10" fill="#fbbf24" opacity="0.3"/>
-                        <circle cx="12" cy="12" r="8" fill="#fbbf24" opacity="0.5"/>
-                        <circle cx="12" cy="12" r="6" fill="#fbbf24"/>
-                        <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5"/>
-                        <circle cx="6" cy="6" r="1.5" fill="#fbbf24"/>
-                        <circle cx="18" cy="6" r="1.5" fill="#fbbf24"/>
-                        <circle cx="6" cy="18" r="1.5" fill="#fbbf24"/>
-                        <circle cx="18" cy="18" r="1.5" fill="#fbbf24"/>
-                        <circle cx="12" cy="4" r="1" fill="#f59e0b"/>
-                        <circle cx="12" cy="20" r="1" fill="#f59e0b"/>
-                        <circle cx="4" cy="12" r="1" fill="#f59e0b"/>
-                        <circle cx="20" cy="12" r="1" fill="#f59e0b"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" fill="#fbbf24" opacity="0.3" />
+                        <circle cx="12" cy="12" r="8" fill="#fbbf24" opacity="0.5" />
+                        <circle cx="12" cy="12" r="6" fill="#fbbf24" />
+                        <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5" />
+                        <circle cx="6" cy="6" r="1.5" fill="#fbbf24" />
+                        <circle cx="18" cy="6" r="1.5" fill="#fbbf24" />
+                        <circle cx="6" cy="18" r="1.5" fill="#fbbf24" />
+                        <circle cx="18" cy="18" r="1.5" fill="#fbbf24" />
+                        <circle cx="12" cy="4" r="1" fill="#f59e0b" />
+                        <circle cx="12" cy="20" r="1" fill="#f59e0b" />
+                        <circle cx="4" cy="12" r="1" fill="#f59e0b" />
+                        <circle cx="20" cy="12" r="1" fill="#f59e0b" />
                     </svg>
                 </div>
             </div>
@@ -483,18 +882,19 @@
                     <div class="building building-4"></div>
                 </div>
                 <svg class="map-pin" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
                 </svg>
             </div>
             <div class="location-info">
                 <div class="location-label">Pick-up location</div>
                 <div class="location-address" id="pickupAddress">1234 Main St, Hyderabad</div>
             </div>
-            <svg class="mini-map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <circle cx="12" cy="12" r="2"/>
-                <path d="M12 8v4M8 12h4"/>
+            <svg class="mini-map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="12" cy="12" r="2" />
+                <path d="M12 8v4M8 12h4" />
             </svg>
         </div>
 
@@ -515,18 +915,23 @@
         <!-- Payment Summary Section -->
         <div class="payment-summary">
             <div class="payment-item">
-                <svg class="checkmark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                    <polyline points="22 4 12 14.01 9 11.01"/>
+                <svg class="checkmark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
-                <span class="payment-text">One <span class="payment-amount" id="advanceAmount">₹728</span> payment online</span>
+                <span class="payment-text">One <span class="payment-amount" id="advanceAmount">₹728</span> payment
+                    online</span>
             </div>
-            <div class="balance-payment">Pay the balance of <strong id="balanceAmount">₹6,559</strong> at car pickup.</div>
-            
+            <div class="balance-payment">Pay the balance of <strong id="balanceAmount">₹6,559</strong> at car pickup.
+            </div>
+
             <div class="additional-charge">
                 <div class="charge-item">
-                    <svg class="car-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                    <svg class="car-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z" />
                     </svg>
                     <span class="charge-label">Car pareda</span>
                 </div>
@@ -542,6 +947,98 @@
             Damage up to ₹1L covered; below ₹50K you pay note in neutral box.
         </div>
     </div>
+
+    <!-- Footer Section -->
+    <footer class="main-footer" id="footer">
+        <div class="footer-container">
+            <!-- Column 1: Logo & Desc -->
+            <div class="footer-col" id="about-us">
+                <div class="footer-logo">
+                    <div class="logo-img-footer">
+                        <img src="/static/img/logo.png?v=2" alt="GOGO CARS">
+                    </div>
+                </div>
+                <p class="footer-desc">
+                    GoGo Cars offers reliable car rentals with well-maintained vehicles, flexible plans, and complete
+                    freedom for every journey.
+                </p>
+            </div>
+
+            <!-- Column 2: Quick Links -->
+            <div class="footer-col">
+                <h3 class="footer-col-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/cars">Car Rentals</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Refund Policy</a></li>
+                    <li><a href="/#faqs">FAQs</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Social & Gallery -->
+            <div class="footer-col">
+                <div class="footer-gallery">
+                    <img src="/static/img/car-suv.png" alt="Car 1">
+                    <img src="/static/img/toggle-car.png" alt="Car 2">
+                    <img src="/static/img/image.png" alt="Car 3">
+                </div>
+                <div class="social-icons-wrapper">
+                    <h3 class="footer-col-title" style="margin-bottom: 20px;">Social Links</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon instagram">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
+                                alt="Instagram">
+                        </a>
+                        <a href="#" class="social-icon facebook">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg"
+                                alt="Facebook">
+                        </a>
+                        <a href="#" class="social-icon youtube">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
+                                alt="YouTube">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 4: Contact -->
+            <div class="footer-col">
+                <h3 class="footer-col-title">Contact Us</h3>
+                <ul class="contact-info">
+                    <li>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>146, Road No.8, Road, Ayyappa Society, Madhapur, Hyderabad, Telangana 500081</span>
+                    </li>
+                    <li>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.83 12.83 0 0 0 .62 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.62A2 2 0 0 1 22 16.92z">
+                            </path>
+                        </svg>
+                        <span>8121765714 - 9052775477</span>
+                    </li>
+                    <li>
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                            </path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>gogocars5477@gmail.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GoGo Cars. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
         // Get URL parameters
@@ -665,7 +1162,34 @@
 
         // Load car data on page load
         loadCarData();
+
+        // Mobile menu toggle logic
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', function () {
+                this.classList.toggle('active');
+                mainNav.classList.toggle('active');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!menuToggle.contains(e.target) && !mainNav.contains(e.target)) {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                }
+            });
+
+            // Close menu when clicking on a nav link
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function () {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                });
+            });
+        }
     </script>
 </body>
-</html>
 
+</html>

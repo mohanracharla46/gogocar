@@ -2,6 +2,7 @@
 Structured logging configuration
 """
 import logging
+import os
 import sys
 from pathlib import Path
 from typing import Optional
@@ -38,19 +39,29 @@ def setup_logging(
     
     # Add file handler if log_file is provided
     if log_file:
-        log_path = Path(log_file)
-        # Ensure log directory exists (relative to project root)
-        log_dir = log_path.parent
-        if not log_dir.is_absolute():
-            # If relative path, make it relative to project root
-            project_root = Path(__file__).parent.parent.parent.parent
-            log_path = project_root / log_file
+        try:
+            log_path = Path(log_file)
+            # Ensure log directory exists (relative to project root)
             log_dir = log_path.parent
-        log_dir.mkdir(parents=True, exist_ok=True)
-        file_handler = logging.FileHandler(str(log_path))
-        file_handler.setLevel(getattr(logging, log_level.upper()))
-        file_handler.setFormatter(logging.Formatter(log_format))
-        logging.getLogger().addHandler(file_handler)
+            if not log_dir.is_absolute():
+                # If relative path, make it relative to project root
+                # This file is at app/core/logging_config.py, so project root is 3 levels up
+                project_root = Path(__file__).parent.parent.parent
+                log_path = project_root / log_file
+                log_dir = log_path.parent
+            
+            # Only create directory and add handler if OS environment is not Render
+            # or if it's explicitly allowed. Render filesystem is mostly read-only.
+            if os.getenv("RENDER") is None:
+                log_dir.mkdir(parents=True, exist_ok=True)
+                file_handler = logging.FileHandler(str(log_path))
+                file_handler.setLevel(getattr(logging, log_level.upper()))
+                file_handler.setFormatter(logging.Formatter(log_format))
+                logging.getLogger().addHandler(file_handler)
+            else:
+                print("Running on Render, skipping file logging. Logging to stdout only.")
+        except Exception as e:
+            print(f"Failed to setup file logging: {e}. Falling back to stdout.")
     
     # Set log levels for specific libraries
     logging.getLogger("uvicorn").setLevel(logging.INFO)

@@ -9,12 +9,23 @@ from app.core.config import settings
 from app.core.logging_config import logger
 
 # Create database engine
+# Create database engine
+connect_args = {}
+engine_args = {
+    "pool_pre_ping": True,
+    "echo": settings.DEBUG
+}
+
+if "sqlite" in settings.DATABASE_URL:
+    connect_args["check_same_thread"] = False
+else:
+    engine_args["pool_size"] = 10
+    engine_args["max_overflow"] = 20
+
 engine = create_engine(
     settings.DATABASE_URL,
-    pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
-    echo=settings.DEBUG
+    connect_args=connect_args,
+    **engine_args
 )
 
 # Create session factory

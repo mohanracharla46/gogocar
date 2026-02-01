@@ -127,7 +127,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
             # Decode and validate token using cognitojwt
             decoded_token = cognitojwt.decode(
                 token,
-                "us-east-1",
+                settings.AWS_REGION,
                 settings.USERPOOL_ID,
                 settings.APP_CLIENT_ID
             )
