@@ -1,6 +1,7 @@
 """
 Pydantic schemas for Support Ticket operations
 """
+from __future__ import annotations
 from typing import Optional, Union
 from datetime import datetime
 from pydantic import BaseModel, field_validator
@@ -18,7 +19,7 @@ class TicketCreate(BaseModel):
 
 class TicketUpdate(BaseModel):
     """Schema for updating support ticket"""
-    status: Optional[Union[TicketStatus, str]] = None
+    status: Optional[TicketStatus] = None
     priority: Optional[str] = None
     assigned_to: Optional[int] = None
     resolution_notes: Optional[str] = None

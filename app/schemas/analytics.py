@@ -1,6 +1,7 @@
 """
 Pydantic schemas for Analytics/Dashboard
 """
+from __future__ import annotations
 from typing import Optional, Dict, List
 from datetime import datetime
 from pydantic import BaseModel
