@@ -26,8 +26,8 @@ cognitojwt==1.4.1
 
 # CCAvenue Payment Gateway
 pay-ccavenue>=1.0.0
-# Note: pycryptodome may still be needed as a dependency for pay-ccavenue
-pycryptodome==3.20.0
+# pycryptodome is a dependency of pay-ccavenue, letting pip handle the version
+pycryptodome
 
 # HTTP client
 requests==2.31.0
