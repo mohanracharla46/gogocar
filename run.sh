@@ -1,13 +1,13 @@
 #!/bin/bash
-# Run script for GoGoCar application
+# Production run script for Render
 
-# Activate virtual environment
-source ../venv/bin/activate
+# Default to port 8000 if $PORT is not set
+PORT="${PORT:-8000}"
 
-# Set environment variables if .env exists
-if [ -f .env ]; then
-    export $(cat .env | grep -v '^#' | xargs)
-fi
+echo "Starting GoGoCar on port $PORT..."
 
-# Run the application
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 --env-file ../.env
+# Run migrations if needed
+# alembic upgrade head
+
+# Start gunicorn with uvicorn workers
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:$PORT
