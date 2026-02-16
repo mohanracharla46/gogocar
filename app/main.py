@@ -1,5 +1,5 @@
 """
-Main FastAPI application entry point
+Main FastAPI application entry point - Reload Triggered
 """
 from typing import Optional
 from fastapi import FastAPI, Request, status
@@ -18,29 +18,13 @@ from app.db.session import init_db, get_db
 from app.routes import auth, payments, bookings
 from fastapi import Depends
 from sqlalchemy.orm import Session
-# Import other routes as they are created
-# from app.routes import cars, pages, coupons, ratings
+# Include other routes as they are created
+# from app.routes import pages, ratings
 
 # Setup logging (logs directory in project root)
-from pathlib import Path
-import os
-project_root = Path(__file__).parent.parent
-logs_dir = project_root / "logs"
-
-# Only attempt to create logs directory if not on Render
-if os.getenv("RENDER") is None:
-    try:
-        logs_dir.mkdir(exist_ok=True)
-        log_file = str(logs_dir / "app.log")
-    except Exception:
-        log_file = None
-else:
-    log_file = None
-
-setup_logging(
-    log_level="DEBUG" if settings.DEBUG else "INFO",
-    log_file=log_file if not settings.DEBUG else None
-)
+# The logging is already configured in app.core.logging_config on import.
+# We just need to make sure the logger is available here.
+logger.info(f"Starting {settings.APP_NAME} in {'DEBUG' if settings.DEBUG else 'PRODUCTION'} mode")
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -80,6 +64,23 @@ except Exception as e:
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     """Handle HTTP exceptions"""
     logger.error(f"HTTP exception: {exc.status_code} - {exc.detail}")
+    
+    # Check if this is an admin page request (not an API request or login page itself)
+    path = request.url.path
+    is_admin_path = path.startswith("/admin")
+    is_admin_api = path.startswith("/admin/api")
+    is_admin_auth = path.startswith("/admin/auth")
+    
+    # If unauthorized/forbidden access to an admin page, redirect to login
+    if is_admin_path and not is_admin_api and not is_admin_auth:
+        if exc.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]:
+            from fastapi.responses import RedirectResponse
+            error_type = "unauthorized" if exc.status_code == status.HTTP_401_UNAUTHORIZED else "forbidden"
+            return RedirectResponse(
+                url=f"/admin/auth/login?error={error_type}&return_url={path}",
+                status_code=status.HTTP_302_FOUND
+            )
+
     return JSONResponse(
         status_code=exc.status_code,
         content={"error": exc.detail, "status_code": exc.status_code}
@@ -118,8 +119,9 @@ app.include_router(tickets.router)
 # IMPORTANT: Include page routes BEFORE API routes to avoid path conflicts
 from app.routes.admin import pages as admin_pages
 from app.routes.admin import cars as admin_cars, dashboard as admin_dashboard, bookings as admin_bookings
-from app.routes.admin import locations as admin_locations, users as admin_users, reviews as admin_reviews, maintenance as admin_maintenance, tickets as admin_tickets, offers as admin_offers, websocket as admin_websocket
+from app.routes.admin import locations as admin_locations, users as admin_users, reviews as admin_reviews, maintenance as admin_maintenance, tickets as admin_tickets, offers as admin_offers, websocket as admin_websocket, auth as admin_auth
 from app.routes import offers as customer_offers
+app.include_router(admin_auth.router)  # Auth first (login page)
 app.include_router(admin_pages.router)  # Pages first
 app.include_router(admin_dashboard.router)
 app.include_router(admin_cars.router)
@@ -134,8 +136,19 @@ app.include_router(admin_websocket.router)  # WebSocket for notifications
 app.include_router(customer_offers.router)
 
 
+@app.get("/admin")
+async def admin_redirect():
+    """Redirect /admin to dashboard"""
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/admin/dashboard", status_code=302)
+
+
 @app.get("/")
-async def root(request: Request, db: Session = Depends(get_db)):
+async def root(
+    request: Request, 
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(auth.get_current_user)
+):
     """Root endpoint - render index.html"""
     from app.db.models import Cars, Location
     from sqlalchemy import case
@@ -149,13 +162,16 @@ async def root(request: Request, db: Session = Depends(get_db)):
             (Cars.car_type == 'SUV', 3),
             else_=5
         )
-        cars = db.query(Cars).filter(Cars.active == True).order_by(car_order).all()
+        cars = db.query(Cars).filter(Cars.active == True).order_by(car_order, Cars.id.desc()).all()
         locations = db.query(Location).all()
         login_url = settings.LOGIN_URL
         
-        # Check for access_token cookie
-        access_token = request.cookies.get('access_token')
-        is_authenticated = access_token is not None and access_token != ''
+        locations = db.query(Location).all()
+        login_url = settings.LOGIN_URL
+        
+        # Check authentication using current_user dependency
+        is_authenticated = not current_user.get("error")
+        is_admin = current_user.get("isadmin", False)
         
         # Get featured cars based on bookings
         from app.db.models import Orders
@@ -283,6 +299,7 @@ async def root(request: Request, db: Session = Depends(get_db)):
                 "cars": cars,
                 "locations": locations_data,
                 "is_authenticated": is_authenticated,
+                "is_admin": is_admin,
                 "featured_cars": featured_cars_data,
                 "reviews": reviews_data,
                 "offers": offers_data
@@ -314,7 +331,8 @@ async def cars_page(
     page_size: int = 12,
     pickup_datetime: Optional[str] = None,
     end_datetime: Optional[str] = None,
-    location: Optional[str] = None
+    location: Optional[str] = None,
+    current_user: dict = Depends(auth.get_current_user)
 ):
     """Cars listing page - render cars.html with pagination and date filtering"""
     from app.db.models import Cars, Location, Orders, BookingStatus
@@ -333,8 +351,8 @@ async def cars_page(
             else_=5
         )
         
-        # Base query for active cars
-        query = db.query(Cars).filter(Cars.active == True).order_by(car_order)
+        # Base query for active cars - order by category then latest first
+        query = db.query(Cars).filter(Cars.active == True).order_by(car_order, Cars.id.desc())
         
         # Filter by location if provided
         if location:
@@ -413,9 +431,9 @@ async def cars_page(
                 "count": review_count
             }
         
-        # Check for access_token cookie
-        access_token = request.cookies.get('access_token')
-        is_authenticated = access_token is not None and access_token != ''
+        # Check authentication using current_user dependency
+        is_authenticated = not current_user.get("error")
+        is_admin = current_user.get("isadmin", False)
         
         logger.debug(f"Rendering cars.html with {len(cars)} cars (page {page}) and {len(locations)} locations")
         
@@ -432,11 +450,13 @@ async def cars_page(
                 "locations": locations_data,
                 "brands": brands,
                 "is_authenticated": is_authenticated,
+                "is_admin": is_admin,
                 "car_ratings": car_ratings,
                 "pagination": pagination,
                 "pickup_datetime": pickup_datetime,
                 "end_datetime": end_datetime,
-                "selected_location": location
+                "selected_location": location,
+                "current_user": current_user
             }
         )
     except Exception as e:
@@ -462,11 +482,48 @@ async def cars_page(
         )
 
 
+@app.get("/profile")
+async def profile_page(
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(auth.get_current_user)
+):
+    """Render user profile page"""
+    from fastapi.responses import RedirectResponse
+    if current_user.get("error"):
+        return RedirectResponse(url="/auth/login", status_code=302)
+    
+    from app.db.models import UserProfile
+    user = db.query(UserProfile).filter(UserProfile.id == current_user.get("user_id")).first()
+    
+    if not user:
+        return RedirectResponse(url="/auth/login", status_code=302)
+    
+    # Calculate KYC completion percentage
+    kyc_fields = [user.aadhaar_front, user.aadhaar_back, user.drivinglicense_front, user.drivinglicense_back, user.phone, user.permanentaddress]
+    filled_fields = [f for f in kyc_fields if f]
+    kyc_percentage = int((len(filled_fields) / len(kyc_fields)) * 100)
+    
+    return templates.TemplateResponse(
+        "profile.html",
+        {
+            "request": request,
+            "user": user,
+            "current_user": user,
+            "is_authenticated": True,
+            "is_admin": user.isadmin,
+            "kyc_percentage": kyc_percentage,
+            "login_url": settings.LOGIN_URL
+        }
+    )
+
+
 @app.get("/cars/{car_id}")
 async def car_detail_page(
     request: Request,
     car_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(auth.get_current_user)
 ):
     """Car detail page - render car_detail.html with car information"""
     from app.db.models import Cars, Reviews, Location
@@ -515,9 +572,9 @@ async def car_detail_page(
             Cars.active == True
         ).limit(3).all()
         
-        # Check authentication
-        access_token = request.cookies.get('access_token')
-        is_authenticated = access_token is not None and access_token != ''
+        # Check authentication using current_user dependency
+        is_authenticated = not current_user.get("error")
+        is_admin = current_user.get("isadmin", False)
         
         # Convert reviews to dict format
         reviews_data = []
@@ -545,6 +602,7 @@ async def car_detail_page(
                 "review_count": review_count,
                 "similar_cars": similar_cars,
                 "is_authenticated": is_authenticated,
+                "is_admin": is_admin,
                 "login_url": settings.LOGIN_URL
             }
         )
@@ -680,7 +738,9 @@ async def payment_page(
                 "missing_documents": missing_documents,
                 "kyc_complete": kyc_complete,
                 "pricing_breakdown": pricing_breakdown,
-                "is_authenticated": True
+                "is_authenticated": True,
+                "is_admin": current_user.get("isadmin", False),
+                "current_user": current_user
             }
         )
         
@@ -690,27 +750,26 @@ async def payment_page(
 
 
 @app.get("/booking")
-async def booking_page(request: Request):
-    """Booking confirmation page - render booking.html with static data"""
-    from fastapi.responses import HTMLResponse
-    
+async def booking_page(
+    request: Request,
+    current_user: dict = Depends(auth.get_current_user)
+):
+    """Booking confirmation page - render booking.html"""
     logger.info("Booking page accessed")
     
     try:
-        # Read the booking.html file and return it as HTML
-        from pathlib import Path
-        template_path = Path(__file__).parent.parent / "templates" / "booking.html"
-        
-        if template_path.exists():
-            with open(template_path, 'r', encoding='utf-8') as f:
-                html_content = f.read()
-            return HTMLResponse(content=html_content)
-        else:
-            logger.error(f"Booking template not found at: {template_path}")
-            return HTMLResponse(
-                content="<h1>Booking page not found</h1>",
-                status_code=404
-            )
+        is_authenticated = not current_user.get("error")
+        return templates.TemplateResponse(
+            "booking.html",
+            {
+                "request": request,
+                "is_authenticated": is_authenticated,
+                "user_info": current_user if is_authenticated else None,
+                "is_admin": current_user.get("isadmin", False) if is_authenticated else False,
+                "login_url": settings.LOGIN_URL,
+                "current_user": current_user
+            }
+        )
     except Exception as e:
         logger.error(f"Error rendering booking.html: {str(e)}", exc_info=True)
         return HTMLResponse(
@@ -720,21 +779,27 @@ async def booking_page(request: Request):
 
 
 @app.get("/contact")
-async def contact_page(request: Request):
+async def contact_page(
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(auth.get_current_user)
+):
     """Contact page - render contact.html"""
     logger.info("Contact page accessed")
     
     try:
-        # Check authentication
-        access_token = request.cookies.get('access_token')
-        is_authenticated = access_token is not None and access_token != ''
+        # Check authentication using current_user dependency
+        is_authenticated = not current_user.get("error")
+        is_admin = current_user.get("isadmin", False)
         
         return templates.TemplateResponse(
             "contact.html",
             {
                 "request": request,
                 "is_authenticated": is_authenticated,
-                "login_url": settings.LOGIN_URL
+                "is_admin": is_admin,
+                "login_url": settings.LOGIN_URL,
+                "current_user": current_user
             }
         )
     except Exception as e:

@@ -29,35 +29,33 @@ def setup_logging(
         )
     
     # Configure root logger
-    logging.basicConfig(
-        level=getattr(logging, log_level.upper()),
-        format=log_format,
-        handlers=[
-            logging.StreamHandler(sys.stdout),
-        ]
-    )
+    root_logger = logging.getLogger()
+    root_logger.setLevel(getattr(logging, log_level.upper()))
+    
+    # Clear existing handlers to avoid duplicates/conflicts
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
+    
+    # Always add stdout handler
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setFormatter(logging.Formatter(log_format))
+    root_logger.addHandler(stdout_handler)
     
     # Add file handler if log_file is provided
     if log_file:
         try:
-            log_path = Path(log_file)
             # Ensure log directory exists (relative to project root)
-            log_dir = log_path.parent
-            if not log_dir.is_absolute():
-                # If relative path, make it relative to project root
-                # This file is at app/core/logging_config.py, so project root is 3 levels up
-                project_root = Path(__file__).parent.parent.parent
-                log_path = project_root / log_file
-                log_dir = log_path.parent
+            # This file is at app/core/logging_config.py, so project root is 2 levels up
+            project_root = Path(__file__).parent.parent.parent
+            log_path = project_root / log_file
             
-            # Only create directory and add handler if OS environment is not Render
-            # or if it's explicitly allowed. Render filesystem is mostly read-only.
             if os.getenv("RENDER") is None:
-                log_dir.mkdir(parents=True, exist_ok=True)
+                log_path.parent.mkdir(parents=True, exist_ok=True)
                 file_handler = logging.FileHandler(str(log_path))
                 file_handler.setLevel(getattr(logging, log_level.upper()))
                 file_handler.setFormatter(logging.Formatter(log_format))
-                logging.getLogger().addHandler(file_handler)
+                root_logger.addHandler(file_handler)
+                print(f"File logging configured to: {log_path}")
             else:
                 print("Running on Render, skipping file logging. Logging to stdout only.")
         except Exception as e:
@@ -87,7 +85,7 @@ def get_logger(name: str) -> logging.Logger:
 # Setup logging on import
 setup_logging(
     log_level="DEBUG" if settings.DEBUG else "INFO",
-    log_file="logs/app.log" if not settings.DEBUG else None
+    log_file="logs/app.log"
 )
 
 # Create main application logger

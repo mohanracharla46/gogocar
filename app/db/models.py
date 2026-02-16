@@ -100,6 +100,7 @@ class UserProfile(Base):
     firstname = Column(String, nullable=False)
     lastname = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False, index=True)
+    hashed_password = Column(String, nullable=True)  # Added for manual auth
     isadmin = Column(Boolean, default=False, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)  # Enable/disable user
     aadhaar_front = Column(String, nullable=True)

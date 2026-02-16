@@ -57,6 +57,25 @@
             pointer-events: none;
         }
 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+            border: 2px solid #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
         /* Header New Design */
         header {
             position: fixed;
@@ -64,12 +83,16 @@
             left: 0;
             width: 100%;
             padding: 15px 80px;
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
         }
 
         .logo-container {
@@ -270,8 +293,8 @@
         /* Hero Section Refined Design */
         /* Hero Section Redesign */
         .hero {
-            min-height: 100vh;
-            padding-top: 150px;
+            min-height: 75vh;
+            padding-top: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -329,17 +352,33 @@
             font-weight: 500;
         }
 
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
         .hero-promo-car {
             width: 100%;
             max-width: 550px;
-            margin-top: 20px;
+            margin-top: -100px;
             filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
             transition: transform 0.5s ease;
             position: relative;
             z-index: 1;
+            animation: float 6s ease-in-out infinite;
         }
 
         .hero-promo-car:hover {
+            animation-play-state: paused;
             transform: scale(1.02);
         }
 
@@ -462,6 +501,18 @@
             width: 100%;
             outline: none;
             display: block;
+            padding: 5px 0;
+        }
+
+        select.input-value {
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232b3990' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0px center;
+            background-size: 16px;
         }
 
         input.input-value {
@@ -540,6 +591,18 @@
 
         .search-btn:active {
             transform: translateY(0);
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .input-group.error {
+            border-color: #ef4444;
         }
 
         /* Ensure headline stays on top */
@@ -1400,20 +1463,22 @@
 
         .car-card {
             background: #ffffff;
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(43, 57, 144, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 30px rgba(43, 57, 144, 0.05);
+            border: 1px solid rgba(43, 57, 144, 0.05);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             position: relative;
             display: flex;
             flex-direction: column;
-            min-height: 380px;
-            /* Increased to accommodate content comfortably */
+            min-height: 320px;
+            overflow: hidden;
         }
 
         .car-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(43, 57, 144, 0.12);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(43, 57, 144, 0.15);
+            border-color: rgba(43, 57, 144, 0.1);
         }
 
         .card-content {
@@ -1521,29 +1586,43 @@
         }
 
         .book-now-btn {
-            background: #2b3990;
+            background: linear-gradient(135deg, #2b3990 0%, #1e296a 100%);
             color: #ffffff;
             border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
+            padding: 12px 28px;
+            border-radius: 50px;
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(43, 57, 144, 0.2);
         }
 
         .book-now-btn:hover {
-            background: #1e2866;
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(43, 57, 144, 0.3);
         }
 
         /* Responsive for Featured Cars */
 
         /* Offers Section */
         .offers-section {
-            background: linear-gradient(135deg, #ff6b35 0%, #3b82f6 100%);
-            padding: 80px 50px;
+            background: linear-gradient(135deg, #061a40 0%, #2b3990 60%, #4354b0 100%);
+            padding: 100px 50px;
             color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offers-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.15), transparent 40%);
+            pointer-events: none;
         }
 
         .offers-container {
@@ -2607,16 +2686,32 @@
                     stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg></a>
-            <a href="#why-choose-us">About Us</a>
+            <a href="/#why-choose-us">About Us</a>
             <a href="/contact">Contact Us</a>
+            {% if is_authenticated %}
+            <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
+            {% endif %}
+            {% if is_admin %}
+            <a href="/admin/dashboard" style="color: #ff6b35;">Admin Panel</a>
+            {% endif %}
         </nav>
 
         <div class="auth-buttons">
             <a href="/host" class="host-btn">Become a HOST</a>
             {% if is_authenticated %}
-            <a href="/auth/logout" class="login-btn-new">Logout</a>
+            <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
+                <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="user-avatar-mini"
+                        style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
+                        {{ current_user.firstname[0] if current_user else 'U' }}
+                    </span>
+                    {{ current_user.firstname if current_user else 'User' }}
+                </a>
+                <a href="/auth/logout" class="logout-link"
+                    style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
+            </div>
             {% else %}
-            <a href="{{ login_url }}" class="login-btn-new" onclick="setAuthAction('login', event)">
+            <a href="/auth/login" class="login-btn-new">
                 Login or Signup
             </a>
             {% endif %}
@@ -2633,53 +2728,62 @@
                 </h1>
                 <p class="promo-subtext">Wide range of Hatchbacks, Sedans and SUV's with multiple fuel and transmission
                     options</p>
-                <img src="/static/img/car-suv.png" alt="Car" class="hero-promo-car" id="heroCarImage">
+                <img src="/static/img/crysta.png" alt="Car" class="hero-promo-car" id="heroCarImage">
             </div>
 
-            <!-- Hero Card (Right Side) -->
+            <!-- Search Card -->
             <div class="hero-card">
                 <div class="hero-card-inner">
+                    <!-- Toggle Buttons -->
                     <div class="toggle-container">
-                        <button class="toggle-btn active" id="rentalTab" onclick="toggleHeroMode('rental')">
-                            <span class="toggle-title">Daily Drives</span>
-                            <span class="toggle-subtitle">Upto 7 Days</span>
+                        <button class="toggle-btn active" id="rentalsTab">
+                            <span class="toggle-title">Rentals</span>
+                            <span class="toggle-subtitle">For hours & days</span>
                         </button>
-                        <button class="toggle-btn" id="subscriptionTab" onclick="toggleHeroMode('subscription')">
-                            <span class="toggle-title">Subscription</span>
-                            <span class="toggle-subtitle">7 Days+ Ride</span>
+                        <button class="toggle-btn" id="subscriptionTab">
+                            <span class="toggle-title">Subscriptions</span>
+                            <span class="toggle-subtitle">For months & years</span>
                         </button>
                     </div>
 
+                    <!-- Search Form -->
                     <div class="search-card-body">
-                        <h2>Looking for Best Car Rentals?</h2>
+                        <form id="searchForm" action="/cars" method="GET">
+                            <h2>The best GoGo experience</h2>
 
-                        <div class="input-group" id="selectLocationBtn" style="cursor: pointer;">
-                            <span class="input-label">Location</span>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span class="input-value" id="selectedLocationDisplay">Hyderabad</span>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b3990"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
+                            <div class="input-group" id="locationGroup">
+                                <label class="input-label">Location</label>
+                                <select class="input-value" id="locationInput" name="location">
+                                    <option value="" disabled selected>Select Location</option>
+                                    {% for location in locations %}
+                                    <option value="{{ location.location }}">{{ location.location }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="error-message" id="locationError">Please select a location</div>
                             </div>
-                        </div>
 
-                        <div class="date-grid">
-                            <div class="input-group">
-                                <label class="input-label" for="pickupDate">Pick-Up Date</label>
-                                <input type="datetime-local" class="input-value" id="pickupDate"
-                                    value="2026-01-14T10:00">
+                            <div class="date-grid">
+                                <div class="input-group" id="pickupGroup">
+                                    <label class="input-label">Pick-Up Date</label>
+                                    <input type="datetime-local" class="input-value" id="pickupInput"
+                                        name="pickup_datetime">
+                                    <div class="error-message" id="pickupError">Required</div>
+                                </div>
+                                <div class="input-group" id="returnGroup">
+                                    <label class="input-label">Return Date</label>
+                                    <input type="datetime-local" class="input-value" id="returnInput"
+                                        name="end_datetime">
+                                    <div class="error-message" id="returnError">Required</div>
+                                </div>
                             </div>
-                            <div class="input-group">
-                                <label class="input-label" for="returnDate">Return Date</label>
-                                <input type="datetime-local" class="input-value" id="returnDate"
-                                    value="2026-01-16T22:00">
+
+                            <div class="duration-text" id="durationDisplay"
+                                style="background: #e0e7ff; color: #2b3990; margin-top: 10px; margin-bottom: 20px;">
+                                Total Time: -- Days, -- Hrs
                             </div>
-                        </div>
 
-                        <div class="duration-text">Duration 2 Days and 12 Hours</div>
-
-                        <button class="search-btn">Search</button>
+                            <button type="submit" class="search-btn">SEARCH CARS</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -2800,7 +2904,7 @@
                                 <div class="car-brand">Maruti</div>
                             </div>
                             <div class="car-visual">
-                                <img src="/static/img/car-suv.png" alt="Baleno">
+                                <img src="/static/img/baleno1.png" alt="Baleno">
                             </div>
                         </div>
                         <div class="car-specs">
@@ -2851,7 +2955,7 @@
                                 <div class="car-brand">Maruti</div>
                             </div>
                             <div class="car-visual">
-                                <img src="/static/img/toggle-car.png" alt="Ertiga">
+                                <img src="/static/img/ertiga.png" alt="Ertiga">
                             </div>
                         </div>
                         <div class="car-specs">
@@ -2902,7 +3006,7 @@
                                 <div class="car-brand">Maruti</div>
                             </div>
                             <div class="car-visual">
-                                <img src="/static/img/car-suv.png" alt="Fronx">
+                                <img src="/static/img/fronx.jpg" alt="Fronx">
                             </div>
                         </div>
                         <div class="car-specs">
@@ -2974,7 +3078,7 @@
                                 <div class="car-brand">Toyota</div>
                             </div>
                             <div class="car-visual">
-                                <img src="/static/img/toggle-car.png" alt="Innova">
+                                <img src="/static/img/crysta.png" alt="Innova">
                             </div>
                         </div>
                         <div class="car-specs">
@@ -3025,7 +3129,7 @@
                                 <div class="car-brand">Hyundai</div>
                             </div>
                             <div class="car-visual">
-                                <img src="/static/img/car-suv.png" alt="Alcazar">
+                                <img src="/static/img/alcazar.png" alt="Alcazar">
                             </div>
                         </div>
                         <div class="car-specs">
@@ -3076,7 +3180,7 @@
                                 <div class="car-brand">Kia</div>
                             </div>
                             <div class="car-visual">
-                                <img src="/static/img/toggle-car.png" alt="Seltos">
+                                <img src="/static/img/seltos.png" alt="Seltos">
                             </div>
                         </div>
                         <div class="car-specs">
@@ -3448,7 +3552,9 @@
         const cancelLocationBtn = document.getElementById('cancelLocationBtn');
         const confirmLocationBtn = document.getElementById('confirmLocationBtn');
         const locationSearchInput = document.getElementById('locationSearchInput');
-        const locationList = document.getElementById('locationList');
+
+        let locationList = document.getElementById('locationList'); // May be null if not in DOM yet
+
 
         let selectedLocation = null;
 
@@ -3505,89 +3611,6 @@
             }
         });
 
-        // Hero Section Toggle Logic
-        function toggleHeroMode(mode) {
-            const rentalTab = document.getElementById('rentalTab');
-            const subscriptionTab = document.getElementById('subscriptionTab');
-            const heroCardTitle = document.getElementById('heroCardTitle');
-            const heroPromoContent = document.getElementById('heroPromoContent');
-            const heroCarImage = document.getElementById('heroCarImage');
-            const toggleCar = document.getElementById('toggleCarIndicator');
-
-            // Trigger Content Animation
-            heroPromoContent.classList.remove('fade-slide-up');
-            if (heroCarImage) heroCarImage.classList.remove('fade-slide-up');
-
-            // Trigger reflow to restart animation
-            void heroPromoContent.offsetWidth;
-
-            heroPromoContent.classList.add('fade-slide-up');
-            if (heroCarImage) heroCarImage.classList.add('fade-slide-up');
-
-            if (mode === 'rental') {
-                // Update Tabs
-                rentalTab.classList.add('active');
-                rentalTab.classList.add('active-tab-anim');
-                setTimeout(() => rentalTab.classList.remove('active-tab-anim'), 400);
-
-                subscriptionTab.classList.remove('active');
-
-                // Update Toggle Car Position
-                if (toggleCar) toggleCar.classList.remove('move-right');
-
-                // Update Card Title
-                heroCardTitle.textContent = 'Rentals';
-
-                // Update Promo Content
-                heroPromoContent.querySelector('.promo-headline').innerHTML = `
-                    Subscribe a car @ <br>
-                    <span class="promo-price">₹570</span><span class="promo-price-suffix">/day</span>
-                `;
-
-                // Update Benefits
-                const benefitsList = heroPromoContent.querySelector('.benefits-list');
-                benefitsList.innerHTML = `
-                    <li><span class="check-circle"></span> Only ₹5,000 refundable deposit</li>
-                    <li><span class="check-circle"></span> No loan liability, Zero downpayment</li>
-                    <li><span class="check-circle"></span> Insurance & maintenance included</li>
-                `;
-
-                // Update Image - assuming car-suv.png is the red one
-                if (heroCarImage) heroCarImage.src = "/static/img/car-suv.png";
-
-            } else if (mode === 'subscription') {
-                // Update Tabs
-                subscriptionTab.classList.add('active');
-                subscriptionTab.classList.add('active-tab-anim');
-                setTimeout(() => subscriptionTab.classList.remove('active-tab-anim'), 400);
-
-                rentalTab.classList.remove('active');
-
-                // Update Toggle Car Position
-                if (toggleCar) toggleCar.classList.add('move-right');
-
-                // Update Card Title
-                heroCardTitle.textContent = 'Subscriptions';
-
-                // Update Promo Content
-                heroPromoContent.querySelector('.promo-headline').innerHTML = `
-                    Private car for <br> essential travels
-                `;
-
-                // Update Benefits (Text paragraph for subscription)
-                const benefitsList = heroPromoContent.querySelector('.benefits-list');
-                // Replace list with paragraph or different list items
-                benefitsList.innerHTML = `
-                    <div style="font-size: 18px; color: #334155; line-height: 1.6; max-width: 600px;">
-                        No long term commitment, Min 7 days.<br>
-                        Experience the comfort and safety of your own <br> car without the hassle of ownership.
-                    </div>
-                `;
-
-                // Update Image - using image.png for subscription
-                if (heroCarImage) heroCarImage.src = "/static/img/image.png";
-            }
-        }
         // Location item selection
         if (locationList) {
             locationList.addEventListener('click', function (e) {
@@ -3651,7 +3674,7 @@
         });
 
         // Featured Cars Data
-        const featuredCarsData = {{ featured_cars | tojson if featured_cars else '[]' }};
+        const featuredCarsData = JSON.parse('{{ (featured_cars | tojson | safe) if featured_cars else "[]" }}');
 
         // Load Featured Cars
         function loadFeaturedCars() {
@@ -3686,7 +3709,7 @@
         }
 
         // Reviews Data
-        const reviewsData = {{ reviews | tojson if reviews else '[]' }};
+        const reviewsData = JSON.parse('{{ (reviews | tojson | safe) if reviews else "[]" }}');
 
         // Load Reviews with Auto-scroll
         function loadReviews() {
@@ -3696,24 +3719,27 @@
             if (!reviewsSection || !reviewsContainer) return;
 
             if (reviewsData && reviewsData.length > 0) {
-                // Show the section
                 reviewsSection.style.display = 'block';
 
-                // Display reviews (5-10)
                 const reviewsToShow = reviewsData.slice(0, Math.min(10, reviewsData.length));
+                let html = '';
 
-                reviewsContainer.innerHTML = reviewsToShow.map(review => {
+                reviewsToShow.forEach(review => {
                     const userName = `${review.user_firstname || ''} ${review.user_lastname || ''}`.trim() || 'Anonymous';
-                    const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'AN';
-                    const carName = `${review.car_brand || ''} ${review.car_model || ''}`.trim() || 'Car';
+                    const initials = userName.charAt(0).toUpperCase() || 'A';
                     const ratingStars = '⭐'.repeat(review.rating || 5);
-                    const reviewDate = review.created_at ? new Date(review.created_at).toLocaleDateString('en-IN', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    }) : '';
+                    let reviewDate = '';
+                    if (review.created_at) {
+                        try {
+                            reviewDate = new Date(review.created_at).toLocaleDateString('en-IN', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                            });
+                        } catch (e) { console.error(e); }
+                    }
 
-                    return `
+                    html += `
                         <div class="review-card-horizontal">
                             <div class="review-avatar">${initials}</div>
                             <div class="review-content">
@@ -3724,12 +3750,11 @@
                             </div>
                         </div>
                     `;
-                }).join('');
+                });
 
-                // Auto-scroll functionality
+                reviewsContainer.innerHTML = html;
                 startAutoScroll();
             } else {
-                // Hide the section if no reviews
                 reviewsSection.style.display = 'none';
             }
         }
@@ -3805,145 +3830,6 @@
             });
         }
 
-        // Hero Mode Toggling
-        function toggleHeroMode(mode) {
-            const rentalTab = document.getElementById('rentalTab');
-            const subscriptionTab = document.getElementById('subscriptionTab');
-            const heroPromoContent = document.getElementById('heroPromoContent');
-
-            if (mode === 'rental') {
-                rentalTab.classList.add('active');
-                subscriptionTab.classList.remove('active');
-                heroPromoContent.innerHTML = `
-                    <h1 class="promo-headline">Rent a car@ <br>
-                        <span class="promo-price-highlight">Rs.1399/12hrs</span>
-                    </h1>
-                    <p class="promo-subtext">Wide range of Hatchbacks, Sedans and SUV's with multiple fuel and transmission options</p>
-                    <img src="/static/img/car-suv.png" alt="Car" class="hero-promo-car" id="heroCarImage">
-                `;
-            } else {
-                rentalTab.classList.remove('active');
-                subscriptionTab.classList.add('active');
-                heroPromoContent.innerHTML = `
-                    <h1 class="promo-headline">Monthly <br>
-                        <span class="promo-price-highlight">Subscriptions</span>
-                    </h1>
-                    <p class="promo-subtext">Get a car for more than 7 days with zero downpayment and included maintenance.</p>
-                    <img src="/static/img/toggle-car.png" alt="Subscription Car" class="hero-promo-car" id="heroCarImage">
-                `;
-            }
-        }
-
-        // Location Modal Logic
-        document.addEventListener('DOMContentLoaded', function () {
-            const selectLocationBtn = document.getElementById('selectLocationBtn');
-            const locationModal = document.getElementById('locationModal');
-            const closeLocationModal = document.getElementById('closeLocationModal');
-            const cancelLocationBtn = document.getElementById('cancelLocationBtn');
-            const confirmLocationBtn = document.getElementById('confirmLocationBtn');
-            const locationItems = document.querySelectorAll('.location-item');
-            const selectedLocationDisplay = document.getElementById('selectedLocationDisplay');
-            const locationSearchInput = document.getElementById('locationSearchInput');
-            const searchBtn = document.querySelector('.search-btn');
-
-            if (selectLocationBtn) {
-                selectLocationBtn.addEventListener('click', () => {
-                    locationModal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                });
-            }
-
-            const closeModal = () => {
-                locationModal.classList.remove('active');
-                document.body.style.overflow = '';
-            };
-
-            if (closeLocationModal) closeLocationModal.addEventListener('click', closeModal);
-            if (cancelLocationBtn) cancelLocationBtn.addEventListener('click', closeModal);
-
-            locationItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    locationItems.forEach(i => i.classList.remove('selected'));
-                    item.classList.add('selected');
-                    const loc = item.getAttribute('data-location');
-                    window.selectedLocation = loc;
-                    confirmLocationBtn.disabled = false;
-                });
-            });
-
-            if (confirmLocationBtn) {
-                confirmLocationBtn.addEventListener('click', () => {
-                    if (window.selectedLocation) {
-                        selectedLocationDisplay.textContent = window.selectedLocation;
-                        closeModal();
-                    }
-                });
-            }
-
-            if (searchBtn) {
-                searchBtn.addEventListener('click', () => {
-                    if (!window.selectedLocation && selectedLocationDisplay.textContent === 'Hyderabad') {
-                        window.selectedLocation = 'Hyderabad';
-                    }
-
-                    if (window.selectedLocation) {
-                        window.location.href = `/cars?location=${encodeURIComponent(window.selectedLocation)}`;
-                    } else {
-                        showNotification('Please select a location first', 'warning');
-                        locationModal.classList.add('active');
-                    }
-                });
-            }
-
-            if (locationSearchInput) {
-                locationSearchInput.addEventListener('input', (e) => {
-                    const search = e.target.value.toLowerCase();
-                    locationItems.forEach(item => {
-                        const name = item.querySelector('.location-name').textContent.toLowerCase();
-                        item.style.display = name.includes(search) ? 'flex' : 'none';
-                    });
-                });
-            }
-
-            // Date and Duration logic
-            const pickupInput = document.getElementById('pickupDate');
-            const returnInput = document.getElementById('returnDate');
-            const durationDisplay = document.querySelector('.duration-text');
-
-            function updateDuration() {
-                if (!pickupInput.value || !returnInput.value) return;
-
-                const start = new Date(pickupInput.value);
-                const end = new Date(returnInput.value);
-
-                if (end <= start) {
-                    durationDisplay.textContent = 'Return must be after pickup';
-                    durationDisplay.style.color = '#ef4444';
-                    return;
-                }
-
-                durationDisplay.style.color = '#2b3990';
-                const diffMs = end - start;
-                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-                const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-                let text = 'Duration ';
-                if (diffDays > 0) text += `${diffDays} Day${diffDays > 1 ? 's' : ''} `;
-                if (diffHours > 0) text += `${diffHours} Hour${diffHours > 1 ? 's' : ''}`;
-                if (diffDays === 0 && diffHours === 0) text = 'Duration less than 1 hour';
-
-                durationDisplay.textContent = text.trim();
-            }
-
-            if (pickupInput && returnInput) {
-                pickupInput.addEventListener('change', updateDuration);
-                returnInput.addEventListener('change', updateDuration);
-                updateDuration(); // Initial calculation
-            }
-
-            loadFeaturedCars();
-            loadReviews();
-        });
         // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
         const mainNav = document.getElementById('mainNav');

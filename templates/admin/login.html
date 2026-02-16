@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - GoGoCar</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2b3990;
+            --primary-light: #3f51b5;
+            --secondary: #ff6b35;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --bg-body: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --error: #ef4444;
+            --success: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Abstract Background Elements */
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+        }
+
+        .shape-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -250px;
+            right: -100px;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            bottom: -200px;
+            left: -100px;
+        }
+
+        .shape-3 {
+            width: 300px;
+            height: 300px;
+            background: #cbd5e1;
+            top: 40%;
+            left: 10%;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            z-index: 1;
+        }
+
+        .login-card {
+            background: var(--white);
+            border-radius: 32px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-container {
+            margin-bottom: 40px;
+        }
+
+        .logo-container img {
+            width: 160px;
+            height: auto;
+        }
+
+        .login-card h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .login-card p.subtitle {
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        .alert {
+            display: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: left;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-error {
+            background: #fff1f2;
+            color: var(--error);
+            border: 1px solid #fee2e2;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            color: var(--success);
+            border: 1px solid #dcfce7;
+        }
+
+        .alert.show {
+            display: flex;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            margin-left: 4px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 16px 16px 52px;
+            background: #f1f5f9;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            font-size: 16px;
+            font-family: inherit;
+            color: var(--text-main);
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            background: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(43, 57, 144, 0.08);
+        }
+
+        .form-control:focus+i {
+            color: var(--primary);
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            font-size: 14px;
+            padding: 0 4px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .remember input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .forgot-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-link:hover {
+            color: var(--secondary);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 18px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 10px 20px rgba(43, 57, 144, 0.15);
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(43, 57, 144, 0.2);
+        }
+
+        .btn-submit:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--text-main);
+        }
+
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid var(--white);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading .loader {
+            display: block;
+        }
+
+        .loading .btn-text {
+            display: none;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 40px 25px;
+                border-radius: 24px;
+            }
+
+            .login-card h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="logo-container">
+                <img src="/static/img/logo.png?v=2" alt="GoGoCar Logo" onerror="this.style.display='none'">
+            </div>
+
+            <h2>Admin Access</h2>
+            <p class="subtitle">Secure login for authorized personnel only</p>
+
+            <div id="alertBox" class="alert">
+                <i class="fas fa-info-circle"></i>
+                <span id="alertMessage"></span>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-box">
+                        <i class="fas fa-user-shield"></i>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="admin_user"
+                            required autofocus>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-box">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="••••••••"
+                            required>
+                    </div>
+                </div>
+
+                <div class="options">
+                    <label class="remember">
+                        <input type="checkbox" id="remember" name="remember">
+                        Stay signed in
+                    </label>
+                    <a href="#" class="forgot-link" onclick="forgotPassword()">Reset Password</a>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <div class="loader"></div>
+                    <span class="btn-text">Log In To Dashboard</span>
+                    <i class="fas fa-arrow-right btn-text"></i>
+                </button>
+            </form>
+
+            <div class="footer">
+                <a href="/" class="back-link">
+                    <i class="fas fa-chevron-left"></i>
+                    Return to Main Website
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const alertBox = document.getElementById('alertBox');
+        const alertMessage = document.getElementById('alertMessage');
+
+        function showAlert(message, type = 'error') {
+            alertBox.className = `alert alert-${type} show`;
+            alertMessage.textContent = message;
+
+            const icon = alertBox.querySelector('i');
+            if (type === 'error') icon.className = 'fas fa-exclamation-triangle';
+            if (type === 'success') icon.className = 'fas fa-check-circle';
+        }
+
+        function forgotPassword() {
+            showAlert('Please contact the system administrator to reset your password.', 'error');
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+
+            if (!username || !password) {
+                showAlert('Username and password are required.');
+                return;
+            }
+
+            // UI Feedback
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            alertBox.classList.remove('show');
+
+            try {
+                const response = await fetch('/admin/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, remember })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showAlert('Authentication successful! Accessing portal...', 'success');
+
+                    // Check for return_url
+                    const returnUrl = params.get('return_url') || '/admin/dashboard';
+
+                    setTimeout(() => {
+                        window.location.href = returnUrl;
+                    }, 1200);
+                } else {
+                    showAlert(data.message || 'Invalid administrative credentials.');
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Login Error:', error);
+                showAlert('System error occurred. Check your connection.');
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Handle URL status messages
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('error') === 'unauthorized') {
+            showAlert('Secure session required. Please sign in.', 'error');
+        } else if (params.get('error') === 'forbidden') {
+            showAlert('You do not have administrative privileges.', 'error');
+        }
+    </script>
+</body>
+
+</html>

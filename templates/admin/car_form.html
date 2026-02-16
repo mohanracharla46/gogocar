@@ -10,19 +10,20 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="brand">Brand *</label>
-                <input type="text" id="brand" name="brand" class="form-control" 
-                       value="{{ car.brand if car else '' }}" required>
+                <input type="text" id="brand" name="brand" class="form-control" value="{{ car.brand if car else '' }}"
+                    required>
             </div>
             <div class="form-group">
                 <label for="car_model">Model *</label>
-                <input type="text" id="car_model" name="car_model" class="form-control" 
-                       value="{{ car.car_model if car else '' }}" required>
+                <input type="text" id="car_model" name="car_model" class="form-control"
+                    value="{{ car.car_model if car else '' }}" required>
             </div>
         </div>
 
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea id="description" name="description" class="form-control" rows="4">{{ car.description if car else '' }}</textarea>
+            <textarea id="description" name="description" class="form-control"
+                rows="4">{{ car.description if car else '' }}</textarea>
         </div>
 
         <div class="form-row">
@@ -31,7 +32,8 @@
                 <select id="car_type" name="car_type" class="form-control" required>
                     <option value="">Select Type</option>
                     {% for type in car_types %}
-                    <option value="{{ type }}" {{ 'selected' if car and car.car_type.value == type else '' }}>{{ type }}</option>
+                    <option value="{{ type }}" {{ 'selected' if car and car.car_type.value==type else '' }}>{{ type }}
+                    </option>
                     {% endfor %}
                 </select>
             </div>
@@ -40,7 +42,8 @@
                 <select id="fuel_type" name="fuel_type" class="form-control" required>
                     <option value="">Select Fuel Type</option>
                     {% for type in fuel_types %}
-                    <option value="{{ type }}" {{ 'selected' if car and car.fuel_type.value == type else '' }}>{{ type }}</option>
+                    <option value="{{ type }}" {{ 'selected' if car and car.fuel_type.value==type else '' }}>{{ type }}
+                    </option>
                     {% endfor %}
                 </select>
             </div>
@@ -49,7 +52,8 @@
                 <select id="transmission_type" name="transmission_type" class="form-control" required>
                     <option value="">Select Transmission</option>
                     {% for type in transmission_types %}
-                    <option value="{{ type }}" {{ 'selected' if car and car.transmission_type.value == type else '' }}>{{ type }}</option>
+                    <option value="{{ type }}" {{ 'selected' if car and car.transmission_type.value==type else '' }}>{{
+                        type }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -58,7 +62,8 @@
                 <select id="no_of_seats" name="no_of_seats" class="form-control" required>
                     <option value="">Select Seats</option>
                     {% for seats in seat_options %}
-                    <option value="{{ seats }}" {{ 'selected' if car and car.no_of_seats.value == seats else '' }}>{{ seats }}</option>
+                    <option value="{{ seats }}" {{ 'selected' if car and car.no_of_seats.value==seats else '' }}>{{
+                        seats }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -67,48 +72,47 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="base_price">Base Price (₹/day) *</label>
-                <input type="number" id="base_price" name="base_price" class="form-control" 
-                       value="{{ car.base_price if car else '' }}" required min="0">
+                <input type="number" id="base_price" name="base_price" class="form-control"
+                    value="{{ car.base_price if car else '' }}" required min="0">
             </div>
             <div class="form-group">
                 <label for="damage_price">Damage Price (₹) *</label>
-                <input type="number" id="damage_price" name="damage_price" class="form-control" 
-                       value="{{ car.damage_price if car else '' }}" required min="0">
+                <input type="number" id="damage_price" name="damage_price" class="form-control"
+                    value="{{ car.damage_price if car else '' }}" required min="0">
             </div>
             <div class="form-group">
                 <label for="protection_price">Protection Price (₹) *</label>
-                <input type="number" id="protection_price" name="protection_price" class="form-control" 
-                       value="{{ car.protection_price if car else '' }}" required min="0">
+                <input type="number" id="protection_price" name="protection_price" class="form-control"
+                    value="{{ car.protection_price if car else '' }}" required min="0">
             </div>
             <div class="form-group">
                 <label for="no_of_km">KM Limit *</label>
-                <input type="number" id="no_of_km" name="no_of_km" class="form-control" 
-                       value="{{ car.no_of_km if car else '' }}" required min="0">
+                <input type="number" id="no_of_km" name="no_of_km" class="form-control"
+                    value="{{ car.no_of_km if car else '' }}" required min="0">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label for="registration_number">Registration Number</label>
-                <input type="text" id="registration_number" name="registration_number" class="form-control" 
-                       value="{{ car.registration_number if car else '' }}">
+                <input type="text" id="registration_number" name="registration_number" class="form-control"
+                    value="{{ car.registration_number if car else '' }}">
             </div>
             <div class="form-group">
                 <label for="year">Year</label>
-                <input type="number" id="year" name="year" class="form-control" 
-                       value="{{ car.year if car else '' }}" min="1900" max="2100">
+                <input type="number" id="year" name="year" class="form-control" value="{{ car.year if car else '' }}"
+                    min="1900" max="2100">
             </div>
             <div class="form-group">
                 <label for="color">Color</label>
-                <input type="text" id="color" name="color" class="form-control" 
-                       value="{{ car.color if car else '' }}">
+                <input type="text" id="color" name="color" class="form-control" value="{{ car.color if car else '' }}">
             </div>
             <div class="form-group">
                 <label for="location_id">Location</label>
                 <select id="location_id" name="location_id" class="form-control">
                     <option value="">Select Location</option>
                     {% for loc in locations %}
-                    <option value="{{ loc.id }}" {{ 'selected' if car and car.location_id == loc.id else '' }}>
+                    <option value="{{ loc.id }}" {{ 'selected' if car and car.location_id==loc.id else '' }}>
                         {{ loc.location }}
                     </option>
                     {% endfor %}
@@ -122,16 +126,17 @@
             {% if car and car.images %}
             <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
                 {% for image_url in car.images.split(',') %}
-                <img src="{{ image_url }}" alt="Car Image" style="width: 100px; height: 80px; object-fit: cover; border-radius: 6px;">
+                <img src="{{ image_url }}" alt="Car Image"
+                    style="width: 100px; height: 80px; object-fit: cover; border-radius: 6px;">
                 {% endfor %}
             </div>
-            {% endif %}
+                {% endif %}
             <small style="color: var(--gray);">You can select multiple images</small>
         </div>
 
         <div class="form-group">
-            <label>
-                <input type="checkbox" id="active" name="active" {{ 'checked' if car and car.active else '' }}>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" id="active" name="active" {{ 'checked' if not car or car.active else '' }}>
                 Active (Car will be visible to users)
             </label>
         </div>
@@ -146,7 +151,9 @@
         </div>
     </form>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
     document.getElementById('carForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -154,59 +161,59 @@
         const formData = new FormData();
         {% if car %}
         const carId = {{ car.id }};
+
         {% else %}
         const carId = null;
         {% endif %}
 
-        // Add form fields
-        formData.append('brand', document.getElementById('brand').value);
-        formData.append('car_model', document.getElementById('car_model').value);
-        formData.append('description', document.getElementById('description').value);
-        formData.append('car_type', document.getElementById('car_type').value);
-        formData.append('fuel_type', document.getElementById('fuel_type').value);
-        formData.append('transmission_type', document.getElementById('transmission_type').value);
-        formData.append('no_of_seats', document.getElementById('no_of_seats').value);
-        formData.append('base_price', document.getElementById('base_price').value);
-        formData.append('damage_price', document.getElementById('damage_price').value);
-        formData.append('protection_price', document.getElementById('protection_price').value);
-        formData.append('no_of_km', document.getElementById('no_of_km').value);
-        formData.append('registration_number', document.getElementById('registration_number').value);
-        formData.append('year', document.getElementById('year').value);
-        formData.append('color', document.getElementById('color').value);
-        formData.append('location_id', document.getElementById('location_id').value);
-        formData.append('active', document.getElementById('active').checked ? 'true' : 'false');
+    // Add form fields
+    formData.append('brand', document.getElementById('brand').value);
+    formData.append('car_model', document.getElementById('car_model').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('car_type', document.getElementById('car_type').value);
+    formData.append('fuel_type', document.getElementById('fuel_type').value);
+    formData.append('transmission_type', document.getElementById('transmission_type').value);
+    formData.append('no_of_seats', document.getElementById('no_of_seats').value);
+    formData.append('base_price', document.getElementById('base_price').value);
+    formData.append('damage_price', document.getElementById('damage_price').value);
+    formData.append('protection_price', document.getElementById('protection_price').value);
+    formData.append('no_of_km', document.getElementById('no_of_km').value);
+    formData.append('registration_number', document.getElementById('registration_number').value);
+    formData.append('year', document.getElementById('year').value);
+    formData.append('color', document.getElementById('color').value);
+    formData.append('location_id', document.getElementById('location_id').value);
+    formData.append('active', document.getElementById('active').checked ? 'true' : 'false');
 
-        // Add images
-        const imagesInput = document.getElementById('images');
-        if (imagesInput.files.length > 0) {
-            for (let i = 0; i < imagesInput.files.length; i++) {
-                formData.append('images', imagesInput.files[i]);
-            }
+    // Add images
+    const imagesInput = document.getElementById('images');
+    if (imagesInput.files.length > 0) {
+        for (let i = 0; i < imagesInput.files.length; i++) {
+            formData.append('images', imagesInput.files[i]);
+        }
+    }
+
+    try {
+        const url = carId ? `/cars/${carId}` : '/cars';
+        const method = carId ? 'PUT' : 'POST';
+
+        const response = await fetch(API_BASE + url, {
+            method: method,
+            body: formData,
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({ detail: 'Request failed' }));
+            throw new Error(error.detail || 'Request failed');
         }
 
-        try {
-            const url = carId ? `/cars/${carId}` : '/cars';
-            const method = carId ? 'PUT' : 'POST';
-
-            const response = await fetch(API_BASE + url, {
-                method: method,
-                body: formData,
-                credentials: 'include'
-            });
-
-            if (!response.ok) {
-                const error = await response.json().catch(() => ({ detail: 'Request failed' }));
-                throw new Error(error.detail || 'Request failed');
-            }
-
-            showAlert(`Car ${carId ? 'updated' : 'created'} successfully!`, 'success');
-            setTimeout(() => {
-                window.location.href = '/admin/cars';
-            }, 1500);
-        } catch (error) {
-            showAlert('Error saving car: ' + error.message, 'danger');
-        }
+        showAlert(`Car ${carId ? 'updated' : 'created'} successfully!`, 'success');
+        setTimeout(() => {
+            window.location.href = '/admin/cars';
+        }, 1500);
+    } catch (error) {
+        showAlert('Error saving car: ' + error.message, 'danger');
+    }
     });
 </script>
 {% endblock %}
-

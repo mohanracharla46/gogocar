@@ -61,7 +61,7 @@
     async function loadCars() {
         const loadingSpinner = document.getElementById('loadingSpinner');
         const carsTable = document.getElementById('carsTable');
-        
+
         loadingSpinner.style.display = 'block';
         carsTable.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading...</td></tr>';
 
@@ -75,13 +75,13 @@
             if (typeFilter) url += `&car_type=${typeFilter}`;
 
             const data = await apiCall(url);
-            
+
             if (data.items && data.items.length > 0) {
                 let filtered = data.items;
-                
+
                 // Client-side search
                 if (search) {
-                    filtered = filtered.filter(car => 
+                    filtered = filtered.filter(car =>
                         car.brand.toLowerCase().includes(search.toLowerCase()) ||
                         car.car_model.toLowerCase().includes(search.toLowerCase())
                     );
@@ -90,7 +90,7 @@
                 carsTable.innerHTML = filtered.map(car => {
                     const images = car.images ? (typeof car.images === 'string' ? car.images.split(',') : []) : [];
                     const imageUrl = images[0] || '/static/img/landing.png';
-                    
+
                     // Handle features - could be array, string, or null
                     let featuresDisplay = '<span style="color: var(--gray);">-</span>';
                     if (car.features) {
@@ -100,7 +100,7 @@
                             featuresDisplay = car.features;
                         }
                     }
-                    
+
                     return `
                         <tr>
                             <td>#${car.id}</td>
@@ -176,9 +176,9 @@
     function updatePagination(data) {
         const pagination = document.getElementById('pagination');
         const totalPages = data.total_pages || 1;
-        
+
         let html = '';
-        
+
         // Previous button
         html += `<button onclick="changePage(${currentPage - 1})" ${!data.has_prev ? 'disabled' : ''}>
             <i class="fas fa-chevron-left"></i> Previous
@@ -213,7 +213,7 @@
             const car = await apiCall(`/cars/${carId}/toggle-active`, {
                 method: 'POST'
             });
-            
+
             showAlert(`Car ${car.active ? 'activated' : 'deactivated'} successfully`, 'success');
             loadCars();
         } catch (error) {
@@ -228,7 +228,7 @@
             await apiCall(`/cars/${carId}`, {
                 method: 'DELETE'
             });
-            
+
             showAlert('Car deleted successfully', 'success');
             loadCars();
         } catch (error) {
@@ -249,23 +249,7 @@
 
 {% block extra_js %}
 <script>
-    // This block runs AFTER base.html scripts are loaded, so apiCall is available
-    function initCarsPage() {
-        if (typeof apiCall !== 'undefined' && typeof loadCars === 'function') {
-            loadCars();
-        } else {
-            // Wait a bit more for scripts to load
-            setTimeout(initCarsPage, 50);
-        }
-    }
-    
-    // Start initialization
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCarsPage);
-    } else {
-        // DOM already loaded
-        initCarsPage();
-    }
+    // Load cars on page load
+    loadCars();
 </script>
 {% endblock %}
-

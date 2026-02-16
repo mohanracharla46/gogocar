@@ -9,8 +9,10 @@
     <!-- Main Info -->
     <div class="card">
         <div class="card-header">
-            <h3><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 10px;"></i>Booking Information</h3>
-            <span class="badge badge-{{ 'success' if booking.order_status.value in ['COMPLETED', 'BOOKED'] else 'warning' if booking.order_status.value == 'PENDING' else 'primary' if booking.order_status.value == 'ONGOING' else 'danger' if booking.order_status.value == 'CANCELLED' else 'info' }}">
+            <h3><i class="fas fa-info-circle" style="color: var(--primary); margin-right: 10px;"></i>Booking Information
+            </h3>
+            <span
+                class="badge badge-{{ 'success' if booking.order_status.value in ['COMPLETED', 'BOOKED'] else 'warning' if booking.order_status.value == 'PENDING' else 'primary' if booking.order_status.value == 'ONGOING' else 'danger' if booking.order_status.value == 'CANCELLED' else 'info' }}">
                 {{ booking.order_status.value }}
             </span>
         </div>
@@ -27,7 +29,8 @@
                 <label>User</label>
                 <div>
                     {% if booking.user %}
-                    <a href="/admin/users/{{ booking.user_id }}" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                    <a href="/admin/users/{{ booking.user_id }}"
+                        style="color: var(--primary); text-decoration: none; font-weight: 600;">
                         {{ booking.user.firstname }} {{ booking.user.lastname }}
                     </a>
                     <div style="font-size: 12px; color: var(--gray); margin-top: 2px;">ID: #{{ booking.user_id }}</div>
@@ -40,10 +43,12 @@
                 <label>Car</label>
                 <div>
                     {% if booking.car %}
-                    <a href="/admin/cars/{{ booking.car_id }}/edit" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                    <a href="/admin/cars/{{ booking.car_id }}/edit"
+                        style="color: var(--primary); text-decoration: none; font-weight: 600;">
                         {{ booking.car.brand }} {{ booking.car.car_model }}
                     </a>
-                    <div style="font-size: 12px; color: var(--gray); margin-top: 2px;">ID: #{{ booking.car_id }} | Reg: {{ booking.car.registration_number }}</div>
+                    <div style="font-size: 12px; color: var(--gray); margin-top: 2px;">ID: #{{ booking.car_id }} | Reg:
+                        {{ booking.car.registration_number }}</div>
                     {% else %}
                     <div>#{{ booking.car_id }}</div>
                     {% endif %}
@@ -59,7 +64,8 @@
             </div>
             <div class="form-group">
                 <label>Actual Start</label>
-                <div>{{ booking.actual_start_time.strftime('%Y-%m-%d %H:%M') if booking.actual_start_time else '-' }}</div>
+                <div>{{ booking.actual_start_time.strftime('%Y-%m-%d %H:%M') if booking.actual_start_time else '-' }}
+                </div>
             </div>
             <div class="form-group">
                 <label>Actual End</label>
@@ -87,23 +93,21 @@
                 <i class="fas fa-check-circle"></i> Mark as Completed
             </button>
             {% endif %}
-            
+
             {% if booking.order_status.value in ['PENDING', 'APPROVED', 'BOOKED'] %}
             <button onclick="cancelBooking()" class="btn btn-danger">
                 <i class="fas fa-times"></i> Cancel Booking
             </button>
             {% endif %}
-            
+
             {% if booking.home_delivery and booking.delivery_latitude and booking.delivery_longitude %}
-            <a href="https://www.google.com/maps?q={{ booking.delivery_latitude }},{{ booking.delivery_longitude }}" 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               class="btn btn-primary"
-               style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <a href="https://www.google.com/maps?q={{ booking.delivery_latitude }},{{ booking.delivery_longitude }}"
+                target="_blank" rel="noopener noreferrer" class="btn btn-primary"
+                style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i class="fas fa-map-marker-alt"></i> Go to Delivery Location
             </a>
             {% endif %}
-            
+
             <a href="/admin/bookings" class="btn btn-outline">
                 <i class="fas fa-arrow-left"></i> Back to Bookings
             </a>
@@ -115,7 +119,8 @@
 {% if booking.home_delivery %}
 <div class="card">
     <div class="card-header">
-        <h3><i class="fas fa-truck" style="color: var(--primary); margin-right: 10px;"></i>Home Delivery Information</h3>
+        <h3><i class="fas fa-truck" style="color: var(--primary); margin-right: 10px;"></i>Home Delivery Information
+        </h3>
     </div>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
         <div class="form-group">
@@ -172,7 +177,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
     async function updateStatus(status) {
         if (!confirm(`Are you sure you want to update booking status to ${status}?`)) return;
@@ -183,7 +190,7 @@
                 body: JSON.stringify({ order_status: status }),
                 headers: { 'Content-Type': 'application/json' }
             });
-            
+
             showAlert(`Booking status updated to ${status}`, 'success');
             setTimeout(() => window.location.reload(), 1500);
         } catch (error) {
@@ -203,7 +210,7 @@
                 body: JSON.stringify({ cancellation_reason: reason }),
                 headers: { 'Content-Type': 'application/json' }
             });
-            
+
             showAlert('Booking cancelled successfully. Refund initiated if applicable.', 'success');
             setTimeout(() => window.location.reload(), 1500);
         } catch (error) {
@@ -212,4 +219,3 @@
     }
 </script>
 {% endblock %}
-

@@ -204,6 +204,27 @@
             color: #ffffff;
         }
 
+        .login-btn-new {
+            background: #061a40;
+            color: #ffffff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6, 26, 64, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 26, 64, 0.3);
+            background: #0a295c;
+        }
+
         /* Main Container */
         .main-container {
             max-width: 600px;
@@ -828,12 +849,32 @@
             <a href="/#subscriptions">Subscriptions</a>
             <a href="/#offers">Offers</a>
             <a href="#footer">Contact</a>
+            {% if is_authenticated %}
+            <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
+            {% endif %}
+            {% if is_admin %}
+            <a href="/admin/dashboard" style="color: #ff6b35; margin-left: 10px;">Admin Panel</a>
+            {% endif %}
 
             <div class="auth-buttons">
-                <!-- Static auth button for booking page -->
-                <a href="/profile" class="login-btn-new">
-                    My Booking
+                <a href="/host" class="host-btn">Become a HOST</a>
+                {% if is_authenticated %}
+                <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
+                    <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
+                        <span class="user-avatar-mini"
+                            style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
+                            {{ current_user.firstname[0] if current_user else 'U' }}
+                        </span>
+                        {{ current_user.firstname if current_user else 'User' }}
+                    </a>
+                    <a href="/auth/logout" class="logout-link"
+                        style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
+                </div>
+                {% else %}
+                <a href="/auth/login" class="login-btn-new">
+                    Login or Signup
                 </a>
+                {% endif %}
             </div>
         </nav>
 

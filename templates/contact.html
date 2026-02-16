@@ -931,20 +931,34 @@
         </button>
 
         <nav id="mainNav">
-            <a href="/cars">Car Rentals <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg></a>
+            <a href="/">Home</a>
+            <a href="/cars">Cars</a>
             <a href="/#why-choose-us">About Us</a>
             <a href="/contact" class="active">Contact Us</a>
+            {% if is_authenticated %}
+            <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
+            {% endif %}
+            {% if is_admin %}
+            <a href="/admin/dashboard" style="color: #ff6b35;">Admin Panel</a>
+            {% endif %}
         </nav>
 
         <div class="auth-buttons">
             <a href="/host" class="host-btn">Become a HOST</a>
             {% if is_authenticated %}
-            <a href="/auth/logout" class="login-btn-new">Logout</a>
+            <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
+                <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="user-avatar-mini"
+                        style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
+                        {{ current_user.firstname[0] if current_user else 'U' }}
+                    </span>
+                    {{ current_user.firstname if current_user else 'User' }}
+                </a>
+                <a href="/auth/logout" class="logout-link"
+                    style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
+            </div>
             {% else %}
-            <a href="{{ login_url }}" class="login-btn-new" onclick="setAuthAction('login', event)">
+            <a href="/auth/login" class="login-btn-new">
                 Login or Signup
             </a>
             {% endif %}

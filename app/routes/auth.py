@@ -1,21 +1,19 @@
 """
-Authentication routes for Cognito integration
+Authentication routes for Manual Auth integration
 """
 import os
-import requests
 from typing import Optional, Dict
+from datetime import timedelta
 from fastapi import APIRouter, Depends, Request, HTTPException, status, Cookie, UploadFile, File, Form
 from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import MultipleResultsFound, NoResultFound
-import cognitojwt
-import boto3
 
 from app.db.session import get_db
-from app.db.models import UserProfile, AnonymousUsers
+from app.db.models import UserProfile, AnonymousUsers, KYCStatus
 from app.core.config import settings
 from app.core.logging_config import logger
-from app.utils.auth_utils import create_user_if_not_exists
+from app.core.security import get_password_hash, verify_password, create_access_token, decode_access_token
 
 router = APIRouter(
     prefix="/auth",
@@ -23,71 +21,24 @@ router = APIRouter(
 )
 
 
-def decode_token(token: str) -> Dict:
-    """
-    Decode and validate Cognito access token
-    
-    Args:
-        token: Access token
-        
-    Returns:
-        Decoded token data
-    """
-    try:
-        decoded_token = cognitojwt.decode(
-            token,
-            "us-east-1",
-            settings.USERPOOL_ID,
-            settings.APP_CLIENT_ID
-        )
-        return {
-            "username": decoded_token.get("username"),
-            "email": decoded_token.get("email"),
-            "sub": decoded_token.get("sub")
-        }
-    except cognitojwt.CognitoJWTException as e:
-        logger.error(f"Cognito JWT exception: {str(e)}")
-        return {"error": "Invalid token"}
-    except Exception as e:
-        logger.error(f"Error decoding token: {str(e)}")
-        return {"error": "Unable to decode token"}
+@router.get("/login")
+async def login_page(request: Request):
+    """Render custom login page"""
+    from app.core.templates import templates
+    return templates.TemplateResponse(
+        "auth/login.html",
+        {"request": request, "login_url": settings.LOGIN_URL}
+    )
 
 
-def get_access_token(
-    authorization_code: str,
-    redirect_uri: str
-) -> Optional[str]:
-    """
-    Get access token from Cognito
-    
-    Args:
-        authorization_code: Authorization code
-        redirect_uri: Redirect URI
-        
-    Returns:
-        Access token or None
-    """
-    token_url = f"{settings.COGNITO_DOMAIN}/oauth2/token"
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    data = {
-        "grant_type": "authorization_code",
-        "client_id": settings.APP_CLIENT_ID,
-        "client_secret": settings.APP_CLIENT_SECRET,
-        "redirect_uri": redirect_uri,
-        "code": authorization_code,
-    }
-    
-    try:
-        response = requests.post(token_url, headers=headers, data=data, timeout=30)
-        
-        if response.ok:
-            return response.json().get("access_token")
-        else:
-            logger.error(f"Failed to get access token: {response.text}")
-            return None
-    except Exception as e:
-        logger.error(f"Error getting access token: {str(e)}")
-        return None
+@router.get("/signup")
+async def signup_page(request: Request):
+    """Render custom signup page"""
+    from app.core.templates import templates
+    return templates.TemplateResponse(
+        "auth/signup.html",
+        {"request": request, "signup_url": settings.SIGNUP_URL}
+    )
 
 
 def get_current_user(
@@ -97,14 +48,6 @@ def get_current_user(
 ) -> Dict:
     """
     Get current authenticated user
-    
-    Args:
-        request: FastAPI request object
-        access_token: Access token from cookie
-        db: Database session
-        
-    Returns:
-        User data dictionary
     """
     if not access_token:
         access_token = request.cookies.get('access_token')
@@ -113,15 +56,15 @@ def get_current_user(
         return {"error": 401, "message": "Not authenticated"}
     
     # Decode token
-    token_data = decode_token(access_token)
+    token_data = decode_access_token(access_token)
     
-    if token_data.get("error"):
-        return {"error": 401, "message": "Invalid token"}
+    if not token_data or token_data.get("error"):
+        return {"error": 401, "message": "Invalid or expired token"}
     
     # Get user from database
     try:
         user = db.query(UserProfile).filter(
-            UserProfile.username == token_data["username"]
+            UserProfile.username == token_data["sub"]
         ).one()
         
         return {
@@ -133,149 +76,165 @@ def get_current_user(
             "isadmin": user.isadmin
         }
     except NoResultFound:
-        # User not found - don't auto-create
-        logger.warning(f"User not found in database: {token_data.get('username')}")
         return {"error": 404, "message": "User not found"}
-    except MultipleResultsFound:
-        logger.error(f"Multiple users found for username: {token_data['username']}")
-        return {"error": 500, "message": "Multiple users found"}
     except Exception as e:
         logger.error(f"Error getting user: {str(e)}")
-        return {"error": 500, "message": "Database error"}
+        return {"error": 500, "message": "Internal error"}
 
 
-@router.get("/token")
-async def get_token(
+@router.post("/api/signup")
+async def api_signup(
     request: Request,
-    code: str,
+    username: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+    firstname: str = Form(...),
+    lastname: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    """
-    Handle OAuth callback from Cognito
-    
-    Args:
-        request: FastAPI request object
-        code: Authorization code
-        db: Database session
-        
-    Returns:
-        Redirect response with cookies set
-    """
+    """Manual signup API"""
+    username = username.strip()
+    email = email.strip().lower()
+    logger.info(f"Signup attempt for: {username} ({email})")
     try:
-        # Get access token
-        access_token = get_access_token(code, settings.REDIRECT_URI)
-        
-        if not access_token:
-            logger.error("Failed to get access token")
-            return RedirectResponse(url="/?error=auth_failed", status_code=status.HTTP_302_FOUND)
-        
-        # Decode token to get user info
-        token_data = decode_token(access_token)
-        
-        if token_data.get("error"):
-            logger.error("Failed to decode token")
-            return RedirectResponse(url="/?error=token_invalid", status_code=status.HTTP_302_FOUND)
-        
-        # Get action from cookie (login or signup)
-        action = request.cookies.get('auth_action', 'login')
-        
-        # Check if user exists
-        user = db.query(UserProfile).filter(
-            UserProfile.username == token_data.get("username")
+        # Check if user already exists
+        existing_user = db.query(UserProfile).filter(
+            (UserProfile.username == username) | (UserProfile.email == email)
         ).first()
         
-        # Handle based on action
-        if action == 'signup':
-            # For signup: create user if not exists
-            if not user:
-                try:
-                    user = create_user_if_not_exists(token_data, db)
-                    logger.info(f"New user created during signup: {user.username}")
-                except Exception as e:
-                    logger.error(f"Error creating user during signup: {str(e)}")
-                    response = RedirectResponse(url="/?error=server_error", status_code=status.HTTP_302_FOUND)
-                    response.delete_cookie(key="auth_action")
-                    return response
-            else:
-                logger.info(f"Existing user logged in via signup: {user.username}")
-        else:
-            # For login: user must exist
-            if not user:
-                logger.warning(f"Login attempted for non-existent user: {token_data.get('username')}")
-                # Clear any cookies and redirect with error
-                response = RedirectResponse(url="/?error=user_not_found", status_code=status.HTTP_302_FOUND)
-                response.delete_cookie(key="auth_action")
-                response.delete_cookie(key="access_token")
-                response.delete_cookie(key="username")
-                return response
-            else:
-                logger.info(f"User logged in: {user.username}")
+        if existing_user:
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                content={"success": False, "message": "Username or email already exists"}
+            )
         
-        # Check for anonymous user session
-        unique_string = request.cookies.get('unique_string')
-        redirect_url = "/"
+        # Create new user
+        new_user = UserProfile(
+            username=username,
+            email=email,
+            firstname=firstname,
+            lastname=lastname,
+            hashed_password=get_password_hash(password),
+            is_active=True,
+            isadmin=False,
+            kyc_status=KYCStatus.NOT_SUBMITTED
+        )
         
-        # Check for return_url parameter (for pending bookings)
-        return_url_param = request.query_params.get("return_url")
-        if return_url_param:
-            redirect_url = return_url_param
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
         
-        if unique_string:
-            anony_user = db.query(AnonymousUsers).filter(
-                AnonymousUsers.unique_string == unique_string
-            ).first()
-            
-            if anony_user:
-                redirect_url = f"/cars/car-detail/{anony_user.car_id}?start_time={anony_user.start_time}&end_time={anony_user.end_time}&location={anony_user.location}"
-                db.delete(anony_user)
-                db.commit()
+        logger.info(f"User successfully created: {username}")
         
-        # Redirect admin users (but only if no return_url specified)
-        if user.isadmin and not return_url_param:
-            redirect_url = "/admin/dashboard"
+        # Create access token
+        access_token = create_access_token(data={"sub": username, "email": email})
         
-        # Create response with cookies
-        response = RedirectResponse(url=redirect_url, status_code=status.HTTP_302_FOUND)
+        response = JSONResponse({
+            "success": True, 
+            "message": "User registered successfully",
+            "redirect_url": "/"
+        })
+        
         response.set_cookie(
             key="access_token",
             value=access_token,
             httponly=True,
             secure=not settings.DEBUG,
-            samesite="lax"
+            samesite="lax",
+            max_age=60*60*24*7 # 7 days
+        )
+        response.set_cookie(
+            key="username",
+            value=f"{firstname} {lastname}",
+            httponly=True
+        )
+        
+        return response
+        
+    except Exception as e:
+        db.rollback()
+        error_msg = str(e)
+        logger.error(f"Signup error: {error_msg}", exc_info=True)
+        
+        # Check for specific database errors
+        if "UNIQUE constraint failed" in error_msg:
+            message = "Username or email already exists."
+        elif "NOT NULL constraint failed" in error_msg:
+            message = "Please fill in all required fields."
+        else:
+            message = "Failed to create user. Please try again later."
+            
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"success": False, "message": message}
+        )
+
+
+@router.post("/api/login")
+async def api_login(
+    username: str = Form(...),
+    password: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    """Manual login API"""
+    try:
+        # Get user
+        user = db.query(UserProfile).filter(UserProfile.username == username).first()
+        
+        if not user or not verify_password(password, user.hashed_password):
+            return JSONResponse(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                content={"success": False, "message": "Invalid username or password"}
+            )
+        
+        if not user.is_active:
+            return JSONResponse(
+                status_code=status.HTTP_403_FORBIDDEN,
+                content={"success": False, "message": "Account is inactive"}
+            )
+        
+        # Create access token
+        access_token = create_access_token(data={"sub": user.username, "email": user.email})
+        
+        redirect_url = "/admin/dashboard" if user.isadmin else "/"
+        
+        response = JSONResponse({
+            "success": True, 
+            "message": "Login successful",
+            "redirect_url": redirect_url
+        })
+        
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            httponly=True,
+            secure=not settings.DEBUG,
+            samesite="lax",
+            max_age=60*60*24*7 # 7 days
         )
         response.set_cookie(
             key="username",
             value=f"{user.firstname} {user.lastname}",
             httponly=True
         )
-        # Clear the auth_action cookie
-        response.delete_cookie(key="auth_action")
         
-        logger.info(f"User authenticated: {user.username}")
+        logger.info(f"User logged in: {username}")
         return response
         
     except Exception as e:
-        logger.error(f"Error in token endpoint: {str(e)}")
-        return RedirectResponse(url="/?error=server_error", status_code=status.HTTP_302_FOUND)
+        logger.error(f"Login error: {str(e)}", exc_info=True)
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"success": False, "message": "An error occurred during login"}
+        )
 
 
 @router.get("/logout")
 async def logout(request: Request):
-    """
-    Logout user by clearing cookies
-    
-    Args:
-        request: FastAPI request object
-        
-    Returns:
-        Redirect response
-    """
+    """Logout user"""
     response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
     response.delete_cookie(key="access_token")
     response.delete_cookie(key="username")
-    response.set_cookie(key="isloggedout", value="true", httponly=True)
-    
-    logger.info("User logged out")
     return response
 
 
@@ -285,78 +244,28 @@ async def update_phone(
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
 ):
-    """
-    Update user phone number
-    
-    Args:
-        request: FastAPI request object
-        db: Database session
-        current_user: Current authenticated user
-        
-    Returns:
-        JSON response with success status
-    """
+    """Update user phone number"""
     try:
         if current_user.get("error"):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="User not authenticated"
-            )
+            raise HTTPException(status_code=401, detail="Unauthorized")
         
         user_id = current_user.get("user_id")
-        if not user_id:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="User not authenticated"
-            )
-        
-        # Parse request body
         body = await request.json()
         phone = body.get("phone", "").strip()
         
-        # Validate phone number
-        if not phone:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Phone number is required"
-            )
+        if not phone or len(phone) != 10 or not phone.isdigit():
+            raise HTTPException(status_code=400, detail="Invalid phone number")
         
-        if len(phone) != 10 or not phone.isdigit():
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Phone number must be exactly 10 digits"
-            )
-        
-        # Get user profile
         user = db.query(UserProfile).filter(UserProfile.id == user_id).first()
         if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
-            )
+            raise HTTPException(status_code=404, detail="User not found")
         
-        # Update phone number
         user.phone = phone
         db.commit()
-        db.refresh(user)
-        
-        logger.info(f"Phone number updated for user {user_id}")
-        
-        return {
-            "success": True,
-            "message": "Phone number updated successfully",
-            "phone": phone
-        }
-        
-    except HTTPException:
-        raise
+        return {"success": True, "message": "Phone updated"}
     except Exception as e:
-        logger.error(f"Error updating phone number: {str(e)}", exc_info=True)
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update phone number"
-        )
+        logger.error(f"Phone update error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Update failed")
 
 
 @router.post("/kyc/upload")
@@ -367,19 +276,7 @@ async def upload_kyc_document(
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
 ):
-    """
-    Upload KYC document
-    
-    Args:
-        request: FastAPI request object
-        document_type: Type of document (aadhaar_front, aadhaar_back, dl_front, dl_back)
-        file: Uploaded file
-        db: Database session
-        current_user: Current authenticated user
-        
-    Returns:
-        JSON response with upload status
-    """
+    """Upload KYC document"""
     from app.services.kyc_service import kyc_service
     from datetime import datetime
     
@@ -388,16 +285,7 @@ async def upload_kyc_document(
             raise HTTPException(status_code=401, detail="Unauthorized")
         
         user_id = current_user.get("user_id")
-        if not user_id:
-            raise HTTPException(status_code=401, detail="User not found")
-        
-        # Upload document
-        file_url = await kyc_service.upload_kyc_document(
-            db, user_id, document_type, file
-        )
-        
-        if not file_url:
-            raise HTTPException(status_code=400, detail="Failed to upload document")
+        file_url = await kyc_service.upload_kyc_document(db, user_id, document_type, file)
         
         return JSONResponse({
             "success": True,
@@ -405,10 +293,6 @@ async def upload_kyc_document(
             "file_url": file_url,
             "uploaded_at": datetime.now().isoformat()
         })
-        
-    except HTTPException:
-        raise
     except Exception as e:
-        logger.error(f"Error uploading KYC document: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to upload document")
-
+        logger.error(f"KYC upload error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Upload failed")

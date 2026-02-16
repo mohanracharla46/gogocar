@@ -25,6 +25,7 @@ async def admin_dashboard(
 ):
     """Admin dashboard page"""
     from app.services.analytics_service import analytics_service
+    from app.core.config import settings
     
     try:
         stats = analytics_service.get_dashboard_stats(db)

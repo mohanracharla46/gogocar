@@ -10,7 +10,8 @@
         <h3><i class="fas fa-users" style="color: var(--primary); margin-right: 10px;"></i>All Users</h3>
     </div>
     <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search users..." style="max-width: 300px;">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search users..."
+            style="max-width: 300px;">
         <select id="filterKYC" class="form-control" style="max-width: 200px;">
             <option value="">All KYC Status</option>
             <option value="NOT_SUBMITTED">Not Submitted</option>
@@ -60,25 +61,16 @@
     let currentPage = 1;
     const pageSize = 20;
 
-    function getKYCStatusColor(status) {
-        const colors = {
-            'NOT_SUBMITTED': 'info',
-            'PENDING': 'warning',
-            'APPROVED': 'success',
-            'REJECTED': 'danger'
-        };
-        return colors[status] || 'info';
-    }
 
     async function loadUsers(resetPage = false) {
         const loadingSpinner = document.getElementById('loadingSpinner');
         const usersTable = document.getElementById('usersTable');
-        
+
         // Reset to page 1 when applying filters
         if (resetPage) {
             currentPage = 1;
         }
-        
+
         loadingSpinner.style.display = 'block';
         usersTable.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading...</td></tr>';
 
@@ -94,7 +86,7 @@
 
             console.log('Loading users with URL:', url); // Debug log
             const data = await apiCall(url);
-            
+
             if (data.items && data.items.length > 0) {
                 usersTable.innerHTML = data.items.map(user => `
                     <tr>
@@ -102,7 +94,7 @@
                         <td>${user.firstname} ${user.lastname} ${user.isadmin ? '<span class="badge badge-primary" style="margin-left: 5px;">Admin</span>' : ''}</td>
                         <td>${user.email}</td>
                         <td>${user.phone || '-'}</td>
-                        <td><span class="badge badge-${getKYCStatusColor(user.kyc_status)}">${user.kyc_status}</span></td>
+                        <td><span class="badge badge-${getStatusColor(user.kyc_status)}">${user.kyc_status}</span></td>
                         <td><span class="badge badge-${user.is_active ? 'success' : 'danger'}">${user.is_active ? 'Active' : 'Inactive'}</span></td>
                         <td>
                             <div style="display: flex; gap: 5px;">
@@ -157,9 +149,9 @@
     function updatePagination(data) {
         const pagination = document.getElementById('pagination');
         const totalPages = data.total_pages || 1;
-        
+
         let html = '';
-        
+
         html += `<button onclick="changePage(${currentPage - 1})" ${!data.has_prev ? 'disabled' : ''}>
             <i class="fas fa-chevron-left"></i> Previous
         </button>`;
@@ -191,7 +183,7 @@
             await apiCall(`/users/${userId}/kyc/approve`, {
                 method: 'POST'
             });
-            
+
             showAlert('KYC approved successfully', 'success');
             loadUsers();
         } catch (error) {
@@ -211,7 +203,7 @@
                 body: JSON.stringify({ rejection_reason: reason }),
                 headers: { 'Content-Type': 'application/json' }
             });
-            
+
             showAlert('KYC rejected successfully', 'success');
             loadUsers();
         } catch (error) {
@@ -226,7 +218,7 @@
             await apiCall(`/users/${userId}/toggle-active`, {
                 method: 'POST'
             });
-            
+
             showAlert(`User ${currentStatus ? 'deactivated' : 'activated'} successfully`, 'success');
             loadUsers();
         } catch (error) {
@@ -246,22 +238,11 @@
         loadUsers(false);
     }
 
-    // Wait for base template scripts to be available
-    function waitForBaseScripts(callback, maxAttempts = 50) {
-        if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
-            callback();
-        } else if (maxAttempts > 0) {
-            setTimeout(() => waitForBaseScripts(callback, maxAttempts - 1), 100);
-        } else {
-            console.error('Base template scripts failed to load');
-        }
-    }
-
     // Allow Enter key to trigger filter
     function setupEventListeners() {
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
-            searchInput.addEventListener('keypress', function(e) {
+            searchInput.addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
                     applyFilters();
                 }
@@ -269,11 +250,8 @@
         }
     }
 
-    // Initialize when scripts are ready
-    waitForBaseScripts(() => {
-        loadUsers(false);
-        setupEventListeners();
-    });
+    // Initialize
+    loadUsers(false);
+    setupEventListeners();
 </script>
 {% endblock %}
-

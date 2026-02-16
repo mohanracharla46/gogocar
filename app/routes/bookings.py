@@ -96,7 +96,10 @@ def view_orders(
                 "orders": orders,
                 "pagination": pagination,
                 "user": user,
-                "order_review_status": order_review_status
+                "order_review_status": order_review_status,
+                "current_user": current_user,
+                "is_authenticated": True,
+                "is_admin": current_user.get("isadmin", False)
             }
         )
     except Exception as e:
@@ -169,7 +172,10 @@ def view_order_detail(
                 "order": order,
                 "user": user,
                 "can_review": can_review,
-                "existing_review": existing_review
+                "existing_review": existing_review,
+                "current_user": current_user,
+                "is_authenticated": True,
+                "is_admin": current_user.get("isadmin", False)
             }
         )
     except HTTPException:

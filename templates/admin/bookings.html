@@ -61,7 +61,7 @@
     async function loadBookings() {
         const loadingSpinner = document.getElementById('loadingSpinner');
         const bookingsTable = document.getElementById('bookingsTable');
-        
+
         loadingSpinner.style.display = 'block';
         bookingsTable.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading...</td></tr>';
 
@@ -76,7 +76,7 @@
             if (carIdFilter) url += `&car_id=${carIdFilter}`;
 
             const data = await apiCall(url);
-            
+
             if (data.items && data.items.length > 0) {
                 bookingsTable.innerHTML = data.items.map(booking => {
                     // Build user name - show firstname and lastname with space
@@ -86,7 +86,7 @@
                         const last = booking.user_lastname || '';
                         userName = `${first} ${last}`.trim() || userName;
                     }
-                    
+
                     // Build car name
                     let carName = `Car #${booking.car_id}`;
                     if (booking.car_brand || booking.car_model) {
@@ -94,7 +94,7 @@
                         const model = booking.car_model || '';
                         carName = `${brand} ${model}`.trim() || carName;
                     }
-                    
+
                     return `
                     <tr>
                         <td>#${booking.id}</td>
@@ -160,24 +160,13 @@
         }
     }
 
-    function getStatusColor(status) {
-        const colors = {
-            'PENDING': 'warning',
-            'APPROVED': 'info',
-            'BOOKED': 'success',
-            'ONGOING': 'primary',
-            'COMPLETED': 'success',
-            'CANCELLED': 'danger'
-        };
-        return colors[status] || 'info';
-    }
 
     function updatePagination(data) {
         const pagination = document.getElementById('pagination');
         const totalPages = data.total_pages || 1;
-        
+
         let html = '';
-        
+
         html += `<button onclick="changePage(${currentPage - 1})" ${!data.has_prev ? 'disabled' : ''}>
             <i class="fas fa-chevron-left"></i> Previous
         </button>`;
@@ -211,7 +200,7 @@
                 body: JSON.stringify({ order_status: status }),
                 headers: { 'Content-Type': 'application/json' }
             });
-            
+
             showAlert(`Booking ${status.toLowerCase()} successfully`, 'success');
             loadBookings();
         } catch (error) {
@@ -231,7 +220,7 @@
                 body: JSON.stringify({ cancellation_reason: reason }),
                 headers: { 'Content-Type': 'application/json' }
             });
-            
+
             showAlert('Booking cancelled successfully. Refund initiated if applicable.', 'success');
             loadBookings();
         } catch (error) {
@@ -247,19 +236,7 @@
         loadBookings();
     }
 
-    // Wait for base template scripts to be available
-    function waitForBaseScripts(callback, maxAttempts = 50) {
-        if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined' && typeof formatDate !== 'undefined' && typeof formatCurrency !== 'undefined') {
-            callback();
-        } else if (maxAttempts > 0) {
-            setTimeout(() => waitForBaseScripts(callback, maxAttempts - 1), 100);
-        } else {
-            console.error('Base template scripts failed to load');
-        }
-    }
-
-    // Initialize when scripts are ready
-    waitForBaseScripts(loadBookings);
+    // Initialize
+    loadBookings();
 </script>
 {% endblock %}
-

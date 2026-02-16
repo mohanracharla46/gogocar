@@ -34,16 +34,18 @@
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-calendar-check" style="color: var(--primary); margin-right: 10px;"></i>Bookings by Status</h3>
+                <h3><i class="fas fa-calendar-check" style="color: var(--primary); margin-right: 10px;"></i>Bookings by
+                    Status</h3>
             </div>
             <div style="position: relative; height: 300px;">
                 <canvas id="bookingsStatusChart"></canvas>
             </div>
         </div>
-        
+
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-rupee-sign" style="color: var(--success); margin-right: 10px;"></i>Revenue Breakdown</h3>
+                <h3><i class="fas fa-rupee-sign" style="color: var(--success); margin-right: 10px;"></i>Revenue
+                    Breakdown</h3>
             </div>
             <div style="position: relative; height: 300px;">
                 <canvas id="revenueBreakdownChart"></canvas>
@@ -55,16 +57,18 @@
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-chart-line" style="color: var(--info); margin-right: 10px;"></i>Bookings Over Time</h3>
+                <h3><i class="fas fa-chart-line" style="color: var(--info); margin-right: 10px;"></i>Bookings Over Time
+                </h3>
             </div>
             <div style="position: relative; height: 300px;">
                 <canvas id="bookingsTimeChart"></canvas>
             </div>
         </div>
-        
+
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-chart-area" style="color: var(--warning); margin-right: 10px;"></i>Revenue Over Time</h3>
+                <h3><i class="fas fa-chart-area" style="color: var(--warning); margin-right: 10px;"></i>Revenue Over
+                    Time</h3>
             </div>
             <div style="position: relative; height: 300px;">
                 <canvas id="revenueTimeChart"></canvas>
@@ -76,13 +80,14 @@
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-trophy" style="color: var(--success); margin-right: 10px;"></i>Top Performing Cars</h3>
+                <h3><i class="fas fa-trophy" style="color: var(--success); margin-right: 10px;"></i>Top Performing Cars
+                </h3>
             </div>
             <div style="position: relative; height: 300px;">
                 <canvas id="topCarsChart"></canvas>
             </div>
         </div>
-        
+
         <div class="card">
             <div class="card-header">
                 <h3><i class="fas fa-tags" style="color: var(--info); margin-right: 10px;"></i>Category Performance</h3>
@@ -111,25 +116,6 @@
     let charts = {};
     let currentPeriod = 30;
 
-    function waitForBaseScripts(maxAttempts = 50) {
-        return new Promise((resolve, reject) => {
-            function check() {
-                if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
-                    resolve();
-                } else if (maxAttempts > 0) {
-                    setTimeout(() => {
-                        maxAttempts--;
-                        check();
-                    }, 100);
-                } else {
-                    console.error('Base scripts failed to load');
-                    reject(new Error('Base scripts failed to load'));
-                }
-            }
-            check();
-        });
-    }
-
     function destroyCharts() {
         Object.values(charts).forEach(chart => {
             if (chart) chart.destroy();
@@ -145,7 +131,7 @@
     function createBookingsStatusChart(data) {
         const ctx = document.getElementById('bookingsStatusChart');
         if (charts.bookingsStatus) charts.bookingsStatus.destroy();
-        
+
         charts.bookingsStatus = new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -180,7 +166,7 @@
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 const total = context.dataset.data.reduce((a, b) => a + b, 0);
                                 const percentage = ((context.parsed / total) * 100).toFixed(1);
                                 return `${context.label}: ${context.parsed} (${percentage}%)`;
@@ -195,7 +181,7 @@
     function createRevenueBreakdownChart(data) {
         const ctx = document.getElementById('revenueBreakdownChart');
         if (charts.revenueBreakdown) charts.revenueBreakdown.destroy();
-        
+
         const revenue = data.revenue_summary;
         charts.revenueBreakdown = new Chart(ctx, {
             type: 'pie',
@@ -227,7 +213,7 @@
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 return `${context.label}: ₹${parseFloat(context.parsed).toLocaleString('en-IN')}`;
                             }
                         }
@@ -240,11 +226,11 @@
     function createBookingsTimeChart(data) {
         const ctx = document.getElementById('bookingsTimeChart');
         if (charts.bookingsTime) charts.bookingsTime.destroy();
-        
+
         const timeseries = data.booking_timeseries || {};
         const dates = Object.keys(timeseries).sort();
         const values = dates.map(date => timeseries[date] || 0);
-        
+
         charts.bookingsTime = new Chart(ctx, {
             type: 'line',
             data: {
@@ -282,11 +268,11 @@
     function createRevenueTimeChart(data) {
         const ctx = document.getElementById('revenueTimeChart');
         if (charts.revenueTime) charts.revenueTime.destroy();
-        
+
         const timeseries = data.revenue_timeseries || {};
         const dates = Object.keys(timeseries).sort();
         const values = dates.map(date => timeseries[date] || 0);
-        
+
         charts.revenueTime = new Chart(ctx, {
             type: 'line',
             data: {
@@ -313,7 +299,7 @@
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            callback: function(value) {
+                            callback: function (value) {
                                 return '₹' + parseFloat(value).toLocaleString('en-IN');
                             }
                         }
@@ -326,7 +312,7 @@
     function createTopCarsChart(data) {
         const ctx = document.getElementById('topCarsChart');
         if (charts.topCars) charts.topCars.destroy();
-        
+
         const cars = data.top_performing_cars || [];
         charts.topCars = new Chart(ctx, {
             type: 'bar',
@@ -363,11 +349,11 @@
     function createCategoryChart(data) {
         const ctx = document.getElementById('categoryChart');
         if (charts.category) charts.category.destroy();
-        
+
         const categories = data.category_performance || {};
         const labels = Object.keys(categories);
         const bookings = labels.map(cat => categories[cat].bookings || 0);
-        
+
         charts.category = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -403,11 +389,11 @@
     function createUserGrowthChart(data) {
         const ctx = document.getElementById('userGrowthChart');
         if (charts.userGrowth) charts.userGrowth.destroy();
-        
+
         const growth = data.user_growth || {};
         const dates = Object.keys(growth).sort();
         const values = dates.map(date => growth[date] || 0);
-        
+
         charts.userGrowth = new Chart(ctx, {
             type: 'line',
             data: {
@@ -447,14 +433,14 @@
         try {
             currentPeriod = parseInt(document.getElementById('periodSelect').value) || 30;
             const stats = await apiCall(`/dashboard/stats?days=${currentPeriod}`);
-            
+
             // Hide loading, show charts
             document.getElementById('analyticsContent').style.display = 'none';
             document.getElementById('chartsContainer').style.display = 'block';
-            
+
             // Destroy existing charts
             destroyCharts();
-            
+
             // Create all charts
             createBookingsStatusChart(stats);
             createRevenueBreakdownChart(stats);
@@ -463,7 +449,7 @@
             createTopCarsChart(stats);
             createCategoryChart(stats);
             createUserGrowthChart(stats);
-            
+
         } catch (error) {
             console.error('Error loading analytics:', error);
             document.getElementById('analyticsContent').innerHTML = `
@@ -478,9 +464,7 @@
         }
     }
 
-    // Wait for base scripts to load before initializing
-    waitForBaseScripts().then(() => {
-        loadAnalytics();
-    });
+    // Load analytics on page load
+    loadAnalytics();
 </script>
 {% endblock %}

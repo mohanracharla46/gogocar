@@ -30,7 +30,8 @@
             </tbody>
         </table>
     </div>
-    <div id="pagination" style="margin-top: 20px; display: flex; justify-content: center; gap: 10px; align-items: center;"></div>
+    <div id="pagination"
+        style="margin-top: 20px; display: flex; justify-content: center; gap: 10px; align-items: center;"></div>
 </div>
 {% endblock %}
 
@@ -39,17 +40,6 @@
     let currentPage = 1;
     const pageSize = 10;
 
-    function formatDate(dateString) {
-        if (!dateString) return 'N/A';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
 
     function getStatusBadge(review) {
         if (review.is_hidden) {
@@ -80,13 +70,13 @@
 
         const loadingSpinner = document.getElementById('loadingSpinner');
         const reviewsTable = document.getElementById('reviewsTable');
-        
+
         loadingSpinner.style.display = 'block';
-        
+
         try {
             const url = `/reviews?page=${currentPage}&page_size=${pageSize}`;
             const data = await apiCall(url);
-            
+
             if (data.items && data.items.length > 0) {
                 reviewsTable.innerHTML = data.items.map(review => {
                     // Build user name
@@ -96,7 +86,7 @@
                         const lastname = review.user_lastname || '';
                         userName = `${firstname} ${lastname}`.trim() || userName;
                     }
-                    
+
                     // Build car name
                     let carName = `Car #${review.car_id}`;
                     if (review.car_brand || review.car_model) {
@@ -104,7 +94,7 @@
                         const model = review.car_model || '';
                         carName = `${brand} ${model}`.trim() || carName;
                     }
-                    
+
                     return `
                         <tr>
                             <td>#${review.id}</td>
@@ -180,7 +170,7 @@
                 stack: error.stack,
                 name: error.name
             });
-            
+
             // Only show error if table is empty
             if (reviewsTable.innerHTML.includes('Loading...') || reviewsTable.innerHTML.trim() === '') {
                 reviewsTable.innerHTML = `
@@ -211,20 +201,20 @@
         }
 
         let paginationHTML = '';
-        
+
         // Previous button
         if (data.page > 1) {
             paginationHTML += `<button onclick="changePage(${data.page - 1})" class="btn btn-outline">Previous</button>`;
         }
-        
+
         // Page numbers
         paginationHTML += `<span style="margin: 0 15px;">Page ${data.page} of ${data.total_pages}</span>`;
-        
+
         // Next button
         if (data.page < data.total_pages) {
             paginationHTML += `<button onclick="changePage(${data.page + 1})" class="btn btn-outline">Next</button>`;
         }
-        
+
         paginationDiv.innerHTML = paginationHTML;
     }
 
@@ -246,7 +236,7 @@
                     is_hidden: hide
                 })
             });
-            
+
             showAlert(hide ? 'Review hidden successfully' : 'Review shown successfully', 'success');
             loadReviews(false);
         } catch (error) {
@@ -263,7 +253,7 @@
             await apiCall(`/reviews/${reviewId}`, {
                 method: 'DELETE'
             });
-            
+
             showAlert('Review deleted successfully', 'success');
             loadReviews(false);
         } catch (error) {
@@ -271,17 +261,7 @@
         }
     }
 
-    function waitForBaseScripts(callback) {
-        if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
-            callback();
-        } else {
-            setTimeout(() => waitForBaseScripts(callback), 100);
-        }
-    }
-
-    waitForBaseScripts(() => {
-        loadReviews(false);
-    });
+    // Initialize
+    loadReviews(false);
 </script>
 {% endblock %}
-

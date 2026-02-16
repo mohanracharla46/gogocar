@@ -19,24 +19,28 @@
         z-index: 1100;
         padding: 20px;
     }
+
     .modal-overlay.active {
         display: flex;
     }
+
     .modal {
         background: white;
         border-radius: 12px;
         padding: 25px;
         width: 100%;
         max-width: 620px;
-        box-shadow: 0 20px 45px rgba(15,23,42,0.25);
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
         position: relative;
     }
+
     .modal h3 {
         margin-top: 0;
         margin-bottom: 20px;
         font-size: 22px;
         color: #0f172a;
     }
+
     .modal-close {
         position: absolute;
         top: 15px;
@@ -47,21 +51,25 @@
         cursor: pointer;
         color: #64748b;
     }
+
     .form-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 16px;
     }
+
     .form-group {
         display: flex;
         flex-direction: column;
         gap: 6px;
     }
+
     .form-group label {
         font-size: 14px;
         font-weight: 600;
         color: #475569;
     }
+
     .form-group input,
     .form-group select,
     .form-group textarea {
@@ -71,20 +79,24 @@
         font-size: 14px;
         font-family: inherit;
     }
+
     .modal-actions {
         margin-top: 20px;
         display: flex;
         justify-content: flex-end;
         gap: 10px;
     }
+
     .car-search-inline {
         display: flex;
         gap: 8px;
         align-items: center;
     }
+
     .car-search-inline input {
         flex: 1;
     }
+
     .form-group small {
         color: #94a3b8;
         font-size: 12px;
@@ -125,7 +137,8 @@
 
 <div class="card" style="margin-top: 25px;">
     <div class="card-header">
-        <h3><i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-right: 10px;"></i>Damage Reports</h3>
+        <h3><i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-right: 10px;"></i>Damage Reports
+        </h3>
         <button class="btn btn-outline" onclick="openDamageModal()">
             <i class="fas fa-plus"></i> Add Damage Report
         </button>
@@ -168,7 +181,8 @@
                     <label>Search Car by Registration</label>
                     <div class="car-search-inline">
                         <input type="text" id="maintenanceCarSearch" placeholder="Enter registration number">
-                        <button type="button" class="btn btn-outline" onclick="searchCarsByRegistration('maintenanceCarSearch', 'maintenanceCar')">
+                        <button type="button" class="btn btn-outline"
+                            onclick="searchCarsByRegistration('maintenanceCarSearch', 'maintenanceCar')">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -226,7 +240,8 @@
                     <label>Search Car by Registration</label>
                     <div class="car-search-inline">
                         <input type="text" id="damageCarSearch" placeholder="Enter registration number">
-                        <button type="button" class="btn btn-outline" onclick="searchCarsByRegistration('damageCarSearch', 'damageCar')">
+                        <button type="button" class="btn btn-outline"
+                            onclick="searchCarsByRegistration('damageCarSearch', 'damageCar')">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -250,7 +265,8 @@
                 </div>
                 <div class="form-group" style="grid-column: span 2;">
                     <label for="damageDescription">Damage Description *</label>
-                    <textarea id="damageDescription" rows="4" required placeholder="Describe the damage in detail"></textarea>
+                    <textarea id="damageDescription" rows="4" required
+                        placeholder="Describe the damage in detail"></textarea>
                 </div>
             </div>
             <div class="modal-actions">
@@ -260,6 +276,7 @@
         </form>
     </div>
 </div>
+{% endblock %}
 
 {% block extra_js %}
 <script>
@@ -270,14 +287,6 @@
     let maintenanceModalMode = 'create';
     let editingMaintenanceId = null;
     let editingDamageId = null;
-
-    function waitForBaseScripts(callback) {
-        if (typeof showAlert !== 'undefined' && typeof apiCall !== 'undefined' && typeof formatDate !== 'undefined') {
-            callback();
-        } else {
-            setTimeout(() => waitForBaseScripts(callback), 100);
-        }
-    }
 
     function formatCurrency(amount) {
         if (!amount && amount !== 0) return '—';
@@ -477,96 +486,48 @@
         fetchDamageReports();
     }
 
+    async function loadMaintenanceLogForEdit(id) {
+        try {
+            const log = await apiCall(`/maintenance/logs/${id}`);
+            ensureCarOption('maintenanceCar', {
+                id: log.car_id,
+                brand: log.car_brand,
+                car_model: log.car_model,
+                registration_number: log.car_registration || ''
+            });
+            document.getElementById('maintenanceCar').value = log.car_id;
+            document.getElementById('maintenanceType').value = log.maintenance_type;
+            document.getElementById('maintenanceTitle').value = log.title;
+            document.getElementById('maintenanceCost').value = log.cost || '';
+
+            // Format dates for datetime-local input (YYYY-MM-DDTHH:mm)
+            if (log.start_date) {
+                document.getElementById('maintenanceStart').value = new Date(log.start_date).toISOString().slice(0, 16);
+            }
+            if (log.end_date) {
+                document.getElementById('maintenanceEnd').value = new Date(log.end_date).toISOString().slice(0, 16);
+            }
+
+            document.getElementById('maintenanceProvider').value = log.service_provider || '';
+            document.getElementById('maintenanceDescription').value = log.description || '';
+        } catch (error) {
+            console.error('Error loading maintenance log:', error);
+            showAlert('Failed to load maintenance details', 'error');
+        }
+    }
+
     function openMaintenanceModal(id = null) {
         maintenanceModalMode = id ? 'edit' : 'create';
         editingMaintenanceId = id;
         document.getElementById('maintenanceModalTitle').textContent = id ? 'Edit Maintenance Log' : 'Add Maintenance Log';
         resetMaintenanceForm();
-        if (id) {
-            showAlert('Editing existing maintenance logs will be supported soon.', 'info');
-        }
         populateSelect('maintenanceCar');
         loadCarOptions();
-        document.getElementById('maintenanceModal').classList.add('active');
-    }
 
-    function closeMaintenanceModal() {
-        document.getElementById('maintenanceModal').classList.remove('active');
-        editingMaintenanceId = null;
-    }
-
-    function resetMaintenanceForm() {
-        document.getElementById('maintenanceForm').reset();
-        const typeSelect = document.getElementById('maintenanceType');
-        typeSelect.innerHTML = maintenanceTypes.map(type => `<option value="${type}">${type.replace('_', ' ')}</option>`).join('');
-    }
-
-    function openDamageModal(id = null) {
-        editingDamageId = id;
-        const isEdit = id !== null;
-        document.getElementById('damageModalTitle').textContent = isEdit ? 'Edit Damage Report' : 'Add Damage Report';
-        document.getElementById('damageStatusGroup').style.display = isEdit ? 'block' : 'none';
-        document.getElementById('damageModal').classList.add('active');
-        document.getElementById('damageForm').reset();
-        populateSelect('damageCar');
-        loadCarOptions();
-        
         if (id) {
-            // Load existing damage report data
-            loadDamageReportForEdit(id);
+            loadMaintenanceLogForEdit(id);
         }
-    }
-
-    function openDamageEditModal(id) {
-        openDamageModal(id);
-    }
-
-    async function loadDamageReportForEdit(id) {
-        try {
-            const report = await apiCall(`/maintenance/damages/${id}`);
-            ensureCarOption('damageCar', {
-                id: report.car_id,
-                brand: report.car_brand,
-                car_model: report.car_model,
-                registration_number: report.car_registration || ''
-            });
-            document.getElementById('damageCar').value = report.car_id;
-            if (report.order_id) {
-                document.getElementById('damageOrder').value = report.order_id;
-            }
-            if (report.repair_cost) {
-                document.getElementById('damageCost').value = report.repair_cost;
-            }
-            document.getElementById('damageDescription').value = report.damage_description || '';
-            if (report.repair_status) {
-                document.getElementById('damageStatus').value = report.repair_status;
-            }
-        } catch (error) {
-            console.error('Error loading damage report:', error);
-            showAlert('Failed to load damage report details', 'error');
-        }
-    }
-
-    async function updateDamageStatus(reportId, newStatus) {
-        try {
-            await apiCall(`/maintenance/damages/${reportId}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    repair_status: newStatus
-                })
-            });
-            showAlert(`Damage report status updated to ${newStatus}`, 'success');
-            fetchDamageReports();
-        } catch (error) {
-            console.error('Error updating damage status:', error);
-            showAlert('Failed to update damage report status: ' + (error.message || 'Unknown error'), 'error');
-            fetchDamageReports(); // Reload to reset dropdown
-        }
-    }
-
-    function closeDamageModal() {
-        document.getElementById('damageModal').classList.remove('active');
-        editingDamageId = null;
+        document.getElementById('maintenanceModal').classList.add('active');
     }
 
     async function submitMaintenanceForm(event) {
@@ -583,11 +544,19 @@
         };
 
         try {
-            await apiCall('/maintenance/logs', {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-            showAlert('Maintenance log saved successfully', 'success');
+            if (editingMaintenanceId) {
+                await apiCall(`/maintenance/logs/${editingMaintenanceId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(payload)
+                });
+                showAlert('Maintenance log updated successfully', 'success');
+            } else {
+                await apiCall('/maintenance/logs', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                showAlert('Maintenance log saved successfully', 'success');
+            }
             closeMaintenanceModal();
             fetchMaintenance();
         } catch (error) {
@@ -615,14 +584,14 @@
             damage_description: document.getElementById('damageDescription').value,
             repair_cost: document.getElementById('damageCost').value ? parseFloat(document.getElementById('damageCost').value) : null
         };
-        
+
         if (isEdit) {
             // For edit, include status if available
             const statusSelect = document.getElementById('damageStatus');
             if (statusSelect && statusSelect.value) {
                 payload.repair_status = statusSelect.value;
             }
-            
+
             // For edit, use update endpoint
             try {
                 await apiCall(`/maintenance/damages/${editingDamageId}`, {
@@ -668,14 +637,11 @@
         document.getElementById('damageForm').addEventListener('submit', submitDamageForm);
     });
 
-    waitForBaseScripts(() => {
-        resetMaintenanceForm();
-        loadCarOptions().then(() => {
-            fetchMaintenance();
-            fetchDamageReports();
-        });
+    // Initialize page
+    resetMaintenanceForm();
+    loadCarOptions().then(() => {
+        fetchMaintenance();
+        fetchDamageReports();
     });
 </script>
 {% endblock %}
-{% endblock %}
-

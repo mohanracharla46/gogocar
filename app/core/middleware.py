@@ -6,16 +6,15 @@ from fastapi import Request, status
 from fastapi.responses import RedirectResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
-import cognitojwt
-import time
 
 from app.core.config import settings
 from app.core.logging_config import logger
+from app.core.security import decode_access_token
 
 
 class AuthMiddleware(BaseHTTPMiddleware):
     """
-    Middleware to validate Cognito JWT access tokens
+    Middleware to validate local JWT access tokens
     Exempts certain URLs from authentication
     """
     
@@ -28,19 +27,22 @@ class AuthMiddleware(BaseHTTPMiddleware):
         "/auth/token",
         "/auth/logout",
         "/health",
-        "/cars",
+        "/cars",   # Car listing
+        "/cars/",  # Car details prefix
         "/payment",
         "/booking",
-        "/contact",  # Contact page is public
-        "/admin/login",  # Admin login page
+        "/contact",
+        "/admin/login",
     ]
     
-    # Exempted URL prefixes (for static files, etc.)
+    # Exempted URL prefixes
     EXEMPTED_PREFIXES: List[str] = [
         "/static",
         "/auth",
-        "/payments/callback",  # CCAvenue callback doesn't have user context
-        "/payments/cancel",    # CCAvenue cancel doesn't have user context
+        "/admin",
+        "/cars",  # All car routes
+        "/payments/callback",
+        "/payments/cancel",
     ]
     
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
@@ -104,7 +106,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
     
     def _validate_token(self, token: str) -> bool:
         """
-        Validate Cognito JWT token and check expiration
+        Validate local JWT token and check expiration
         
         Args:
             token: Access token string
@@ -113,51 +115,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
             True if valid and not expired, False otherwise
         """
         try:
-            # Check if required settings are configured
-            if not settings.USERPOOL_ID or not settings.APP_CLIENT_ID:
-                logger.warning("Cognito settings not configured, skipping token validation")
-                # If Cognito is not configured, allow the request to proceed
-                # This is useful for development or when using alternative auth
-                return True
-            # Basic token format check
-            if not token or not isinstance(token, str) or len(token.split('.')) != 3:
-                logger.warning("Invalid token format")
-                return False
-            
-            # Decode and validate token using cognitojwt
-            decoded_token = cognitojwt.decode(
-                token,
-                settings.AWS_REGION,
-                settings.USERPOOL_ID,
-                settings.APP_CLIENT_ID
-            )
-            
-            # Check if decoded_token is None or empty
-            if not decoded_token:
-                logger.warning("Token decoded to None or empty")
-                return False
-            
-            # Check expiration
-            exp = decoded_token.get('exp')
-            if exp:
-                # Get current time in seconds since epoch
-                current_time = int(time.time())
-                
-                # Check if token is expired
-                if exp < current_time:
-                    logger.warning(f"Token expired. Exp: {exp}, Current: {current_time}")
-                    return False
-            
-            # Token is valid and not expired
-            return True
-            
-        except cognitojwt.CognitoJWTException as e:
-            logger.error(f"Cognito JWT exception: {str(e)}")
-            return False
-        except (TypeError, AttributeError, ValueError) as e:
-            logger.error(f"Error validating token (type error): {str(e)}")
-            return False
+            decoded_token = decode_access_token(token)
+            return decoded_token is not None
         except Exception as e:
-            logger.error(f"Error validating token: {str(e)}", exc_info=True)
+            logger.error(f"Error validating token: {str(e)}")
             return False
 

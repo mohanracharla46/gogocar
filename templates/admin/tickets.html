@@ -54,16 +54,6 @@
 
 {% block extra_js %}
 <script>
-    function waitForBaseScripts(callback, maxAttempts = 50) {
-        if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
-            callback();
-        } else if (maxAttempts > 0) {
-            setTimeout(() => waitForBaseScripts(callback, maxAttempts - 1), 100);
-        } else {
-            console.error('Base scripts failed to load');
-        }
-    }
-
     let currentPage = 1;
     const pageSize = 20;
 
@@ -74,13 +64,13 @@
 
         const loadingSpinner = document.getElementById('loadingSpinner');
         const ticketsTable = document.getElementById('ticketsTable');
-        
+
         loadingSpinner.style.display = 'block';
-        
+
         try {
             const statusFilter = document.getElementById('filterStatus').value;
             const priorityFilter = document.getElementById('filterPriority').value;
-            
+
             let url = `/tickets?page=${currentPage}&page_size=${pageSize}`;
             if (statusFilter) {
                 url += `&status=${statusFilter}`;
@@ -88,9 +78,9 @@
             if (priorityFilter) {
                 url += `&priority=${priorityFilter}`;
             }
-            
+
             const data = await apiCall(url);
-            
+
             if (data.items && data.items.length > 0) {
                 ticketsTable.innerHTML = data.items.map(ticket => {
                     // Handle status - it might be a string or an object with .value
@@ -98,14 +88,14 @@
                     const statusClass = `status-${statusValue.toLowerCase().replace('_', '-')}`;
                     const priorityValue = ticket.priority || 'MEDIUM';
                     const priorityClass = priorityValue.toLowerCase();
-                    
+
                     let userName = `User #${ticket.user_id}`;
                     if (ticket.user_firstname || ticket.user_lastname) {
                         const firstname = ticket.user_firstname || '';
                         const lastname = ticket.user_lastname || '';
                         userName = `${firstname} ${lastname}`.trim() || userName;
                     }
-                    
+
                     return `
                         <tr>
                             <td>
@@ -130,7 +120,7 @@
                         </tr>
                     `;
                 }).join('');
-                
+
                 // Update pagination if needed
                 if (data.total_pages > 1) {
                     // Add pagination controls if not present
@@ -177,9 +167,7 @@
         }
     }
 
-    waitForBaseScripts(() => {
-        loadTickets();
-    });
+    // Load tickets on page load
+    loadTickets();
 </script>
 {% endblock %}
-

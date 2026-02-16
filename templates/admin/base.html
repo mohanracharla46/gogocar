@@ -16,18 +16,18 @@
         }
 
         :root {
-            --primary: #1e40af;
-            --primary-dark: #1e3a8a;
-            --secondary: #f59e0b;
+            --primary: #2b3990;
+            --primary-dark: #1e296a;
+            --secondary: #ff6b35;
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
             --info: #3b82f6;
-            --dark: #1f2937;
-            --light: #f9fafb;
-            --gray: #6b7280;
-            --border: #e5e7eb;
-            --sidebar-width: 260px;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+            --sidebar-width: 280px;
         }
 
         body {
@@ -44,30 +44,39 @@
             left: 0;
             width: var(--sidebar-width);
             height: 100vh;
-            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
-            color: white;
-            padding: 20px 0;
+            background: #ffffff;
+            color: var(--dark);
+            padding: 0;
             overflow-y: auto;
             z-index: 1000;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.03);
+            border-right: 1px solid var(--border);
         }
 
         .sidebar-header {
-            padding: 0 20px 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 25px;
+            border-bottom: 1px solid var(--border);
             margin-bottom: 20px;
         }
 
-        .sidebar-header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--secondary);
+        .sidebar-header .logo-container {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header img {
+            width: 100%;
+            height: auto;
+            max-width: 180px;
         }
 
         .sidebar-header p {
             font-size: 12px;
-            opacity: 0.8;
-            margin-top: 5px;
+            color: var(--gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
         }
 
         .sidebar-nav {
@@ -76,86 +85,96 @@
         }
 
         .sidebar-nav li {
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .sidebar-nav a {
             display: flex;
             align-items: center;
-            padding: 12px 15px;
-            color: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
+            color: var(--gray);
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 12px;
             transition: all 0.3s;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .sidebar-nav a i {
-            margin-right: 12px;
+            margin-right: 14px;
             width: 20px;
-            font-size: 16px;
+            font-size: 18px;
+            opacity: 0.7;
         }
 
         .sidebar-nav a:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: var(--light);
+            color: var(--primary);
             transform: translateX(5px);
         }
 
         .sidebar-nav a.active {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-weight: 600;
+            background: rgba(43, 57, 144, 0.08);
+            color: var(--primary);
+        }
+
+        .sidebar-nav a.active i {
+            opacity: 1;
         }
 
         /* Main Content */
         .main-content {
             margin-left: var(--sidebar-width);
             min-height: 100vh;
+            background-color: var(--light);
         }
 
         /* Header */
         .header {
             background: white;
-            padding: 20px 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid var(--border);
         }
 
         .header h2 {
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
             color: var(--dark);
         }
 
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            padding-left: 20px;
+            border-left: 1px solid var(--border);
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
             background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(43, 57, 144, 0.2);
         }
 
         .btn {
@@ -473,6 +492,100 @@
             border-left: 4px solid var(--info);
         }
     </style>
+    <script>
+        // Global API base URL
+        const API_BASE = '/admin/api';
+
+        // Helper function for API calls
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const url = API_BASE + endpoint;
+                console.log('API Call:', url, options);
+
+                const response = await fetch(url, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    credentials: 'include'
+                });
+
+                console.log('API Response status:', response.status, response.statusText);
+
+                if (!response.ok) {
+                    let errorDetail = 'Request failed';
+                    try {
+                        const errorData = await response.json();
+                        errorDetail = errorData.detail || errorData.message || `HTTP ${response.status}: ${response.statusText}`;
+                        console.error('API Error Response:', errorData);
+                    } catch (e) {
+                        errorDetail = `HTTP ${response.status}: ${response.statusText}`;
+                        console.error('Failed to parse error response:', e);
+                    }
+                    throw new Error(errorDetail);
+                }
+
+                const data = await response.json();
+                console.log('API Response data:', data);
+                return data;
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        // Show alert message
+        function showAlert(message, type = 'info') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-circle' : 'info-circle'}"></i>
+                ${message}
+            `;
+            const contentDiv = document.querySelector('.content') || document.body;
+            if (contentDiv) {
+                if (contentDiv.firstChild) {
+                    contentDiv.insertBefore(alert, contentDiv.firstChild);
+                } else {
+                    contentDiv.appendChild(alert);
+                }
+                setTimeout(() => alert.remove(), 5000);
+            }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            } catch (e) {
+                return dateString;
+            }
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            if (!amount) return '₹0';
+            return '₹' + parseFloat(amount).toLocaleString('en-IN');
+        }
+
+        // Get status badge color
+        function getStatusColor(status) {
+            const colors = {
+                'PENDING': 'warning',
+                'APPROVED': 'info',
+                'BOOKED': 'success',
+                'ONGOING': 'primary',
+                'COMPLETED': 'success',
+                'CANCELLED': 'danger',
+                'REJECTED': 'danger',
+                'NOT_SUBMITTED': 'info'
+            };
+            return colors[status] || 'info';
+        }
+    </script>
     {% block extra_css %}{% endblock %}
 </head>
 
@@ -552,80 +665,6 @@
     </div>
 
     <script>
-        // Global API base URL
-        const API_BASE = '/admin/api';
-
-        // Helper function for API calls
-        async function apiCall(endpoint, options = {}) {
-            try {
-                const url = API_BASE + endpoint;
-                console.log('API Call:', url, options);
-
-                const response = await fetch(url, {
-                    ...options,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...options.headers
-                    },
-                    credentials: 'include'
-                });
-
-                console.log('API Response status:', response.status, response.statusText);
-
-                if (!response.ok) {
-                    let errorDetail = 'Request failed';
-                    try {
-                        const errorData = await response.json();
-                        errorDetail = errorData.detail || errorData.message || `HTTP ${response.status}: ${response.statusText}`;
-                        console.error('API Error Response:', errorData);
-                    } catch (e) {
-                        errorDetail = `HTTP ${response.status}: ${response.statusText}`;
-                        console.error('Failed to parse error response:', e);
-                    }
-                    throw new Error(errorDetail);
-                }
-
-                const data = await response.json();
-                console.log('API Response data:', data);
-                return data;
-            } catch (error) {
-                console.error('API Error:', error);
-                throw error;
-            }
-        }
-
-        // Show alert message
-        function showAlert(message, type = 'info') {
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-circle' : 'info-circle'}"></i>
-                ${message}
-            `;
-            const contentDiv = document.querySelector('.content');
-            if (contentDiv) {
-                contentDiv.insertBefore(alert, contentDiv.firstChild);
-                setTimeout(() => alert.remove(), 5000);
-            }
-        }
-
-        // Format date
-        function formatDate(dateString) {
-            if (!dateString) return '-';
-            try {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            } catch (e) {
-                return dateString;
-            }
-        }
-
-        // Format currency
-        function formatCurrency(amount) {
-            if (!amount) return '₹0';
-            return '₹' + parseFloat(amount).toLocaleString('en-IN');
-        }
-
         // WebSocket connection for real-time notifications
         let ws = null;
         let reconnectAttempts = 0;
@@ -693,16 +732,14 @@
                     console.log('WebSocket disconnected');
                     ws = null;
 
-                    // Clear ping interval
                     if (pingInterval) {
                         clearInterval(pingInterval);
                         pingInterval = null;
                     }
 
-                    // Attempt to reconnect
                     if (reconnectAttempts < maxReconnectAttempts) {
                         reconnectAttempts++;
-                        const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000); // Exponential backoff, max 30s
+                        const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
                         console.log(`Reconnecting in ${delay}ms... (attempt ${reconnectAttempts}/${maxReconnectAttempts})`);
                         reconnectTimeout = setTimeout(connectWebSocket, delay);
                     } else {
@@ -716,25 +753,8 @@
 
         function handleNotification(message) {
             const { notification_type, data } = message;
-
-            // Create notification element
             const notification = document.createElement('div');
             notification.className = 'notification-toast';
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: white;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                padding: 16px 20px;
-                min-width: 300px;
-                max-width: 400px;
-                z-index: 10000;
-                cursor: pointer;
-                animation: slideInRight 0.3s ease-out;
-                border-left: 4px solid ${notification_type === 'booking' ? '#10b981' : '#3b82f6'};
-            `;
 
             let title, content, redirectUrl, speechText;
 
@@ -764,6 +784,22 @@
                 redirectUrl = `/admin/tickets/${data.ticket_id}`;
                 speechText = 'New ticket';
             }
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                padding: 16px 20px;
+                min-width: 300px;
+                max-width: 400px;
+                z-index: 10000;
+                cursor: pointer;
+                animation: slideInRight 0.3s ease-out;
+                border-left: 4px solid ${notification_type === 'booking' ? '#10b981' : '#3b82f6'};
+            `;
 
             notification.innerHTML = `
                 ${content}
@@ -910,24 +946,12 @@
         const style = document.createElement('style');
         style.textContent = `
             @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
             }
             @keyframes slideOutRight {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
             }
         `;
         document.head.appendChild(style);

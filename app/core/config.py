@@ -27,16 +27,13 @@ class Settings(BaseSettings):
         "sqlite:///./gogocar.db"
     ).replace("postgres://", "postgresql://", 1)
     
-    # AWS Cognito
-    AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")
-    USERPOOL_ID: str = os.getenv("USERPOOL_ID", "")
-    APP_CLIENT_ID: str = os.getenv("APP_CLIENT_ID", "")
-    APP_CLIENT_SECRET: str = os.getenv("APP_CLIENT_SECRET", "")
-    COGNITO_DOMAIN: str = os.getenv("COGNITO_DOMAIN", "")
-    REDIRECT_URI: str = os.getenv("REDIRECT_URI", "http://localhost:8000/auth/token")
-    LOGIN_URL: str = os.getenv("LOGIN_URL", "")
+    # Authentication
+    LOGIN_URL: str = "/auth/login"
+    SIGNUP_URL: str = "/auth/signup"
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "7b63e8a4f8d9b0c1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5")
     
     # AWS S3
+    AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")
     AWS_ACCESS_KEY_ID: Optional[str] = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY: Optional[str] = os.getenv("AWS_SECRET_ACCESS_KEY")
     S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "gogocar")
@@ -56,10 +53,6 @@ class Settings(BaseSettings):
     )
     DOMAIN_URL: str = os.getenv("DOMAIN_URL", "http://localhost:8000")
     
-    # Security
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "production key")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    
     # File Upload
     IMAGE_DIR: str = "static/images/"
     MAX_UPLOAD_SIZE: int = 10 * 1024 * 1024  # 10MB
@@ -73,9 +66,11 @@ class Settings(BaseSettings):
     DEFAULT_PAGE_SIZE: int = 20
     MAX_PAGE_SIZE: int = 100
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = {
+        "env_file": ".env",
+        "case_sensitive": True,
+        "extra": "ignore"
+    }
 
 
 @lru_cache()

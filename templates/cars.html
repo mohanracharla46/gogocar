@@ -40,18 +40,41 @@
             z-index: -2;
         }
 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+            border: 2px solid #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             padding: 15px 80px;
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
         }
 
         .logo-container {
@@ -527,6 +550,25 @@
         .toggle-switch.active .toggle-circle {
             left: 23px;
         }
+
+        /* New Top Input Styles */
+        .top-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            font-weight: 700;
+            color: #2b3990;
+            outline: none;
+            padding: 5px 0;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .top-date-value {
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -534,21 +576,42 @@
     <header>
         <div class="logo-container">
             <a href="/" class="logo-img">
-                <img src="/static/img/logo.png?v=2" alt="GoGo Cars" onerror="this.style.display='none'">
+                <img src="/static/img/logo.png?v=2" alt="GoGo Cars Logo" onerror="this.style.display='none'">
             </a>
         </div>
-        <nav>
+        <nav id="mainNav">
             <a href="/">Home</a>
-            <a href="/cars">Car Rentals</a>
-            <a href="/about">About Us</a>
+            <a href="/cars" class="active">Cars</a>
+            <a href="/#why-choose-us">About Us</a>
             <a href="/contact">Contact Us</a>
-            <a href="/host" class="nav-btn host-btn">Become a HOST</a>
             {% if is_authenticated %}
-            <a href="/auth/logout" class="nav-btn auth-btn">Logout</a>
-            {% else %}
-            <a href="{{ login_url }}" class="nav-btn auth-btn">Login or Signup</a>
+            <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
+            {% endif %}
+            {% if is_admin %}
+            <a href="/admin/dashboard" style="color: #ff6b35;">Admin Panel</a>
             {% endif %}
         </nav>
+
+        <div class="auth-buttons">
+            <a href="/host" class="host-btn">Become a HOST</a>
+            {% if is_authenticated %}
+            <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
+                <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="user-avatar-mini"
+                        style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
+                        {{ current_user.firstname[0] if current_user else 'U' }}
+                    </span>
+                    {{ current_user.firstname if current_user else 'User' }}
+                </a>
+                <a href="/auth/logout" class="logout-link"
+                    style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
+            </div>
+            {% else %}
+            <a href="/auth/login" class="login-btn-new">
+                Login or Signup
+            </a>
+            {% endif %}
+        </div>
     </header>
 
     <div class="cars-page-container">
@@ -614,33 +677,32 @@
             <div class="top-booking-bar">
                 <div class="top-date-card">
                     <span class="top-date-label">Location</span>
-                    <div class="top-date-value">
-                        <span id="locationDisplay">{{ selected_location if selected_location else 'Hyderabad' }}</span>
-                        <select id="location-select-top"
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
-                            {% for location in locations %}
-                            <option value="{{ location.location }}" {% if selected_location==location.location
-                                %}selected{% endif %}>{{ location.location }}</option>
-                            {% endfor %}
-                        </select>
+                    <div class="top-date-value" style="justify-content: space-between;">
+                        <span style="font-size: 15px; font-weight: 700; color: #2b3990;">Hyderabad</span>
                     </div>
                 </div>
-                <div class="top-date-card">
+                <div class="top-date-card" style="cursor: pointer; position: relative;"
+                    onclick="document.getElementById('top-pickup-datetime').showPicker()">
                     <span class="top-date-label">Pick-Up Date</span>
-                    <div class="top-date-value">
-                        <span id="pickupDisplay">{{ pickup_datetime if pickup_datetime else 'Select Date' }}</span>
-                        <input type="datetime-local" id="top-pickup-datetime-new"
-                            value="{{ pickup_datetime if pickup_datetime else '' }}"
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                    <div class="top-date-value" style="justify-content: space-between; gap: 10px;">
+                        <span id="pickup-date-display" style="font-size: 15px; font-weight: 700; color: #2b3990;">Select
+                            Date</span>
+                        <span id="pickup-time-display"
+                            style="font-size: 13px; font-weight: 600; color: #64748b;">--:--</span>
+                        <input type="datetime-local" id="top-pickup-datetime"
+                            style="position: absolute; opacity: 0; width: 100%; height: 100%; left: 0; top: 0; cursor: pointer;">
                     </div>
                 </div>
-                <div class="top-date-card">
+                <div class="top-date-card" style="cursor: pointer; position: relative;"
+                    onclick="document.getElementById('top-return-datetime').showPicker()">
                     <span class="top-date-label">Return Date</span>
-                    <div class="top-date-value">
-                        <span id="returnDisplay">{{ end_datetime if end_datetime else 'Select Date' }}</span>
-                        <input type="datetime-local" id="top-end-datetime-new"
-                            value="{{ end_datetime if end_datetime else '' }}"
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                    <div class="top-date-value" style="justify-content: space-between; gap: 10px;">
+                        <span id="return-date-display" style="font-size: 15px; font-weight: 700; color: #2b3990;">Select
+                            Date</span>
+                        <span id="return-time-display"
+                            style="font-size: 13px; font-weight: 600; color: #64748b;">--:--</span>
+                        <input type="datetime-local" id="top-return-datetime"
+                            style="position: absolute; opacity: 0; width: 100%; height: 100%; left: 0; top: 0; cursor: pointer;">
                     </div>
                 </div>
                 <div class="total-time-badge">
@@ -671,8 +733,10 @@
                         <div class="car-card-bottom">
                             <div class="car-card-price">?{{ "{:,.0f}".format(car.base_price) }} <span>per hour</span>
                             </div>
-                            <button class="book-btn-new book-now-card-btn" data-car-id="{{ car.id }}"
-                                data-car-name="{{ car.brand }} {{ car.car_model }}">BOOK NOW</button>
+                            <a href="/cars/{{ car.id }}" class="book-btn-new book-now-card-btn"
+                                onclick="const p=document.getElementById('top-pickup-datetime').value; const r=document.getElementById('top-return-datetime').value; let u=this.href+'?location=Hyderabad'; if(p)u+='&pickup_datetime='+p; if(r)u+='&end_datetime='+r; window.location.assign(u); return false;">
+                                BOOK NOW
+                            </a>
                         </div>
                     </div>
                     <div class="car-card-img-container">
@@ -697,58 +761,109 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const pInput = document.getElementById('top-pickup-datetime-new');
-            const rInput = document.getElementById('top-end-datetime-new');
-            const pickupDisplay = document.getElementById('pickupDisplay');
-            const returnDisplay = document.getElementById('returnDisplay');
+            const pickupInput = document.getElementById('top-pickup-datetime');
+            const returnInput = document.getElementById('top-return-datetime');
+            const pickupDateDisplay = document.getElementById('pickup-date-display');
+            const pickupTimeDisplay = document.getElementById('pickup-time-display');
+            const returnDateDisplay = document.getElementById('return-date-display');
+            const returnTimeDisplay = document.getElementById('return-time-display');
             const durationDisplay = document.getElementById('totalDuration');
-            const locationSelect = document.getElementById('location-select-top');
-            const locationName = document.getElementById('locationDisplay');
+            const selectedLocation = 'Hyderabad';
 
-            // Format date for display to match image
-            function formatDate(dateStr) {
+            // Format date for display (e.g., "10-Feb-2026")
+            function formatDateDisplay(dateStr) {
                 if (!dateStr) return 'Select Date';
                 const date = new Date(dateStr);
                 const day = date.getDate().toString().padStart(2, '0');
                 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                 const month = months[date.getMonth()];
                 const year = date.getFullYear();
+                return `${day}-${month}-${year}`;
+            }
+
+            // Format time for display (e.g., "2:30 PM")
+            function formatTimeDisplay(dateStr) {
+                if (!dateStr) return '--:--';
+                const date = new Date(dateStr);
                 let hours = date.getHours();
                 const minutes = date.getMinutes().toString().padStart(2, '0');
-                const ampm = hours >= 12 ? 'P.M' : 'A.M';
+                const ampm = hours >= 12 ? 'PM' : 'AM';
                 hours = hours % 12;
                 hours = hours ? hours : 12;
-                return `${day}-${month}-${year}, ${hours}:${minutes} ${ampm}`;
+                return `${hours}:${minutes} ${ampm}`;
             }
+
+            // Update displays when input changes
+            function updatePickupDisplay() {
+                if (pickupInput.value) {
+                    pickupDateDisplay.textContent = formatDateDisplay(pickupInput.value);
+                    pickupTimeDisplay.textContent = formatTimeDisplay(pickupInput.value);
+                } else {
+                    pickupDateDisplay.textContent = 'Select Date';
+                    pickupTimeDisplay.textContent = '--:--';
+                }
+            }
+
+            function updateReturnDisplay() {
+                if (returnInput.value) {
+                    returnDateDisplay.textContent = formatDateDisplay(returnInput.value);
+                    returnTimeDisplay.textContent = formatTimeDisplay(returnInput.value);
+                } else {
+                    returnDateDisplay.textContent = 'Select Date';
+                    returnTimeDisplay.textContent = '--:--';
+                }
+            }
+
+            // Parse URL params and set initial values
+            const urlParams = new URLSearchParams(window.location.search);
+            const pickupParam = urlParams.get('pickup_datetime');
+            const returnParam = urlParams.get('end_datetime');
+
+            if (pickupParam) {
+                pickupInput.value = pickupParam;
+                updatePickupDisplay();
+            }
+
+            if (returnParam) {
+                returnInput.value = returnParam;
+                updateReturnDisplay();
+            }
+
+            // Set min datetime for inputs to prevent past selection
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            const nowISO = now.toISOString().slice(0, 16);
+            pickupInput.min = nowISO;
+            returnInput.min = nowISO;
 
             function updateDuration() {
-                const pick = new Date(pInput.value);
-                const ret = new Date(rInput.value);
-                if (pick && ret && ret > pick) {
-                    const diff = ret - pick;
-                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    durationDisplay.textContent = days + " Days, " + hours + " Hrs.";
-                } else { durationDisplay.textContent = "-- Days, -- Hrs."; }
+                if (pickupInput.value && returnInput.value) {
+                    const pick = new Date(pickupInput.value);
+                    const ret = new Date(returnInput.value);
+
+                    if (ret > pick) {
+                        const diff = ret - pick;
+                        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        durationDisplay.textContent = days + " Days, " + hours + " Hrs.";
+                        return;
+                    }
+                }
+                durationDisplay.textContent = "-- Days, -- Hrs.";
             }
 
-            pInput.addEventListener('change', function () {
-                pickupDisplay.textContent = formatDate(this.value);
+            pickupInput.addEventListener('change', function () {
+                updatePickupDisplay();
                 updateDuration();
-            });
-            rInput.addEventListener('change', function () {
-                returnDisplay.textContent = formatDate(this.value);
-                updateDuration();
+                // Update return min to be at least the pickup date
+                if (this.value) {
+                    returnInput.min = this.value;
+                }
             });
 
-            locationSelect.addEventListener('change', function () {
-                const selected = this.value;
-                if (selected) {
-                    locationName.textContent = selected;
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('location', selected);
-                    window.location.href = url.toString();
-                }
+            returnInput.addEventListener('change', function () {
+                updateReturnDisplay();
+                updateDuration();
             });
 
             document.querySelectorAll('.filter-check').forEach(box => {
@@ -775,18 +890,22 @@
                 });
             });
 
-            document.querySelectorAll('.book-now-card-btn').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const pick = pInput.value;
-                    const ret = rInput.value;
-                    if (!pick || !ret) { alert('Select dates!'); return; }
-                    window.location.href = "/payment?car_id=" + this.dataset.carId + "&pickup_datetime=" + encodeURIComponent(pick) + "&end_datetime=" + encodeURIComponent(ret);
-                });
-            });
+            // Sync dates to hidden form inputs
+            function syncDatesToForms() {
+                const pick = pickupInput.value;
+                const ret = returnInput.value;
+                document.querySelectorAll('.hidden-pickup').forEach(i => i.value = pick);
+                document.querySelectorAll('.hidden-return').forEach(i => i.value = ret);
+            }
 
-            if (pInput.value) pickupDisplay.textContent = formatDate(pInput.value);
-            if (rInput.value) returnDisplay.textContent = formatDate(rInput.value);
-            if (pInput.value && rInput.value) updateDuration();
+            pickupInput.addEventListener('change', syncDatesToForms);
+            returnInput.addEventListener('change', syncDatesToForms);
+
+            // Sync initially
+            syncDatesToForms();
+
+            // Initial duration calculation
+            updateDuration();
 
             // Handle Calendar triggers
             document.querySelectorAll('.top-date-card').forEach(card => {

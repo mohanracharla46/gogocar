@@ -1460,20 +1460,37 @@
             <span></span>
         </button>
         <nav id="mainNav">
-            <a href="/cars">Car Rentals <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg></a>
-            <a href="#why-choose-us">About Us</a>
+            <a href="/">Home</a>
+            <a href="/cars">Cars</a>
+            <a href="/#why-choose-us">About Us</a>
             <a href="/contact">Contact Us</a>
+            {% if is_authenticated %}
+            <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
+            {% endif %}
+            {% if is_admin %}
+            <a href="/admin/dashboard" style="color: #ff6b35;">Admin Panel</a>
+            {% endif %}
         </nav>
         <div class="auth-buttons">
             <a href="/host" class="host-btn">Become a HOST</a>
-            <a href="#" class="login-btn-new">
+            {% if is_authenticated %}
+            <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
+                <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="user-avatar-mini"
+                        style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
+                        {{ current_user.firstname[0] if current_user else 'U' }}
+                    </span>
+                    {{ current_user.firstname if current_user else 'User' }}
+                </a>
+                <a href="/auth/logout" class="logout-link"
+                    style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
+            </div>
+            {% else %}
+            <a href="/auth/login" class="login-btn-new">
                 Login or Signup
             </a>
+            {% endif %}
         </div>
-
     </header>
 
     <!-- Main Container -->
@@ -1484,9 +1501,9 @@
             <span>›</span>
             <a href="/cars">Rentals</a>
             <span>›</span>
-            <a href="#">Hatchback</a>
+            <a href="#">{{ car.car_type.value|title }}</a>
             <span>›</span>
-            <span>Renault Triber 2024</span>
+            <span>{{ car.brand }} {{ car.car_model }}</span>
         </div>
 
         <!-- Left Column -->
@@ -1495,57 +1512,51 @@
             <div class="car-title-section">
                 <div class="car-title-header">
                     <div>
-                        <h1 class="car-title">Renault Triber 2024</h1>
-                        <p class="car-subtitle">7 Seater • Petrol • Manual</p>
+                        <h1 class="car-title">{{ car.brand }} {{ car.car_model }}</h1>
+                        <p class="car-subtitle">{{ car.no_of_seats.value }} • {{ car.fuel_type.value }} • {{
+                            car.transmission_type.value|title }}</p>
                     </div>
                     <button class="share-btn">🔗 Share</button>
                 </div>
                 <div class="rating-section">
                     <div class="stars">
+                        {% for i in range(5) %}
+                        {% if avg_rating >= i + 1 %}
                         <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star">★</span>
+                        {% elif avg_rating >= i + 0.5 %}
+                        <span class="star"
+                            style="background: linear-gradient(90deg, #f59e0b 50%, #cbd5e0 50%); -webkit-background-clip: text; color: transparent;">★</span>
+                        {% else %}
                         <span class="star" style="color: #cbd5e0;">★</span>
+                        {% endif %}
+                        {% endfor %}
                     </div>
-                    <span class="rating-text">4.51</span>
-                    <span class="rating-count">Based on 742 Reviews</span>
+                    <span class="rating-text">{{ avg_rating }}</span>
+                    <span class="rating-count">Based on {{ review_count }} Reviews</span>
                 </div>
             </div>
 
             <!-- Image Gallery -->
+            <!-- Image Gallery -->
             <div class="image-gallery">
                 <div class="main-image-container">
-                    <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-front-three-quarter-71.jpeg?isig=0&q=80"
-                        alt="Renault Triber 2024" class="main-image" id="mainImage">
+                    {% set image_list = car.images.split(',') if car.images and ',' in car.images else ([car.images] if
+                    car.images else ['/static/img/landing.png']) %}
+                    <img src="{{ image_list[0] }}" alt="{{ car.brand }} {{ car.car_model }}" class="main-image"
+                        id="mainImage" onerror="this.src='/static/img/landing.png'">
+
+                    {% if image_list|length > 1 %}
                     <button class="gallery-nav prev" onclick="changeImage(-1)">‹</button>
                     <button class="gallery-nav next" onclick="changeImage(1)">›</button>
+                    {% endif %}
                 </div>
                 <div class="thumbnail-grid">
-                    <div class="thumbnail active" onclick="selectImage(0)">
-                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-front-three-quarter-71.jpeg?isig=0&q=80"
-                            alt="View 1">
+                    {% for image in image_list %}
+                    <div class="thumbnail {{ 'active' if loop.index0 == 0 else '' }}"
+                        onclick="selectImage({{ loop.index0 }})">
+                        <img src="{{ image }}" alt="View {{ loop.index }}" onerror="this.src='/static/img/landing.png'">
                     </div>
-                    <div class="thumbnail" onclick="selectImage(1)">
-                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-side-view.jpeg?isig=0&q=80"
-                            alt="View 2">
-                    </div>
-                    <div class="thumbnail" onclick="selectImage(2)">
-                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-rear-three-quarter.jpeg?isig=0&q=80"
-                            alt="View 3">
-                    </div>
-                    <div class="thumbnail" onclick="selectImage(3)">
-                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-dashboard.jpeg?isig=0&q=80"
-                            alt="Interior 1">
-                    </div>
-                    <div class="thumbnail" onclick="selectImage(4)">
-                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-front-row-seats.jpeg?isig=0&q=80"
-                            alt="Interior 2">
-                    </div>
-                    <div class="thumbnail" onclick="selectImage(5)">
-                        <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-steering-wheel.jpeg?isig=0&q=80"
-                            alt="Interior 3">
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -1562,7 +1573,7 @@
                 <div class="tab-content">
                     <!-- Details Tab -->
                     <div class="tab-pane active" id="details">
-                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Car Location</h3>
+                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Car Specifications</h3>
                         <div class="car-details-grid">
                             <div class="detail-item">
                                 <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1570,14 +1581,14 @@
                                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
                                     </path>
                                 </svg>
-                                <span class="detail-text">7 Seater</span>
+                                <span class="detail-text">{{ car.no_of_seats.value }}</span>
                             </div>
                             <div class="detail-item">
                                 <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                 </svg>
-                                <span class="detail-text">Petrol</span>
+                                <span class="detail-text">{{ car.fuel_type.value }}</span>
                             </div>
                             <div class="detail-item">
                                 <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1585,7 +1596,7 @@
                                         d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
                                     </path>
                                 </svg>
-                                <span class="detail-text">Manual</span>
+                                <span class="detail-text">{{ car.transmission_type.value|title }}</span>
                             </div>
                             <div class="detail-item">
                                 <svg class="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1616,14 +1627,7 @@
                         <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px; margin-top: 32px;">
                             Description</h3>
                         <p style="font-size: 15px; color: #475569; line-height: 1.7;">
-                            The Renault Triber 2024 is a versatile and spacious 7-seater hatchback that combines
-                            practicality with modern design.
-                            Perfect for family trips or group outings, this vehicle offers excellent fuel efficiency and
-                            comfortable seating.
-                            With its advanced safety features including ABS with EBD, dual airbags, and rear parking
-                            sensors, you can drive with confidence.
-                            The car comes equipped with air conditioning, power steering, and a modern infotainment
-                            system with Bluetooth connectivity.
+                            {{ car.description if car.description else 'No description available for this car.' }}
                         </p>
                     </div>
 
@@ -1933,7 +1937,7 @@
         <div class="right-sidebar">
             <div class="pricing-card">
                 <div class="price-header">
-                    <div class="price-amount">₹979</div>
+                    <div class="price-amount">₹{{ "{:,.0f}".format(car.base_price) }}</div>
                 </div>
                 <div class="price-label">Per day (24 hours)</div>
 
@@ -2053,7 +2057,9 @@
                 </div>
 
                 <!-- CTA Buttons -->
-                <button class="cta-button cta-primary">LOGIN TO CONTINUE</button>
+                <!-- CTA Buttons -->
+                <button id="bookBtn" class="cta-button cta-primary">{{ 'PROCEED TO PAY' if is_authenticated else 'LOGIN
+                    TO BOOK' }}</button>
                 <button class="cta-button cta-secondary">Contact Host</button>
 
                 <!-- Host Info -->
@@ -2071,13 +2077,17 @@
 
     <script>
         // Image Gallery
+        // Image Gallery
         const images = [
-            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-front-three-quarter-71.jpeg?isig=0&q=80',
-            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-side-view.jpeg?isig=0&q=80',
-            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-exterior-right-rear-three-quarter.jpeg?isig=0&q=80',
-            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-dashboard.jpeg?isig=0&q=80',
-            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-front-row-seats.jpeg?isig=0&q=80',
-            'https://imgd.aeplcdn.com/664x374/n/cw/ec/141867/nexon-interior-steering-wheel.jpeg?isig=0&q=80'
+            {% if car.images and ',' in car.images %}
+        {% for image in car.images.split(',') %}
+        '{{ image }}',
+            {% endfor %}
+        {% elif car.images %}
+        '{{ car.images }}',
+            {% else %}
+        '/static/img/landing.png',
+            {% endif %}
         ];
 
         let currentImageIndex = 0;
@@ -2172,7 +2182,7 @@
         const endDateInput = document.getElementById('endDate');
         const durationDisplay = document.getElementById('durationDisplay');
         const totalAmountDisplay = document.getElementById('totalAmountDisplay');
-        const basePrice = 979; // Daily rate
+        const basePrice = {{ car.base_price }}; // Daily rate
 
         function updateTripDetails() {
             const start = new Date(startDateInput.value);
@@ -2194,13 +2204,19 @@
             }
         }
 
-        startDateInput.addEventListener('change', updateTripDetails);
+        startDateInput.addEventListener('change', function () {
+            updateTripDetails();
+            // Update end date min constraint
+            if (this.value) {
+                endDateInput.min = this.value;
+            }
+        });
         endDateInput.addEventListener('change', updateTripDetails);
 
-        // Set initial values to today and tomorrow
-        const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(tomorrow.getDate() + 1);
+        // Set initial values from URL or defaults
+        const detailUrlParams = new URLSearchParams(window.location.search);
+        const pParam = detailUrlParams.get('pickup_datetime');
+        const rParam = detailUrlParams.get('end_datetime');
 
         function formatForInput(date) {
             const year = date.getFullYear();
@@ -2211,17 +2227,69 @@
             return `${year}-${month}-${day}T${hours}:${minutes}`;
         }
 
-        const todayStr = formatForInput(now);
-        const tomorrowStr = formatForInput(tomorrow);
+        if (pParam) {
+            startDateInput.value = pParam;
+        } else {
+            const now = new Date();
+            startDateInput.value = formatForInput(now);
+        }
 
-        startDateInput.value = todayStr;
-        startDateInput.min = todayStr;
+        if (rParam) {
+            endDateInput.value = rParam;
+        } else {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            endDateInput.value = formatForInput(tomorrow);
+        }
 
-        endDateInput.value = tomorrowStr;
-        endDateInput.min = todayStr;
+        // Set min values
+        const nowObj = new Date();
+        startDateInput.min = formatForInput(nowObj);
+        endDateInput.min = formatForInput(nowObj);
 
         // Run calculation once to set initial state
         updateTripDetails();
+
+        // Booking Button Logic
+        document.getElementById('bookBtn').addEventListener('click', function () {
+            const start = startDateInput.value;
+            const end = endDateInput.value;
+
+            if (!start || !end) {
+                alert('Please select valid start and end dates.');
+                return;
+            }
+
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            const now = new Date();
+
+            // Allow 5 min buffer
+            if (startDate < new Date(now.getTime() - 5 * 60000)) {
+                alert('Pickup time cannot be in the past. Please select a future time.');
+                return;
+            }
+
+            if (endDate <= startDate) {
+                alert('Return time must be after pickup time.');
+                return;
+            }
+
+            // Minimum 1 hour
+            const diffHours = (endDate - startDate) / (1000 * 60 * 60);
+            if (diffHours < 1) {
+                alert('Minimum booking duration is 1 hour.');
+                return;
+            }
+
+            // Check if home delivery is selected
+            const deliveryToggle = document.querySelector('.delivery-toggle .toggle-switch');
+            const homeDelivery = deliveryToggle && deliveryToggle.classList.contains('active');
+
+            // Redirect to payment page
+            const url = `/payment?car_id={{ car.id }}&pickup_datetime=${encodeURIComponent(start)}&end_datetime=${encodeURIComponent(end)}&home_delivery=${homeDelivery}`;
+            window.location.href = url;
+        });
     </script>
 </body>
 

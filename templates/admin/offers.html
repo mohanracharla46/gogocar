@@ -9,8 +9,8 @@
     <div class="card-header">
         <h3><i class="fas fa-tags" style="color: var(--primary); margin-right: 10px;"></i>All Offers & Coupons</h3>
         <div style="display: flex; gap: 10px; align-items: center;">
-            <input type="text" id="searchInput" placeholder="Search by code or description..." 
-                   class="form-control" style="max-width: 300px;" onkeyup="handleSearch()">
+            <input type="text" id="searchInput" placeholder="Search by code or description..." class="form-control"
+                style="max-width: 300px;" onkeyup="handleSearch()">
             <select id="statusFilter" class="form-control" style="max-width: 150px;" onchange="loadOffers(true)">
                 <option value="">All Status</option>
                 <option value="true">Active</option>
@@ -43,34 +43,38 @@
             </tbody>
         </table>
     </div>
-    
+
     <!-- Pagination -->
     <div id="pagination" style="margin-top: 20px; display: none;"></div>
 </div>
 
 <!-- Create/Edit Modal -->
-<div id="offerModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
-    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+<div id="offerModal"
+    style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div
+        style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h3 id="modalTitle">Create Offer</h3>
-            <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray);">&times;</button>
+            <button onclick="closeModal()"
+                style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray);">&times;</button>
         </div>
         <form id="offerForm">
             <input type="hidden" id="offerId" name="offer_id">
-            
+
             <div class="form-group">
                 <label for="couponCode">Coupon Code *</label>
-                <input type="text" id="couponCode" name="coupon_code" class="form-control" required 
-                       placeholder="e.g., SUMMER20" style="text-transform: uppercase;">
+                <input type="text" id="couponCode" name="coupon_code" class="form-control" required
+                    placeholder="e.g., SUMMER20" style="text-transform: uppercase;">
                 <small style="color: var(--gray);">Code will be automatically converted to uppercase</small>
             </div>
-            
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="form-group">
                     <label for="discount">Discount Value *</label>
-                    <input type="number" id="discount" name="discount" class="form-control" required min="0" step="0.01">
+                    <input type="number" id="discount" name="discount" class="form-control" required min="0"
+                        step="0.01">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="discountType">Discount Type *</label>
                     <select id="discountType" name="discount_type" class="form-control" required>
@@ -79,55 +83,56 @@
                     </select>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="expirationTime">Expiration Date & Time *</label>
                 <input type="datetime-local" id="expirationTime" name="expiration_time" class="form-control" required>
             </div>
-            
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="form-group">
                     <label for="usageLimit">Usage Limit</label>
-                    <input type="number" id="usageLimit" name="usage_limit" class="form-control" min="1" 
-                           placeholder="Leave empty for unlimited">
+                    <input type="number" id="usageLimit" name="usage_limit" class="form-control" min="1"
+                        placeholder="Leave empty for unlimited">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="minAmount">Minimum Order Amount (₹)</label>
                     <input type="number" id="minAmount" name="min_amount" class="form-control" min="0" step="0.01"
-                           placeholder="Optional">
+                        placeholder="Optional">
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="maxDiscount">Maximum Discount (₹) - For Percentage Only</label>
                 <input type="number" id="maxDiscount" name="max_discount" class="form-control" min="0" step="0.01"
-                       placeholder="Optional">
+                    placeholder="Optional">
             </div>
-            
+
             <div class="form-group">
                 <label for="carTypes">Applicable Car Types (Optional)</label>
-                <select id="carTypes" name="applicable_to_car_type" class="form-control" multiple style="height: 100px;">
+                <select id="carTypes" name="applicable_to_car_type" class="form-control" multiple
+                    style="height: 100px;">
                     <option value="SUV">SUV</option>
                     <option value="SEDAN">SEDAN</option>
                     <option value="HATCHBACK">HATCHBACK</option>
                 </select>
                 <small style="color: var(--gray);">Hold Ctrl/Cmd to select multiple. Leave empty for all types.</small>
             </div>
-            
+
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea id="description" name="description" class="form-control" rows="3" 
-                          placeholder="Optional description for this offer"></textarea>
+                <textarea id="description" name="description" class="form-control" rows="3"
+                    placeholder="Optional description for this offer"></textarea>
             </div>
-            
+
             <div class="form-group">
                 <label style="display: flex; align-items: center; gap: 10px;">
                     <input type="checkbox" id="isActive" name="is_active" checked>
                     <span>Active (Offer is currently available)</span>
                 </label>
             </div>
-            
+
             <div style="display: flex; gap: 15px; margin-top: 25px;">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Save
@@ -154,31 +159,12 @@
     let currentSearch = '';
     let currentStatus = '';
 
-    function waitForBaseScripts(maxAttempts = 50) {
-        return new Promise((resolve, reject) => {
-            function check() {
-                if (typeof apiCall !== 'undefined' && typeof showAlert !== 'undefined') {
-                    resolve();
-                } else if (maxAttempts > 0) {
-                    setTimeout(() => {
-                        maxAttempts--;
-                        check();
-                    }, 100);
-                } else {
-                    console.error('Base scripts failed to load');
-                    reject(new Error('Base scripts failed to load'));
-                }
-            }
-            check();
-        });
-    }
-
     async function loadOffers(resetPage = false) {
         if (resetPage) currentPage = 1;
-        
+
         const loadingSpinner = document.getElementById('loadingSpinner');
         const offersTable = document.getElementById('offersTable');
-        
+
         loadingSpinner.style.display = 'block';
         offersTable.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading...</td></tr>';
 
@@ -187,19 +173,19 @@
                 page: currentPage,
                 page_size: 20
             });
-            
+
             if (currentSearch) params.append('search', currentSearch);
             if (currentStatus) params.append('is_active', currentStatus);
-            
+
             const data = await apiCall(`/offers?${params.toString()}`);
-            
+
             if (data.items && data.items.length > 0) {
                 offersTable.innerHTML = data.items.map(offer => {
-                    const usageText = offer.usage_limit 
-                        ? `${offer.usage_count}/${offer.usage_limit}` 
+                    const usageText = offer.usage_limit
+                        ? `${offer.usage_count}/${offer.usage_limit}`
                         : `${offer.usage_count}/∞`;
-                    const discountText = offer.discount_type === 'PERCENTAGE' 
-                        ? `${offer.discount}%` 
+                    const discountText = offer.discount_type === 'PERCENTAGE'
+                        ? `${offer.discount}%`
                         : `₹${offer.discount}`;
                     const validUntil = new Date(offer.expiration_time).toLocaleDateString('en-IN', {
                         year: 'numeric',
@@ -208,7 +194,7 @@
                         hour: '2-digit',
                         minute: '2-digit'
                     });
-                    
+
                     return `
                         <tr>
                             <td><strong>${offer.coupon_code}</strong></td>
@@ -242,7 +228,7 @@
                         </tr>
                     `;
                 }).join('');
-                
+
                 // Update pagination
                 updatePagination(data);
             } else {
@@ -270,17 +256,17 @@
         const paginationDiv = document.getElementById('pagination');
         if (data.total_pages > 1) {
             let html = '<div style="display: flex; justify-content: center; gap: 10px; align-items: center;">';
-            
+
             if (data.has_prev) {
                 html += `<button onclick="goToPage(${data.page - 1})" class="btn btn-outline">Previous</button>`;
             }
-            
+
             html += `<span>Page ${data.page} of ${data.total_pages}</span>`;
-            
+
             if (data.has_next) {
                 html += `<button onclick="goToPage(${data.page + 1})" class="btn btn-outline">Next</button>`;
             }
-            
+
             html += '</div>';
             paginationDiv.innerHTML = html;
             paginationDiv.style.display = 'block';
@@ -314,30 +300,30 @@
         try {
             const offer = await apiCall(`/offers/${id}`);
             editingOfferId = id;
-            
+
             document.getElementById('modalTitle').textContent = 'Edit Offer';
             document.getElementById('offerId').value = offer.id;
             document.getElementById('couponCode').value = offer.coupon_code;
             document.getElementById('discount').value = offer.discount;
             document.getElementById('discountType').value = offer.discount_type;
-            
+
             // Format datetime for input
             const expDate = new Date(offer.expiration_time);
             const expDateStr = expDate.toISOString().slice(0, 16);
             document.getElementById('expirationTime').value = expDateStr;
-            
+
             document.getElementById('usageLimit').value = offer.usage_limit || '';
             document.getElementById('minAmount').value = offer.min_amount || '';
             document.getElementById('maxDiscount').value = offer.max_discount || '';
             document.getElementById('description').value = offer.description || '';
             document.getElementById('isActive').checked = offer.is_active;
-            
+
             // Set car types
             const carTypesSelect = document.getElementById('carTypes');
             Array.from(carTypesSelect.options).forEach(option => {
                 option.selected = offer.applicable_to_car_type && offer.applicable_to_car_type.includes(option.value);
             });
-            
+
             document.getElementById('offerModal').style.display = 'flex';
         } catch (error) {
             showAlert('Error loading offer: ' + error.message, 'danger');
@@ -374,70 +360,67 @@
         }
     }
 
-    // Wait for base scripts to load before initializing
-    waitForBaseScripts().then(() => {
-        // Set up form submit handler
-        document.getElementById('offerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+    // Set up form submit handler
+    document.getElementById('offerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-            const formData = {
-                coupon_code: document.getElementById('couponCode').value.trim(),
-                discount: parseFloat(document.getElementById('discount').value),
-                discount_type: document.getElementById('discountType').value,
-                expiration_time: new Date(document.getElementById('expirationTime').value).toISOString(),
-                usage_limit: document.getElementById('usageLimit').value ? parseInt(document.getElementById('usageLimit').value) : null,
-                min_amount: document.getElementById('minAmount').value ? parseFloat(document.getElementById('minAmount').value) : null,
-                max_discount: document.getElementById('maxDiscount').value ? parseFloat(document.getElementById('maxDiscount').value) : null,
-                description: document.getElementById('description').value.trim() || null,
-                is_active: document.getElementById('isActive').checked
-            };
+        const formData = {
+            coupon_code: document.getElementById('couponCode').value.trim(),
+            discount: parseFloat(document.getElementById('discount').value),
+            discount_type: document.getElementById('discountType').value,
+            expiration_time: new Date(document.getElementById('expirationTime').value).toISOString(),
+            usage_limit: document.getElementById('usageLimit').value ? parseInt(document.getElementById('usageLimit').value) : null,
+            min_amount: document.getElementById('minAmount').value ? parseFloat(document.getElementById('minAmount').value) : null,
+            max_discount: document.getElementById('maxDiscount').value ? parseFloat(document.getElementById('maxDiscount').value) : null,
+            description: document.getElementById('description').value.trim() || null,
+            is_active: document.getElementById('isActive').checked
+        };
 
-            // Get selected car types
-            const carTypesSelect = document.getElementById('carTypes');
-            const selectedCarTypes = Array.from(carTypesSelect.selectedOptions).map(opt => opt.value);
-            if (selectedCarTypes.length > 0) {
-                formData.applicable_to_car_type = selectedCarTypes;
+        // Get selected car types
+        const carTypesSelect = document.getElementById('carTypes');
+        const selectedCarTypes = Array.from(carTypesSelect.selectedOptions).map(opt => opt.value);
+        if (selectedCarTypes.length > 0) {
+            formData.applicable_to_car_type = selectedCarTypes;
+        }
+
+        try {
+            if (editingOfferId) {
+                await apiCall(`/offers/${editingOfferId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(formData),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                showAlert('Offer updated successfully!', 'success');
+            } else {
+                await apiCall('/offers', {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                showAlert('Offer created successfully!', 'success');
             }
 
-            try {
-                if (editingOfferId) {
-                    await apiCall(`/offers/${editingOfferId}`, {
-                        method: 'PUT',
-                        body: JSON.stringify(formData),
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                    showAlert('Offer updated successfully!', 'success');
-                } else {
-                    await apiCall('/offers', {
-                        method: 'POST',
-                        body: JSON.stringify(formData),
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                    showAlert('Offer created successfully!', 'success');
-                }
-                
-                closeModal();
-                loadOffers();
-            } catch (error) {
-                showAlert('Error saving offer: ' + error.message, 'danger');
-            }
-        });
-
-        // Update status filter
-        document.getElementById('statusFilter').addEventListener('change', function() {
-            currentStatus = this.value;
-            loadOffers(true);
-        });
-
-        // Close modal on background click
-        document.getElementById('offerModal').addEventListener('click', (e) => {
-            if (e.target.id === 'offerModal') {
-                closeModal();
-            }
-        });
-
-        // Load offers on page load
-        loadOffers();
+            closeModal();
+            loadOffers();
+        } catch (error) {
+            showAlert('Error saving offer: ' + error.message, 'danger');
+        }
     });
+
+    // Update status filter
+    document.getElementById('statusFilter').addEventListener('change', function () {
+        currentStatus = this.value;
+        loadOffers(true);
+    });
+
+    // Close modal on background click
+    document.getElementById('offerModal').addEventListener('click', (e) => {
+        if (e.target.id === 'offerModal') {
+            closeModal();
+        }
+    });
+
+    // Load offers on page load
+    loadOffers();
 </script>
 {% endblock %}

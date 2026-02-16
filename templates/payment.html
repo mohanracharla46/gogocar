@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -415,7 +415,7 @@
         }
 
         .footer-links a::before {
-            content: '›';
+            content: 'â€º';
             color: #ff6b35;
             font-weight: bold;
             font-size: 18px;
@@ -610,19 +610,29 @@
             <a href="/#subscriptions">Subscriptions</a>
             <a href="/#offers">Offers</a>
             <a href="#footer">Contact</a>
+            {% if is_authenticated %}
+            <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
+            {% endif %}
+            {% if is_admin %}
+            <a href="/admin/dashboard" style="color: #ff6b35; margin-left: 10px;">Admin Panel</a>
+            {% endif %}
 
             <div class="auth-buttons">
-                {% if user and user.username %}
-                <a href="/profile" class="login-btn-new">
-                    <svg class="user-icon" viewBox="0 0 24 24">
-                        <path
-                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                    </svg>
-                    {{ user.firstname }}
-                </a>
+                {% if is_authenticated %}
+                <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
+                    <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
+                        <span class="user-avatar-mini"
+                            style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
+                            {{ current_user.firstname[0] if current_user else 'U' }}
+                        </span>
+                        {{ current_user.firstname if current_user else 'User' }}
+                    </a>
+                    <a href="/auth/logout" class="logout-link"
+                        style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
+                </div>
                 {% else %}
-                <a href="#" class="host-btn">Become a Host</a>
-                <a href="#" class="login-btn-new">Login / Signup</a>
+                <a href="/host" class="host-btn">Become a Host</a>
+                <a href="/auth/login" class="login-btn-new">Login / Signup</a>
                 {% endif %}
             </div>
         </nav>
@@ -740,7 +750,7 @@
                 <label class="deposit-option-card"
                     style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 8px; padding: 15px; cursor: pointer; transition: all 0.3s ease; position: relative; display: block;">
                     <input type="radio" name="deposit" value="cash" style="display: none;">
-                    <div style="font-weight: 600; color: #1a202c; margin-bottom: 5px;">₹15,000 Cash</div>
+                    <div style="font-weight: 600; color: #1a202c; margin-bottom: 5px;">â‚¹15,000 Cash</div>
                     <div style="font-size: 12px; color: #4a5568;">Fully refundable</div>
                 </label>
             </div>
@@ -755,18 +765,18 @@
             <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
                 <button type="button" class="damage-protection-btn" data-protection="0" data-price="0"
                     style="flex: 1; min-width: 120px; padding: 20px; background: #ffffff; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-align: center;">
-                    <div style="font-size: 24px; font-weight: 700; color: #1a202c; margin-bottom: 8px;">₹0</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #1a202c; margin-bottom: 8px;">â‚¹0</div>
                     <div style="font-size: 12px; color: #4a5568; line-height: 1.4;">Pay full amount in case of any
-                        damage. Minimum ₹5,000 for any small damage.</div>
+                        damage. Minimum â‚¹5,000 for any small damage.</div>
                 </button>
                 <button type="button" class="damage-protection-btn" data-protection="277" data-price="277"
                     style="flex: 1; min-width: 120px; padding: 20px; background: #ffffff; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-align: center;">
-                    <div style="font-size: 24px; font-weight: 700; color: #1a202c; margin-bottom: 8px;">₹277</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #1a202c; margin-bottom: 8px;">â‚¹277</div>
                     <div style="font-size: 12px; color: #4a5568; line-height: 1.4;">Pay 70% of damage amount</div>
                 </button>
                 <button type="button" class="damage-protection-btn" data-protection="477" data-price="477"
                     style="flex: 1; min-width: 120px; padding: 20px; background: #ffffff; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-align: center;">
-                    <div style="font-size: 24px; font-weight: 700; color: #1a202c; margin-bottom: 8px;">₹477</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #1a202c; margin-bottom: 8px;">â‚¹477</div>
                     <div style="font-size: 12px; color: #4a5568; line-height: 1.4;">Pay 50% of damage amount</div>
                 </button>
             </div>
@@ -807,23 +817,23 @@
                 <li class="pricing-item">
                     <span class="pricing-item-name">Car Price</span>
                     <span class="pricing-item-amount" id="carPriceAmount">
-                        {% if pricing_breakdown %}₹{{ "{:,.0f}".format(pricing_breakdown.base_rental) }}{% else %}₹0{%
+                        {% if pricing_breakdown %}â‚¹{{ "{:,.0f}".format(pricing_breakdown.base_rental) }}{% else %}â‚¹0{%
                         endif %}
                     </span>
                 </li>
                 <li class="pricing-item" id="damageProtectionItem">
                     <span class="pricing-item-name">Damage Protection</span>
-                    <span class="pricing-item-amount" id="damageProtectionAmount">₹0</span>
+                    <span class="pricing-item-amount" id="damageProtectionAmount">â‚¹0</span>
                 </li>
                 <li class="pricing-item" id="discountItem" style="display: none;">
                     <span class="pricing-item-name" style="color: #059669;">Discount Applied</span>
-                    <span class="pricing-item-amount" id="discountAmount" style="color: #059669;">-₹0</span>
+                    <span class="pricing-item-amount" id="discountAmount" style="color: #059669;">-â‚¹0</span>
                 </li>
             </ul>
             <div class="pricing-total">
                 <span class="pricing-total-label">Total Amount</span>
                 <span class="pricing-total-amount" id="totalAmount">
-                    {% if pricing_breakdown %}₹{{ "{:,.0f}".format(pricing_breakdown.total) }}{% else %}₹0{% endif %}
+                    {% if pricing_breakdown %}â‚¹{{ "{:,.0f}".format(pricing_breakdown.total) }}{% else %}â‚¹0{% endif %}
                 </span>
             </div>
         </div>
@@ -869,7 +879,7 @@
                     {% if user.aadhaar_front %}
                     <div class="kyc-preview">
                         <img src="{{ user.aadhaar_front }}" alt="Aadhaar Front" onerror="this.style.display='none'">
-                        <div class="kyc-upload-status uploaded">✓ Uploaded</div>
+                        <div class="kyc-upload-status uploaded">âœ“ Uploaded</div>
                     </div>
                     {% else %}
                     <div class="kyc-upload-area">
@@ -886,7 +896,7 @@
                     {% if user.aadhaar_back %}
                     <div class="kyc-preview">
                         <img src="{{ user.aadhaar_back }}" alt="Aadhaar Back" onerror="this.style.display='none'">
-                        <div class="kyc-upload-status uploaded">✓ Uploaded</div>
+                        <div class="kyc-upload-status uploaded">âœ“ Uploaded</div>
                     </div>
                     {% else %}
                     <div class="kyc-upload-area">
@@ -903,7 +913,7 @@
                     {% if user.drivinglicense_front %}
                     <div class="kyc-preview">
                         <img src="{{ user.drivinglicense_front }}" alt="DL Front" onerror="this.style.display='none'">
-                        <div class="kyc-upload-status uploaded">✓ Uploaded</div>
+                        <div class="kyc-upload-status uploaded">âœ“ Uploaded</div>
                     </div>
                     {% else %}
                     <div class="kyc-upload-area">
@@ -920,7 +930,7 @@
                     {% if user.drivinglicense_back %}
                     <div class="kyc-preview">
                         <img src="{{ user.drivinglicense_back }}" alt="DL Back" onerror="this.style.display='none'">
-                        <div class="kyc-upload-status uploaded">✓ Uploaded</div>
+                        <div class="kyc-upload-status uploaded">âœ“ Uploaded</div>
                     </div>
                     {% else %}
                     <div class="kyc-upload-area">
@@ -938,13 +948,13 @@
         <div class="terms-section">
             <div class="terms-header" onclick="toggleTerms()">
                 <h3>Terms and Conditions & Risk Declaration</h3>
-                <span class="terms-toggle" id="termsToggle">▼</span>
+                <span class="terms-toggle" id="termsToggle">â–¼</span>
             </div>
             <div class="terms-content" id="termsContent">
                 <div class="terms-body">
                     <div
                         style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #e2e8f0;">
-                        <h1 style="font-size: 24px; font-weight: 700; color: #1a202c; margin-bottom: 10px;">GoGo Cars –
+                        <h1 style="font-size: 24px; font-weight: 700; color: #1a202c; margin-bottom: 10px;">GoGo Cars â€“
                             Terms and Conditions & Risk Declaration</h1>
                         <p style="font-size: 14px; color: #64748b; margin: 5px 0;">(operated by GoGo enterprises)</p>
                         <p style="font-size: 12px; color: #475569; margin: 5px 0;">Phone: 8121765714 | Email:
@@ -1009,9 +1019,9 @@
                         No refund for extra fuel and no refund for fastag.</p>
 
                     <h2>6. Payments & Deposits</h2>
-                    <p>All charges must be paid in advance. Security deposit refund will be processed within 7–10
+                    <p>All charges must be paid in advance. Security deposit refund will be processed within 7â€“10
                         working days post inspection. Bike + RC or laptop or cash (minimum 10000rs for small cars and it
-                        will change depends on the car model premium cars – 30000rs min).</p>
+                        will change depends on the car model premium cars â€“ 30000rs min).</p>
                     <p>In the event that the vehicle is damaged during the rental period, the cost of repairs shall be
                         determined by GoGo Cars, and the security deposit shall be retained until all repairs have been
                         fully completed.</p>
@@ -1115,7 +1125,7 @@
                         borne by the renter, without prejudice to GoGo Cars' right to recover dues by other legal means.
                     </p>
 
-                    <h2>18. Accident, Injury & Death – Complete Indemnity</h2>
+                    <h2>18. Accident, Injury & Death â€“ Complete Indemnity</h2>
                     <p>The renter acknowledges that the vehicle is operated entirely at the renters own risk. GoGo Cars,
                         its proprietor, employees, agents or representatives shall bear no liability whatsoever for
                         accidents, injury, disability, death or third party claims. The renter agrees to fully indemnify
@@ -1181,21 +1191,21 @@
                             </div>
                             <div>
                                 <p><strong>Parking - 2</strong></p>
-                                <p>Road No – 8, plot no 146,<br>
+                                <p>Road No â€“ 8, plot no 146,<br>
                                     Ayyappa Society, Madhapur,<br>
                                     Hyderabad, Telangana - 500081</p>
                                 <p>+91 9052775477</p>
                             </div>
                             <div>
                                 <p><strong>Corporate office</strong></p>
-                                <p>5 – 307/3, Opp Power sub station<br>
+                                <p>5 â€“ 307/3, Opp Power sub station<br>
                                     Rtc, colony, Chilakaluripeta,<br>
                                     Guntur, Andrapradesh - 522616</p>
                                 <p>+91 9133135477</p>
                             </div>
                         </div>
                         <p style="margin-top: 15px; text-align: center;">
-                            <strong>GST – 36BTQPG9657M1ZO</strong><br>
+                            <strong>GST â€“ 36BTQPG9657M1ZO</strong><br>
                             gogocars5477@gmail.com | +91 8121765714 | www.gogocar.in
                         </p>
                     </div>
@@ -1224,8 +1234,7 @@
                     {% endif %}
                 </div>
             </div>
-            <button class="pay-button" id="payButton" {% if not kyc_complete %}disabled{% endif %}
-                onclick="if (!checkTermsAccepted()) { alert('Please accept the Terms and Conditions to proceed.'); document.getElementById('termsAcceptCheckbox').focus(); return false; }">
+            <button class="pay-button" id="payButton" {% if not kyc_complete %}disabled{% endif %}>
                 {% if kyc_complete %}
                 Pay Now
                 {% else %}
@@ -1354,7 +1363,7 @@
             });
         });
 
-        // Set default selection (₹0)
+        // Set default selection (â‚¹0)
         if (damageProtectionButtons.length > 0) {
             damageProtectionButtons[0].classList.add('selected');
         }
@@ -1435,44 +1444,44 @@
                     car_id: carId,
                     hours: hours,
                     damage_protection: selectedDamageProtection
-                };
+        
 
-                if (couponCode) {
-                    requestBody.coupon_code = couponCode;
-                } else if (appliedCoupon) {
-                    requestBody.coupon_code = appliedCoupon.coupon_code;
-                }
+                if(couponCode) {
+                        requestBody.coupon_code = couponCode;
+                    } else if(appliedCoupon) {
+                        requestBody.coupon_code = appliedCoupon.coupon_code;
+                    }
 
                 const response = await fetch('/payments/calculate-price', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify(requestBody)
-                });
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify(requestBody)
+                    });
 
-                if (!response.ok) {
-                    throw new Error('Failed to calculate price');
-                }
+                    if(!response.ok) {
+                        throw new Error('Failed to calculate price');
+            }
 
                 const result = await response.json();
 
-                if (!result.success) {
-                    throw new Error(result.detail || 'Failed to calculate price');
-                }
+            if (!result.success) {
+                throw new Error(result.detail || 'Failed to calculate price');
+            }
 
-                currentPricing = result.pricing;
+            currentPricing = result.pricing;
 
-                // Update applied coupon if coupon was used
-                if (result.coupon_applied && result.coupon_id) {
-                    appliedCoupon = {
-                        coupon_id: result.coupon_id,
-                        coupon_code: couponCode || (appliedCoupon ? appliedCoupon.coupon_code : ''),
-                        discount_amount: result.pricing.discount
-                    };
+            // Update applied coupon if coupon was used
+            if (result.coupon_applied && result.coupon_id) {
+                appliedCoupon = {
+                    coupon_id: result.coupon_id,
+                    coupon_code: couponCode || (appliedCoupon ? appliedCoupon.coupon_code : ''),
+                    discount_amount: result.pricing.discount
+            
                     document.getElementById('appliedCouponCode').textContent = appliedCoupon.coupon_code;
-                    document.getElementById('appliedCouponDiscount').textContent = `-₹${result.pricing.discount.toLocaleString('en-IN')}`;
+                    document.getElementById('appliedCouponDiscount').textContent = `-â‚¹${result.pricing.discount.toLocaleString('en-IN')}`;
                     document.getElementById('appliedCoupon').style.display = 'block';
                     document.getElementById('couponCode').value = '';
                     document.getElementById('couponMessage').style.display = 'none';
@@ -1485,13 +1494,13 @@
                 }
 
                 // Update display with backend-calculated values
-                document.getElementById('carPriceAmount').textContent = `₹${currentPricing.base_rental.toLocaleString('en-IN')}`;
+                document.getElementById('carPriceAmount').textContent = `â‚¹${currentPricing.base_rental.toLocaleString('en-IN')}`;
 
                 // Update damage protection amount
                 const damageProtectionItem = document.getElementById('damageProtectionItem');
                 const damageProtectionAmount = document.getElementById('damageProtectionAmount');
                 if (damageProtectionItem && damageProtectionAmount) {
-                    damageProtectionAmount.textContent = `₹${selectedDamageProtection.toLocaleString('en-IN')}`;
+                    damageProtectionAmount.textContent = `â‚¹${selectedDamageProtection.toLocaleString('en-IN')}`;
                 }
 
                 // Show/hide discount item
@@ -1499,12 +1508,12 @@
                 const discountAmount = document.getElementById('discountAmount');
                 if (currentPricing.discount > 0) {
                     discountItem.style.display = 'flex';
-                    discountAmount.textContent = `-₹${currentPricing.discount.toLocaleString('en-IN')}`;
+                    discountAmount.textContent = `-â‚¹${currentPricing.discount.toLocaleString('en-IN')}`;
                 } else {
                     discountItem.style.display = 'none';
                 }
 
-                document.getElementById('totalAmount').textContent = `₹${currentPricing.total.toLocaleString('en-IN')}`;
+                document.getElementById('totalAmount').textContent = `â‚¹${currentPricing.total.toLocaleString('en-IN')}`;
 
                 // Re-enable apply button
                 const applyBtn = document.getElementById('applyCouponBtn');
@@ -1628,8 +1637,9 @@
             }
 
             // Check phone number if home delivery is selected
-            const homeDelivery = {{ 'true' if home_delivery else 'false' }
-        };
+            const homeDelivery = {{ 'true' if home_delivery else 'false' }};
+
+
         if (homeDelivery) {
             const phoneInput = document.getElementById('phoneNumber');
             if (phoneInput) {
@@ -1666,7 +1676,6 @@
                 }
             }
         }
-
         const button = this;
         const originalText = button.innerHTML;
         button.disabled = true;

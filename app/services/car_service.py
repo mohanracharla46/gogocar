@@ -70,6 +70,9 @@ class CarService:
                         image_urls.append(url)
                     except Exception as e:
                         logger.error(f"Error uploading image: {str(e)}")
+                        # Fail fast if credentials are missing or invalid
+                        if "Unable to locate credentials" in str(e) or "InvalidCredentials" in str(e) or "Access Denied" in str(e) or "ClientError" in str(e):
+                            raise Exception(f"S3 Upload Failed: {str(e)}")
                 
                 # Update car with image URLs
                 if image_urls:
