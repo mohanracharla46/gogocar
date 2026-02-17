@@ -6,47 +6,63 @@
 
 {% block content %}
 <div class="card">
-    <div class="card-header">
-        <h3><i class="fas fa-car-side" style="color: var(--primary); margin-right: 10px;"></i>All Cars</h3>
-        <a href="/admin/cars/create" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New Car
-        </a>
+    <div class="card-header" style="flex-wrap: wrap; gap: 20px;">
+        <h3><i class="fas fa-car-side" style="color: var(--primary); margin-right: 12px;"></i>Fleet Management</h3>
+        <div
+            style="display: flex; gap: 15px; flex-grow: 1; min-width: 300px; justify-content: flex-end; align-items: center;">
+            <div style="position: relative; flex-grow: 1; max-width: 400px;">
+                <i class="fas fa-search" style="position: absolute; left: 15px; top: 14px; color: var(--gray);"></i>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search by brand or model..."
+                    style="padding-left: 45px; margin-bottom: 0;">
+            </div>
+            <a href="/admin/cars/create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Car
+            </a>
+        </div>
     </div>
-    <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search cars..." style="max-width: 300px;">
-        <select id="filterActive" class="form-control" style="max-width: 200px;">
-            <option value="">All Cars</option>
+
+    <div
+        style="margin-bottom: 30px; display: flex; gap: 15px; align-items: center; background: #f8fafc; padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-filter" style="color: var(--primary); font-size: 14px;"></i>
+            <span style="font-weight: 700; font-size: 14px; color: var(--dark);">Quick Filters:</span>
+        </div>
+        <select id="filterActive" class="form-control" style="max-width: 160px; margin-bottom: 0;">
+            <option value="">All Status</option>
             <option value="true">Active Only</option>
             <option value="false">Inactive Only</option>
         </select>
-        <select id="filterType" class="form-control" style="max-width: 200px;">
+        <select id="filterType" class="form-control" style="max-width: 160px; margin-bottom: 0;">
             <option value="">All Types</option>
             <option value="SUV">SUV</option>
             <option value="SEDAN">SEDAN</option>
             <option value="HATCHBACK">HATCHBACK</option>
         </select>
-        <button onclick="loadCars()" class="btn btn-primary">
-            <i class="fas fa-filter"></i> Filter
+        <button onclick="loadCars()" class="btn btn-outline" style="padding: 10px 20px;">
+            Apply Filters
         </button>
     </div>
-    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+
+    <div id="loadingSpinner" class="spinner" style="display: none; margin: 50px auto;"></div>
+
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Image</th>
-                    <th>Brand & Model</th>
+                    <th>Car Identity</th>
                     <th>Type</th>
-                    <th>Price/Day</th>
-                    <th>Features</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>Price / Day</th>
+                    <th>Key Features</th>
+                    <th>Visibility</th>
+                    <th style="text-align: right;">Quick Actions</th>
                 </tr>
             </thead>
             <tbody id="carsTable">
                 <tr>
-                    <td colspan="8" style="text-align: center; color: var(--gray);">Loading...</td>
+                    <td colspan="6" style="text-align: center; padding: 60px; color: var(--gray);">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 15px;">Synchronizing fleet data...</p>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -91,46 +107,50 @@
                     const images = car.images ? (typeof car.images === 'string' ? car.images.split(',') : []) : [];
                     const imageUrl = images[0] || '/static/img/landing.png';
 
-                    // Handle features - could be array, string, or null
                     let featuresDisplay = '<span style="color: var(--gray);">-</span>';
                     if (car.features) {
                         if (Array.isArray(car.features) && car.features.length > 0) {
-                            featuresDisplay = car.features.slice(0, 2).join(', ') + (car.features.length > 2 ? '...' : '');
+                            featuresDisplay = car.features.slice(0, 2).map(f => `<span style="font-size: 11px; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; border: 1px solid #e2e8f0; margin-right: 4px;">${f}</span>`).join('') + (car.features.length > 2 ? '...' : '');
                         } else if (typeof car.features === 'string' && car.features.trim()) {
-                            featuresDisplay = car.features;
+                            featuresDisplay = `<span style="font-size: 11px; background: #f1f5f9; padding: 2px 8px; border-radius: 4px;">${car.features.slice(0, 20)}...</span>`;
                         }
                     }
 
                     return `
                         <tr>
-                            <td>#${car.id}</td>
                             <td>
-                                <img src="${imageUrl}" alt="${car.brand} ${car.car_model}" 
-                                     style="width: 60px; height: 40px; object-fit: cover; border-radius: 6px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="position: relative;">
+                                        <img src="${imageUrl}" alt="${car.brand}" 
+                                             style="width: 80px; height: 50px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                                        <div style="position: absolute; -top: 8px; -left: 8px; background: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; border: 1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.05);">ID</div>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span style="font-weight: 800; color: var(--dark); font-size: 15px;">${car.brand}</span>
+                                        <span style="font-size: 12px; color: var(--gray);">${car.car_model} <span style="margin: 0 5px; opacity: 0.3;">|</span> #${car.id}</span>
+                                    </div>
+                                </div>
                             </td>
-                            <td>
-                                <strong>${car.brand}</strong><br>
-                                <small style="color: var(--gray);">${car.car_model}</small>
-                            </td>
-                            <td><span class="badge badge-info">${car.car_type || '-'}</span></td>
-                            <td>₹${(car.base_price || 0).toLocaleString('en-IN')}</td>
+                            <td><span class="badge badge-info" style="background: rgba(59, 130, 246, 0.1); color: #2563eb;">${car.car_type || '-'}</span></td>
+                            <td><span style="font-weight: 800; color: var(--primary); font-size: 15px;">₹${(car.base_price || 0).toLocaleString('en-IN')}</span></td>
                             <td>${featuresDisplay}</td>
                             <td>
                                 <span class="badge badge-${car.active ? 'success' : 'danger'}">
-                                    ${car.active ? 'Active' : 'Inactive'}
+                                    <i class="fas fa-${car.active ? 'check-circle' : 'times-circle'}" style="margin-right: 5px;"></i>
+                                    ${car.active ? 'Visible' : 'Hidden'}
                                 </span>
                             </td>
-                            <td>
-                                <div style="display: flex; gap: 5px;">
-                                    <a href="/admin/cars/${car.id}/edit" class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;">
+                            <td style="text-align: right;">
+                                <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                    <a href="/admin/cars/${car.id}/edit" class="btn btn-outline" style="padding: 8px; width: 36px; height: 36px; justify-content: center;" title="Edit Car">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button onclick="toggleCarActive(${car.id})" class="btn ${car.active ? 'btn-warning' : 'btn-success'}" 
-                                            style="padding: 5px 10px; font-size: 12px;">
-                                        <i class="fas fa-${car.active ? 'ban' : 'check'}"></i>
+                                    <button onclick="toggleCarActive(${car.id})" class="btn ${car.active ? 'btn-outline' : 'btn-primary'}" 
+                                            style="padding: 8px; width: 36px; height: 36px; justify-content: center; ${car.active ? 'color: var(--warning); border-color: var(--warning);' : ''}" title="${car.active ? 'Deactivate' : 'Activate'}">
+                                        <i class="fas fa-${car.active ? 'eye-slash' : 'eye'}"></i>
                                     </button>
-                                    <button onclick="deleteCar(${car.id})" class="btn btn-danger" 
-                                            style="padding: 5px 10px; font-size: 12px;">
+                                    <button onclick="deleteCar(${car.id})" class="btn btn-outline" 
+                                            style="padding: 8px; width: 36px; height: 36px; justify-content: center; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);" title="Delete Car">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>

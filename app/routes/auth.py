@@ -238,6 +238,47 @@ async def logout(request: Request):
     return response
 
 
+@router.post("/update-profile")
+async def update_profile(
+    request: Request,
+    firstname: str = Form(None),
+    lastname: str = Form(None),
+    email: str = Form(None),
+    phone: str = Form(None),
+    permanentaddress: str = Form(None),
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    """Update profile details"""
+    try:
+        if current_user.get("error"):
+            raise HTTPException(status_code=401, detail="Unauthorized")
+        
+        user_id = current_user.get("user_id")
+        user = db.query(UserProfile).filter(UserProfile.id == user_id).first()
+        
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        if firstname: user.firstname = firstname.strip()
+        if lastname: user.lastname = lastname.strip()
+        if email: 
+            email = email.strip().lower()
+            if email != user.email:
+                existing = db.query(UserProfile).filter(UserProfile.email == email).first()
+                if existing:
+                    return JSONResponse(status_code=400, content={"success": False, "message": "Email already in use"})
+                user.email = email
+        if phone: user.phone = phone.strip()
+        if permanentaddress: user.permanentaddress = permanentaddress.strip()
+        
+        db.commit()
+        return JSONResponse({"success": True, "message": "Profile updated successfully"})
+    except Exception as e:
+        logger.error(f"Profile update error: {str(e)}")
+        return JSONResponse(status_code=500, content={"success": False, "message": "Update failed"})
+
+
 @router.post("/update-phone")
 async def update_phone(
     request: Request,
@@ -277,15 +318,17 @@ async def upload_kyc_document(
     current_user: dict = Depends(get_current_user)
 ):
     """Upload KYC document"""
-    from app.services.kyc_service import kyc_service
     from datetime import datetime
-    
     try:
         if current_user.get("error"):
             raise HTTPException(status_code=401, detail="Unauthorized")
         
         user_id = current_user.get("user_id")
+        from app.services.kyc_service import kyc_service
         file_url = await kyc_service.upload_kyc_document(db, user_id, document_type, file)
+        
+        if not file_url:
+            raise HTTPException(status_code=400, detail="Upload failed. Check file format or size.")
         
         return JSONResponse({
             "success": True,
@@ -293,6 +336,8 @@ async def upload_kyc_document(
             "file_url": file_url,
             "uploaded_at": datetime.now().isoformat()
         })
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"KYC upload error: {str(e)}")
-        raise HTTPException(status_code=500, detail="Upload failed")
+        raise HTTPException(status_code=500, detail=str(e))

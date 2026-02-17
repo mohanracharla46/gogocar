@@ -13,7 +13,7 @@ class KYCService:
     """Service for KYC document management"""
     
     ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.pdf'}
-    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+    MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
     
     @staticmethod
     def validate_file(file) -> bool:
@@ -70,6 +70,13 @@ class KYCService:
                 return None
             
             # Get user profile first
+            # Check file size using the .size attribute available in modern FastAPI/Starlette
+            file_size = file.size if hasattr(file, 'size') else 0
+            
+            if file_size > KYCService.MAX_FILE_SIZE:
+                logger.error(f"File too large: {file_size} bytes")
+                return None
+
             user = db.query(UserProfile).filter(UserProfile.id == user_id).first()
             if not user:
                 logger.error(f"User not found: {user_id}")
@@ -92,7 +99,11 @@ class KYCService:
             if (user.aadhaar_front and user.aadhaar_back and 
                 user.drivinglicense_front and user.drivinglicense_back):
                 from app.db.models import KYCStatus
-                if user.kyc_status.value == 'NOT_SUBMITTED':
+                current_status = user.kyc_status
+                if hasattr(current_status, 'value'):
+                    current_status = current_status.value
+                
+                if current_status == 'NOT_SUBMITTED':
                     user.kyc_status = KYCStatus.PENDING
             
             db.commit()

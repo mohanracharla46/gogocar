@@ -461,6 +461,7 @@ async def create_payment(
             <form id="paymentForm" method="post" action="{ccavenue_service.payment_url}">
                 <input type="hidden" name="encRequest" value="{form_data['encRequest']}"/>
                 <input type="hidden" name="access_code" value="{form_data['access_code']}"/>
+                <input type="hidden" name="merchant_id" value="{ccavenue_service.merchant_id}"/>
             </form>
             <script>
                 document.getElementById('paymentForm').submit();

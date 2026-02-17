@@ -6,45 +6,62 @@
 
 {% block content %}
 <div class="card">
-    <div class="card-header">
-        <h3><i class="fas fa-calendar-check" style="color: var(--primary); margin-right: 10px;"></i>All Bookings</h3>
+    <div class="card-header" style="flex-wrap: wrap; gap: 20px;">
+        <h3><i class="fas fa-calendar-alt" style="color: var(--primary); margin-right: 12px;"></i>Reservations Hub</h3>
+        <div style="display: flex; gap: 12px;">
+            <button onclick="resetFilters()" class="btn btn-outline" style="padding: 10px 15px;">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button onclick="loadBookings()" class="btn btn-primary">
+                <i class="fas fa-search"></i> Find Bookings
+            </button>
+        </div>
     </div>
-    <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-        <select id="filterStatus" class="form-control" style="max-width: 200px;">
-            <option value="">All Status</option>
-            <option value="PENDING">Pending</option>
-            <option value="APPROVED">Approved</option>
-            <option value="ONGOING">Ongoing</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="CANCELLED">Cancelled</option>
-        </select>
-        <input type="number" id="filterUserId" class="form-control" placeholder="User ID" style="max-width: 150px;">
-        <input type="number" id="filterCarId" class="form-control" placeholder="Car ID" style="max-width: 150px;">
-        <button onclick="loadBookings()" class="btn btn-primary">
-            <i class="fas fa-filter"></i> Filter
-        </button>
-        <button onclick="resetFilters()" class="btn btn-outline">
-            <i class="fas fa-redo"></i> Reset
-        </button>
+
+    <div
+        style="margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; background: #f8fafc; padding: 25px; border-radius: 20px; border: 1px solid var(--border);">
+        <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-size: 11px; text-transform: uppercase; color: var(--gray);">Booking Status</label>
+            <select id="filterStatus" class="form-control" style="margin-top: 5px;">
+                <option value="">All Statuses</option>
+                <option value="PENDING">Pending Approval</option>
+                <option value="APPROVED">Confirmed</option>
+                <option value="ONGOING">In Transit</option>
+                <option value="COMPLETED">Finished</option>
+                <option value="CANCELLED">Voided</option>
+            </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-size: 11px; text-transform: uppercase; color: var(--gray);">Customer Search</label>
+            <input type="number" id="filterUserId" class="form-control" placeholder="Search by User ID..."
+                style="margin-top: 5px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-size: 11px; text-transform: uppercase; color: var(--gray);">Vehicle Search</label>
+            <input type="number" id="filterCarId" class="form-control" placeholder="Search by Car ID..."
+                style="margin-top: 5px;">
+        </div>
     </div>
-    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+
+    <div id="loadingSpinner" class="spinner" style="display: none; margin: 40px auto;"></div>
+
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>User</th>
-                    <th>Car</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Total Amount</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>Reservation Info</th>
+                    <th>Rental Period</th>
+                    <th>Payment</th>
+                    <th>Current State</th>
+                    <th style="text-align: right;">Operations</th>
                 </tr>
             </thead>
             <tbody id="bookingsTable">
                 <tr>
-                    <td colspan="8" style="text-align: center; color: var(--gray);">Loading...</td>
+                    <td colspan="5" style="text-align: center; padding: 60px; color: var(--gray);">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 15px;">Retrieving latest reservations...</p>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -79,7 +96,6 @@
 
             if (data.items && data.items.length > 0) {
                 bookingsTable.innerHTML = data.items.map(booking => {
-                    // Build user name - show firstname and lastname with space
                     let userName = `User #${booking.user_id}`;
                     if (booking.user_firstname || booking.user_lastname) {
                         const first = booking.user_firstname || '';
@@ -87,7 +103,6 @@
                         userName = `${first} ${last}`.trim() || userName;
                     }
 
-                    // Build car name
                     let carName = `Car #${booking.car_id}`;
                     if (booking.car_brand || booking.car_model) {
                         const brand = booking.car_brand || '';
@@ -97,40 +112,44 @@
 
                     return `
                     <tr>
-                        <td>#${booking.id}</td>
                         <td>
-                            <a href="/admin/users/${booking.user_id}" style="color: var(--primary); text-decoration: none; font-weight: 500;" 
-                               onmouseover="this.style.textDecoration='underline'" 
-                               onmouseout="this.style.textDecoration='none'">
-                                ${userName}
-                            </a>
+                            <div style="display: flex; flex-direction: column;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-weight: 800; color: var(--dark);">#${booking.id}</span>
+                                    <span style="width: 4px; height: 4px; border-radius: 50%; background: var(--border);"></span>
+                                    <a href="/admin/users/${booking.user_id}" style="color: var(--primary); text-decoration: none; font-weight: 600; font-size: 13px;">${userName}</a>
+                                </div>
+                                <div style="margin-top: 4px; font-size: 12px; color: var(--gray);">
+                                    <i class="fas fa-car" style="font-size: 10px; margin-right: 5px;"></i> ${carName}
+                                </div>
+                            </div>
                         </td>
                         <td>
-                            <a href="/admin/cars/${booking.car_id}/edit" style="color: var(--primary); text-decoration: none; font-weight: 500;" 
-                               onmouseover="this.style.textDecoration='underline'" 
-                               onmouseout="this.style.textDecoration='none'">
-                                ${carName}
-                            </a>
+                            <div style="display: flex; flex-direction: column; font-size: 13px;">
+                                <span style="font-weight: 600; color: #334155;">${formatDate(booking.start_time)}</span>
+                                <span style="font-size: 11px; color: var(--gray);">to ${formatDate(booking.end_time)}</span>
+                            </div>
                         </td>
-                        <td>${formatDate(booking.start_time)}</td>
-                        <td>${formatDate(booking.end_time)}</td>
-                        <td>${formatCurrency(booking.total_amount)}</td>
+                        <td>
+                            <div style="font-weight: 800; color: var(--primary); font-size: 15px;">${formatCurrency(booking.total_amount)}</div>
+                            <div style="font-size: 10px; color: var(--gray); font-weight: 600;">INC. TAXES</div>
+                        </td>
                         <td><span class="badge badge-${getStatusColor(booking.order_status)}">${booking.order_status}</span></td>
-                        <td>
-                            <div style="display: flex; gap: 5px;">
-                                <a href="/admin/bookings/${booking.id}" class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;">
-                                    <i class="fas fa-eye"></i> View
+                        <td style="text-align: right;">
+                            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                <a href="/admin/bookings/${booking.id}" class="btn btn-outline" style="padding: 8px; width: 36px; height: 36px; justify-content: center;" title="View Details">
+                                    <i class="fas fa-eye"></i>
                                 </a>
                                 ${booking.order_status === 'PENDING' ? `
-                                    <button onclick="updateStatus(${booking.id}, 'APPROVED')" class="btn btn-success" 
-                                            style="padding: 5px 10px; font-size: 12px;">
-                                        <i class="fas fa-check"></i> Approve
+                                    <button onclick="updateStatus(${booking.id}, 'APPROVED')" class="btn btn-primary" 
+                                            style="padding: 8px; width: 36px; height: 36px; justify-content: center;" title="Approve">
+                                        <i class="fas fa-check"></i>
                                     </button>
                                 ` : ''}
                                 ${['PENDING', 'APPROVED', 'BOOKED'].includes(booking.order_status) ? `
-                                    <button onclick="cancelBooking(${booking.id})" class="btn btn-danger" 
-                                            style="padding: 5px 10px; font-size: 12px;">
-                                        <i class="fas fa-times"></i> Cancel
+                                    <button onclick="cancelBooking(${booking.id})" class="btn btn-outline" 
+                                            style="padding: 8px; width: 36px; height: 36px; justify-content: center; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);" title="Cancel Booking">
+                                        <i class="fas fa-times"></i>
                                     </button>
                                 ` : ''}
                             </div>

@@ -75,8 +75,21 @@ class Settings(BaseSettings):
 
 @lru_cache()
 def get_settings() -> Settings:
-    """Get cached settings instance"""
-    return Settings()
+    """Get cached settings instance with placeholder filtering"""
+    s = Settings()
+    # Filter out common placeholders from environment
+    placeholders = ["XXXX", "your-", "replace-"]
+    
+    def is_placeholder(val: Optional[str]) -> bool:
+        if not val: return True
+        return any(p in val for p in placeholders) or any(p in val.lower() for p in placeholders)
+
+    if is_placeholder(s.AWS_ACCESS_KEY_ID):
+        s.AWS_ACCESS_KEY_ID = None
+    if is_placeholder(s.AWS_SECRET_ACCESS_KEY):
+        s.AWS_SECRET_ACCESS_KEY = None
+        
+    return s
 
 
 # Global settings instance

@@ -4,6 +4,7 @@ Handles pricing breakdown, protection fee, GST, and total calculation
 """
 from typing import Dict, Optional
 from datetime import datetime
+import math
 
 from app.core.logging_config import logger
 
@@ -19,16 +20,17 @@ class PaymentCalculationService:
         hours: int
     ) -> float:
         """
-        Calculate base rental price
+        Calculate base rental price (base_price is per day)
         
         Args:
-            base_price: Hourly price per hour
+            base_price: Daily price
             hours: Number of hours
             
         Returns:
             Base rental price
         """
-        return base_price * max(1, hours)
+        days = math.ceil(max(1, hours) / 24)
+        return base_price * days
     
     @staticmethod
     def calculate_protection_fee(

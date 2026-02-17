@@ -13,19 +13,35 @@ from datetime import datetime
 from app.core.config import settings
 from app.core.logging_config import logger
 
-
 class S3Service:
-    """Service for S3 file operations"""
-    
     def __init__(self):
-        self.s3_client = boto3.client(
-            's3',
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-            region_name=settings.AWS_REGION
-        )
-        self.bucket_name = settings.S3_BUCKET_NAME
+        self.aws_access_key = settings.AWS_ACCESS_KEY_ID
+        self.aws_secret_key = settings.AWS_SECRET_ACCESS_KEY
         self.region = settings.AWS_REGION
+        self.bucket_name = settings.S3_BUCKET_NAME
+        
+        # Use local storage if AWS credentials are missing or placeholders
+        is_placeholder = lambda x: not x or "XXXX" in x or "your-" in x.lower()
+        self.use_local_storage = is_placeholder(self.aws_access_key) or is_placeholder(self.aws_secret_key)
+        
+        logger.info(f"S3Service Init: use_local_storage={self.use_local_storage}, Key placeholder={is_placeholder(self.aws_access_key)}, Secret placeholder={is_placeholder(self.aws_secret_key)}")
+        
+        if not self.use_local_storage:
+            try:
+                self.s3_client = boto3.client(
+                    's3',
+                    aws_access_key_id=self.aws_access_key,
+                    aws_secret_access_key=self.aws_secret_key,
+                    region_name=self.region
+                )
+            except Exception as e:
+                logger.error(f"Failed to initialize S3 client: {str(e)}. Falling back to local storage.")
+                self.use_local_storage = True
+        else:
+            logger.info("Using local storage for uploads.")
+            # Ensure local upload directories exist
+            os.makedirs("static/uploads/kyc", exist_ok=True)
+            os.makedirs("static/uploads/cars", exist_ok=True)
     
     async def upload_file(
         self,
@@ -54,13 +70,25 @@ class S3Service:
             if not object_name.startswith(folder):
                 object_name = f"{folder}/{object_name}"
             
-            # Read file content into memory to avoid file pointer issues
-            # Reset file pointer first
+            # Reset file pointer
             await file.seek(0)
             file_content = await file.read()
-            await file.seek(0)  # Reset again for potential reuse
+            await file.seek(0)
             
-            # Upload from bytes
+            if self.use_local_storage:
+                # Save locally to static/uploads
+                local_path = Path("static/uploads") / object_name
+                local_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                with open(local_path, "wb") as f:
+                    f.write(file_content)
+                
+                # Return local URL (assuming domain is handled or relative works)
+                url = f"/static/uploads/{object_name}"
+                logger.info(f"File saved locally: {url}")
+                return url
+            
+            # Upload to S3
             from io import BytesIO
             file_obj = BytesIO(file_content)
             self.s3_client.upload_fileobj(
@@ -70,17 +98,14 @@ class S3Service:
                 ExtraArgs={'ContentType': file.content_type}
             )
             
-            # Generate URL
+            # Generate S3 URL
             url = f"https://{self.bucket_name}.s3.{self.region}.amazonaws.com/{object_name}"
             
             logger.info(f"File uploaded to S3: {url}")
             return url
             
-        except ClientError as e:
-            logger.error(f"Error uploading file to S3: {str(e)}")
-            raise
         except Exception as e:
-            logger.error(f"Unexpected error uploading file: {str(e)}")
+            logger.error(f"Error in upload_file: {str(e)}")
             raise
     
     async def upload_multiple_files(

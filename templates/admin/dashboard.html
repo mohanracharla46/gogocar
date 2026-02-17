@@ -6,183 +6,246 @@
 
 {% block content %}
 <div class="stats-grid">
-    <div class="stat-card">
-        <h4>Total Bookings</h4>
-        <div class="value">{{ stats.bookings_summary.total if stats else 0 }}</div>
+    <div class="stat-card" style="border-left-color: var(--primary);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h4>Total Bookings</h4>
+                <div class="value">{{ stats.bookings_summary.total if stats else 0 }}</div>
+            </div>
+            <div style="background: rgba(43, 57, 144, 0.1); padding: 12px; border-radius: 12px; color: var(--primary);">
+                <i class="fas fa-calendar-check" style="font-size: 24px;"></i>
+            </div>
+        </div>
         <div class="change">
-            <i class="fas fa-arrow-up"></i> All time
+            <i class="fas fa-chart-line"></i> All time bookings
         </div>
     </div>
     <div class="stat-card" style="border-left-color: var(--success);">
-        <h4>Completed Bookings</h4>
-        <div class="value">{{ stats.bookings_summary.completed if stats else 0 }}</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h4>Completed</h4>
+                <div class="value">{{ stats.bookings_summary.completed if stats else 0 }}</div>
+            </div>
+            <div
+                style="background: rgba(16, 185, 129, 0.1); padding: 12px; border-radius: 12px; color: var(--success);">
+                <i class="fas fa-check-double" style="font-size: 24px;"></i>
+            </div>
+        </div>
         <div class="change" style="color: var(--success);">
-            <i class="fas fa-check-circle"></i> Completed
+            <i class="fas fa-check-circle"></i> Service delivered
         </div>
     </div>
     <div class="stat-card" style="border-left-color: var(--warning);">
-        <h4>Ongoing Bookings</h4>
-        <div class="value">{{ stats.bookings_summary.ongoing if stats else 0 }}</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h4>Ongoing</h4>
+                <div class="value">{{ stats.bookings_summary.ongoing if stats else 0 }}</div>
+            </div>
+            <div
+                style="background: rgba(245, 158, 11, 0.1); padding: 12px; border-radius: 12px; color: var(--warning);">
+                <i class="fas fa-key" style="font-size: 24px;"></i>
+            </div>
+        </div>
         <div class="change" style="color: var(--warning);">
-            <i class="fas fa-clock"></i> Active now
+            <i class="fas fa-clock"></i> Currently active
         </div>
     </div>
     <div class="stat-card" style="border-left-color: var(--info);">
-        <h4>Pending Bookings</h4>
-        <div class="value">{{ stats.bookings_summary.pending if stats else 0 }}</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h4>Pending Tasks</h4>
+                <div class="value">{{ stats.bookings_summary.pending if stats else 0 }}</div>
+            </div>
+            <div style="background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 12px; color: var(--info);">
+                <i class="fas fa-hourglass-half" style="font-size: 24px;"></i>
+            </div>
+        </div>
         <div class="change" style="color: var(--info);">
-            <i class="fas fa-hourglass-half"></i> Awaiting approval
+            <i class="fas fa-info-circle"></i> Needs attention
         </div>
     </div>
 </div>
 
 <div class="stats-grid">
+    <div class="stat-card" style="background: var(--primary-gradient); color: white; border: none;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h4 style="color: rgba(255, 255, 255, 0.7);">Total Revenue</h4>
+                <div class="value" style="color: white;">₹{{ "{:,.0f}".format(stats.revenue_summary.total_revenue if
+                    stats and stats.revenue_summary else 0) }}</div>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.2); padding: 12px; border-radius: 12px; color: white;">
+                <i class="fas fa-wallet" style="font-size: 24px;"></i>
+            </div>
+        </div>
+        <div class="change" style="color: rgba(255, 255, 255, 0.8);">
+            <i class="fas fa-rupee-sign"></i> Gross earnings
+        </div>
+    </div>
     <div class="stat-card" style="border-left-color: var(--success);">
-        <h4>Total Revenue</h4>
-        <div class="value">₹{{ "{:,.0f}".format(stats.revenue_summary.total_revenue if stats and stats.revenue_summary
-            else 0) }}</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h4>Advance Collected</h4>
+                <div class="value">₹{{ "{:,.0f}".format(stats.revenue_summary.advance_collected if stats and
+                    stats.revenue_summary else 0) }}</div>
+            </div>
+            <div
+                style="background: rgba(16, 185, 129, 0.1); padding: 12px; border-radius: 12px; color: var(--success);">
+                <i class="fas fa-hand-holding-usd" style="font-size: 24px;"></i>
+            </div>
+        </div>
         <div class="change" style="color: var(--success);">
-            <i class="fas fa-rupee-sign"></i> Total income
+            <i class="fas fa-shield-alt"></i> Paid upfront
         </div>
     </div>
-    <div class="stat-card" style="border-left-color: var(--primary);">
-        <h4>Advance Collected</h4>
-        <div class="value">₹{{ "{:,.0f}".format(stats.revenue_summary.advance_collected if stats and
-            stats.revenue_summary else 0) }}</div>
-        <div class="change">
-            <i class="fas fa-money-bill-wave"></i> Upfront payments
+    <div class="stat-card" style="border-left-color: var(--secondary);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h4>Balance Due</h4>
+                <div class="value">₹{{ "{:,.0f}".format(stats.revenue_summary.balance_pending if stats and
+                    stats.revenue_summary else 0) }}</div>
+            </div>
+            <div
+                style="background: rgba(255, 107, 53, 0.1); padding: 12px; border-radius: 12px; color: var(--secondary);">
+                <i class="fas fa-coins" style="font-size: 24px;"></i>
+            </div>
         </div>
-    </div>
-    <div class="stat-card" style="border-left-color: var(--warning);">
-        <h4>Balance Pending</h4>
-        <div class="value">₹{{ "{:,.0f}".format(stats.revenue_summary.balance_pending if stats and stats.revenue_summary
-            else 0) }}</div>
-        <div class="change" style="color: var(--warning);">
-            <i class="fas fa-exclamation-circle"></i> To be collected
+        <div class="change" style="color: var(--secondary);">
+            <i class="fas fa-exclamation-triangle"></i> To be collected
         </div>
     </div>
     <div class="stat-card" style="border-left-color: var(--info);">
-        <h4>Cars Currently Rented</h4>
-        <div class="value">{{ stats.cars_currently_rented if stats else 0 }}</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h4>Active Fleet</h4>
+                <div class="value">{{ stats.cars_currently_rented if stats else 0 }}</div>
+            </div>
+            <div style="background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 12px; color: var(--info);">
+                <i class="fas fa-car-side" style="font-size: 24px;"></i>
+            </div>
+        </div>
         <div class="change" style="color: var(--info);">
-            <i class="fas fa-car"></i> Active rentals
+            <i class="fas fa-road"></i> Rented cars
         </div>
     </div>
 </div>
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
-    <!-- Top Performing Cars -->
+<div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; margin-top: 30px;">
+    <!-- Recent Bookings -->
     <div class="card">
         <div class="card-header">
-            <h3><i class="fas fa-trophy" style="color: var(--secondary); margin-right: 10px;"></i>Top Performing Cars
-            </h3>
+            <h3><i class="fas fa-history" style="color: var(--primary); margin-right: 12px;"></i>Recent Bookings</h3>
+            <a href="/admin/bookings" class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;">View All</a>
         </div>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>Car</th>
-                        <th>Bookings</th>
-                        <th>Revenue</th>
-                        <th>Rating</th>
+                        <th>Booking ID</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th style="text-align: right;">Action</th>
                     </tr>
                 </thead>
+                <tbody id="recentBookingsTable">
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--gray);">
+                            <div class="spinner"></div>
+                            <p style="margin-top: 10px;">Syncing data...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top Performing Cars -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-fire" style="color: var(--secondary); margin-right: 12px;"></i>Popular Cars</h3>
+        </div>
+        <div class="table-container">
+            <table style="border: none;">
                 <tbody id="topCarsTable">
                     {% if stats and stats.top_performing_cars %}
                     {% for car in stats.top_performing_cars[:5] %}
                     <tr>
-                        <td>{{ car.car_name }}</td>
-                        <td><span class="badge badge-info">{{ car.total_bookings }}</span></td>
-                        <td>₹{{ "{:,.0f}".format(car.total_revenue) }}</td>
-                        <td>
-                            {% if car.average_rating %}
-                            <span style="color: var(--secondary);">
-                                {% for i in range(car.average_rating|int) %}
-                                <i class="fas fa-star"></i>
-                                {% endfor %}
-                                {{ "%.1f"|format(car.average_rating) }}
-                            </span>
-                            {% else %}
-                            <span style="color: var(--gray);">No ratings</span>
-                            {% endif %}
+                        <td style="padding: 15px 0;">
+                            <div style="display: flex; flex-direction: column;">
+                                <span style="font-weight: 700; color: var(--dark);">{{ car.car_name }}</span>
+                                <span style="font-size: 12px; color: var(--gray);">{{ car.total_bookings }}
+                                    Bookings</span>
+                            </div>
+                        </td>
+                        <td style="text-align: right; padding: 15px 0;">
+                            <div style="font-weight: 800; color: var(--primary);">₹{{
+                                "{:,.0f}".format(car.total_revenue) }}</div>
+                            <div style="font-size: 11px;">
+                                {% if car.average_rating %}
+                                <span style="color: #f59e0b;"><i class="fas fa-star" style="font-size: 10px;"></i> {{
+                                    "%.1f"|format(car.average_rating) }}</span>
+                                {% else %}
+                                <span style="color: var(--gray);">Unrated</span>
+                                {% endif %}
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}
                     {% else %}
                     <tr>
-                        <td colspan="4" style="text-align: center; color: var(--gray);">No data available</td>
+                        <td colspan="2" style="text-align: center; padding: 30px; color: var(--gray);">No data found
+                        </td>
                     </tr>
                     {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
-
-    <!-- Recent Bookings -->
-    <div class="card">
-        <div class="card-header">
-            <h3><i class="fas fa-calendar-alt" style="color: var(--primary); margin-right: 10px;"></i>Recent Bookings
-            </h3>
-            <a href="/admin/bookings" class="btn btn-outline">View All</a>
-        </div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Customer</th>
-                        <th>Status</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody id="recentBookingsTable">
-                    <tr>
-                        <td colspan="4" style="text-align: center; color: var(--gray);">Loading...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>
 
-<div class="card" style="margin-top: 25px;">
+<div class="card" style="margin-top: 30px;">
     <div class="card-header">
-        <h3><i class="fas fa-chart-pie" style="color: var(--info); margin-right: 10px;"></i>Category Performance</h3>
+        <h3><i class="fas fa-layer-group" style="color: var(--info); margin-right: 12px;"></i>Category Insights</h3>
     </div>
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>Category</th>
-                    <th>Total Bookings</th>
-                    <th>Total Revenue</th>
-                    <th>Average Rating</th>
+                    <th style="width: 40%;">Car Category</th>
+                    <th>Bookings</th>
+                    <th>Gross Revenue</th>
+                    <th>Customer Rating</th>
                 </tr>
             </thead>
             <tbody>
                 {% if stats and stats.category_performance %}
                 {% for category, data in stats.category_performance.items() %}
                 <tr>
-                    <td><strong>{{ category }}</strong></td>
-                    <td>{{ data.bookings }}</td>
-                    <td>₹{{ "{:,.0f}".format(data.revenue) }}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></div>
+                            <span style="font-weight: 700;">{{ category }}</span>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-info">{{ data.bookings }}</span></td>
+                    <td><span style="font-weight: 800; color: var(--primary);">₹{{ "{:,.0f}".format(data.revenue)
+                            }}</span></td>
                     <td>
                         {% if data.average_rating %}
-                        <span style="color: var(--secondary);">
-                            {% for i in range(data.average_rating|int) %}
-                            <i class="fas fa-star"></i>
-                            {% endfor %}
-                            {{ "%.1f"|format(data.average_rating) }}
-                        </span>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <i class="fas fa-star" style="color: #f59e0b; font-size: 12px;"></i>
+                            <span style="font-weight: 700;">{{ "%.1f"|format(data.average_rating) }}</span>
+                        </div>
                         {% else %}
-                        <span style="color: var(--gray);">-</span>
+                        <span style="color: var(--gray); font-size: 12px;">N/A</span>
                         {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
                 {% else %}
                 <tr>
-                    <td colspan="4" style="text-align: center; color: var(--gray);">No data available</td>
+                    <td colspan="4" style="text-align: center; padding: 30px; color: var(--gray);">Waiting for
+                        insights...</td>
                 </tr>
                 {% endif %}
             </tbody>
@@ -202,10 +265,14 @@
             if (data.items && data.items.length > 0) {
                 tbody.innerHTML = data.items.map(booking => `
                     <tr>
-                        <td>#${booking.id}</td>
-                        <td>${booking.user_id}</td>
+                        <td><span style="font-weight: 700;">#${booking.id}</span></td>
                         <td><span class="badge badge-${getStatusColor(booking.order_status)}">${booking.order_status}</span></td>
-                        <td>₹${parseFloat(booking.total_amount || 0).toLocaleString('en-IN')}</td>
+                        <td><span style="font-weight: 700; color: var(--primary);">₹${parseFloat(booking.total_amount || 0).toLocaleString('en-IN')}</span></td>
+                        <td style="text-align: right;">
+                            <a href="/admin/bookings/${booking.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 11px;">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </td>
                     </tr>
                 `).join('');
             } else {

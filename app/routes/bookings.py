@@ -330,7 +330,7 @@ async def checkout_order(
         # Render payment page with order details
         # The payment page will have a "Pay Now" button that initiates CCAvenue payment
         return templates.TemplateResponse(
-            "orders/payment.html",
+            "payment.html",
             {
                 "request": request,
                 "user": user,

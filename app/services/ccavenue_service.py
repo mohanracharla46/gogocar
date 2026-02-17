@@ -179,30 +179,24 @@ class CCAvenueService:
             # Build query string from order data (exactly as per CCAvenue official kit)
             # Format: key1=value1&key2=value2&... (NO URL encoding, direct concatenation)
             # The official kit does NOT URL encode values - just concatenates them
+            # Log the redirect URL specifically to debug
+            logger.info(f"Using Redirect URL: {order_data.get('redirect_url')}")
+            
             query_parts = []
             for key, value in order_data.items():
                 if value is not None:
-                    # Convert to string - NO URL encoding (matching official kit behavior)
+                    # Revert to raw string - NO URL encoding (matching official kit behavior)
+                    # CCAvenue encryption handles raw strings correctly
                     str_value = str(value)
                     query_parts.append(f"{key}={str_value}")
             
-            # Join with & and add trailing & (as per CCAvenue specification)
+            # Join with & and add trailing & (required by CCAvenue)
             merchant_data = "&".join(query_parts) + "&"
             
             logger.debug(f"Merchant data query string length: {len(merchant_data)}")
-            logger.debug(f"Merchant data (full): {merchant_data}")
-            
-            # Validate working key is not empty
-            if not self.working_key or len(self.working_key.strip()) == 0:
-                raise ValueError("Working key is empty or whitespace only")
-            
-            logger.debug(f"Working key length: {len(self.working_key)}, first 4 chars: {self.working_key[:4]}...")
             
             # Encrypt using official CCAvenue kit
             encrypted_data = encrypt(merchant_data, self.working_key)
-            
-            logger.info(f"Encryption successful. Encrypted data length: {len(encrypted_data)}")
-            logger.debug(f"Encrypted data (first 100 chars): {encrypted_data[:100]}...")
             
             # Prepare form data for CCAvenue
             form_data = {

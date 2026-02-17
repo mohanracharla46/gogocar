@@ -5,171 +5,300 @@
 {% block page_title %}{{ 'Edit' if car else 'Create' }} Car{% endblock %}
 
 {% block content %}
-<div class="card">
-    <form id="carForm" enctype="multipart/form-data">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="brand">Brand *</label>
-                <input type="text" id="brand" name="brand" class="form-control" value="{{ car.brand if car else '' }}"
-                    required>
+<div style="max-width: 1000px; margin: 0 auto;">
+    <div class="card" style="padding: 40px;">
+        <form id="carForm" enctype="multipart/form-data">
+            <!-- Section 1: Basic Identity -->
+            <div style="margin-bottom: 40px;">
+                <h4
+                    style="font-size: 16px; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
+                    <i class="fas fa-id-card"></i> Vehicle Identity
+                </h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="brand">Brand Name *</label>
+                        <div class="input-group">
+                            <i class="fas fa-car"></i>
+                            <input type="text" id="brand" name="brand" class="form-control"
+                                placeholder="e.g. Maruti Suzuki" value="{{ car.brand if car else '' }}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="car_model">Exact Model *</label>
+                        <div class="input-group">
+                            <i class="fas fa-info-circle"></i>
+                            <input type="text" id="car_model" name="car_model" class="form-control"
+                                placeholder="e.g. Swift 2024" value="{{ car.car_model if car else '' }}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Vehicle Description</label>
+                    <textarea id="description" name="description" class="form-control"
+                        placeholder="Tell customers about this car's features, history, or special qualities..."
+                        rows="4">{{ car.description if car else '' }}</textarea>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="car_model">Model *</label>
-                <input type="text" id="car_model" name="car_model" class="form-control"
-                    value="{{ car.car_model if car else '' }}" required>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" name="description" class="form-control"
-                rows="4">{{ car.description if car else '' }}</textarea>
-        </div>
+            <!-- Section 2: Technical Specifications -->
+            <div style="margin-bottom: 40px;">
+                <h4
+                    style="font-size: 16px; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
+                    <i class="fas fa-cogs"></i> Technical Specs
+                </h4>
+                <div class="form-row" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                    <div class="form-group">
+                        <label for="car_type">Car Classification</label>
+                        <select id="car_type" name="car_type" class="form-control" required>
+                            <option value="">Select Type</option>
+                            {% for type in car_types %}
+                            <option value="{{ type }}" {{ 'selected' if car and car.car_type.value==type else '' }}>{{
+                                type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fuel_type">Fuel Preference</label>
+                        <select id="fuel_type" name="fuel_type" class="form-control" required>
+                            <option value="">Select Fuel</option>
+                            {% for type in fuel_types %}
+                            <option value="{{ type }}" {{ 'selected' if car and car.fuel_type.value==type else '' }}>{{
+                                type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transmission_type">Drive Mode</label>
+                        <select id="transmission_type" name="transmission_type" class="form-control" required>
+                            <option value="">Select Gear</option>
+                            {% for type in transmission_types %}
+                            <option value="{{ type }}" {{ 'selected' if car and car.transmission_type.value==type
+                                else '' }}>{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="no_of_seats">Seating Capacity</label>
+                        <select id="no_of_seats" name="no_of_seats" class="form-control" required>
+                            <option value="">Select Seats</option>
+                            {% for seats in seat_options %}
+                            <option value="{{ seats }}" {{ 'selected' if car and car.no_of_seats.value==seats else ''
+                                }}>{{ seats }} Seats</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="car_type">Car Type *</label>
-                <select id="car_type" name="car_type" class="form-control" required>
-                    <option value="">Select Type</option>
-                    {% for type in car_types %}
-                    <option value="{{ type }}" {{ 'selected' if car and car.car_type.value==type else '' }}>{{ type }}
-                    </option>
-                    {% endfor %}
-                </select>
+            <!-- Section 3: Pricing & Business Rules -->
+            <div style="margin-bottom: 40px;">
+                <h4
+                    style="font-size: 16px; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
+                    <i class="fas fa-rupee-sign"></i> Pricing & Rules
+                </h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="base_price">Standard Fare (24h) *</label>
+                        <div class="input-group">
+                            <i class="fas fa-tag"></i>
+                            <input type="number" id="base_price" name="base_price" class="form-control"
+                                value="{{ car.base_price if car else '' }}" required min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="damage_price">Security Deposit *</label>
+                        <div class="input-group">
+                            <i class="fas fa-shield-alt"></i>
+                            <input type="number" id="damage_price" name="damage_price" class="form-control"
+                                value="{{ car.damage_price if car else '' }}" required min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="protection_price">Insurance Add-on *</label>
+                        <div class="input-group">
+                            <i class="fas fa-user-shield"></i>
+                            <input type="number" id="protection_price" name="protection_price" class="form-control"
+                                value="{{ car.protection_price if car else '' }}" required min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="no_of_km">Daily distance (KM) *</label>
+                        <div class="input-group">
+                            <i class="fas fa-road"></i>
+                            <input type="number" id="no_of_km" name="no_of_km" class="form-control"
+                                value="{{ car.no_of_km if car else '' }}" required min="0">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="fuel_type">Fuel Type *</label>
-                <select id="fuel_type" name="fuel_type" class="form-control" required>
-                    <option value="">Select Fuel Type</option>
-                    {% for type in fuel_types %}
-                    <option value="{{ type }}" {{ 'selected' if car and car.fuel_type.value==type else '' }}>{{ type }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="transmission_type">Transmission *</label>
-                <select id="transmission_type" name="transmission_type" class="form-control" required>
-                    <option value="">Select Transmission</option>
-                    {% for type in transmission_types %}
-                    <option value="{{ type }}" {{ 'selected' if car and car.transmission_type.value==type else '' }}>{{
-                        type }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="no_of_seats">Seats *</label>
-                <select id="no_of_seats" name="no_of_seats" class="form-control" required>
-                    <option value="">Select Seats</option>
-                    {% for seats in seat_options %}
-                    <option value="{{ seats }}" {{ 'selected' if car and car.no_of_seats.value==seats else '' }}>{{
-                        seats }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="base_price">Base Price (₹/day) *</label>
-                <input type="number" id="base_price" name="base_price" class="form-control"
-                    value="{{ car.base_price if car else '' }}" required min="0">
+            <!-- Section 4: Other Details -->
+            <div style="margin-bottom: 40px;">
+                <h4
+                    style="font-size: 16px; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
+                    <i class="fas fa-list-ul"></i> Extended Information
+                </h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="registration_number">Plate Number</label>
+                        <div class="input-group">
+                            <i class="fas fa-id-badge"></i>
+                            <input type="text" id="registration_number" name="registration_number" class="form-control"
+                                placeholder="AP 09 XX 0000" value="{{ car.registration_number if car else '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Production Year</label>
+                        <div class="input-group">
+                            <i class="fas fa-calendar"></i>
+                            <input type="number" id="year" name="year" class="form-control" placeholder="2024"
+                                value="{{ car.year if car else '' }}" min="1900" max="2100">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="color">Exterior Color</label>
+                        <div class="input-group">
+                            <i class="fas fa-palette"></i>
+                            <input type="text" id="color" name="color" class="form-control" placeholder="Arctic White"
+                                value="{{ car.color if car else '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="location_id">Service Location</label>
+                        <select id="location_id" name="location_id" class="form-control">
+                            <option value="">Select Area</option>
+                            {% for loc in locations %}
+                            <option value="{{ loc.id }}" {{ 'selected' if car and car.location_id==loc.id else '' }}>{{
+                                loc.location }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="maps_link">Exact Google Maps Link</label>
+                    <div class="input-group">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="url" id="maps_link" name="maps_link" class="form-control"
+                            placeholder="https://goo.gl/maps/..." value="{{ car.maps_link if car else '' }}">
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="damage_price">Damage Price (₹) *</label>
-                <input type="number" id="damage_price" name="damage_price" class="form-control"
-                    value="{{ car.damage_price if car else '' }}" required min="0">
-            </div>
-            <div class="form-group">
-                <label for="protection_price">Protection Price (₹) *</label>
-                <input type="number" id="protection_price" name="protection_price" class="form-control"
-                    value="{{ car.protection_price if car else '' }}" required min="0">
-            </div>
-            <div class="form-group">
-                <label for="no_of_km">KM Limit *</label>
-                <input type="number" id="no_of_km" name="no_of_km" class="form-control"
-                    value="{{ car.no_of_km if car else '' }}" required min="0">
-            </div>
-        </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="registration_number">Registration Number</label>
-                <input type="text" id="registration_number" name="registration_number" class="form-control"
-                    value="{{ car.registration_number if car else '' }}">
+            <!-- Section 5: Gallery -->
+            <div style="margin-bottom: 40px;">
+                <h4
+                    style="font-size: 16px; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
+                    <i class="fas fa-images"></i> Media Gallery
+                </h4>
+                <div class="form-group">
+                    <label
+                        style="border: 2px dashed var(--border); border-radius: 16px; padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition);"
+                        onmouseover="this.style.borderColor='var(--primary)'; this.style.background='#f8fafc';"
+                        onmouseout="this.style.borderColor='var(--border)'; this.style.background='white';">
+                        <i class="fas fa-cloud-upload-alt"
+                            style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
+                        <span style="font-weight: 700; color: var(--dark);">Upload Car Photos</span>
+                        <span style="font-size: 12px; color: var(--gray); margin-top: 5px;">Supports JPG, PNG (Max 5MB
+                            per file)</span>
+                        <input type="file" id="images" name="images" style="display: none;" multiple accept="image/*"
+                            onchange="previewImages(this)">
+                    </label>
+                    <div id="imagePreview"
+                        style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px;">
+                        {% if car and car.images %}
+                        {% for image_url in car.images.split(',') %}
+                        <div
+                            style="position: relative; border-radius: 12px; overflow: hidden; height: 100px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                            <img src="{{ image_url }}" alt="Car Image"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                            <div
+                                style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.5); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer;">
+                                <i class="fas fa-times"></i>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="year">Year</label>
-                <input type="number" id="year" name="year" class="form-control" value="{{ car.year if car else '' }}"
-                    min="1900" max="2100">
-            </div>
-            <div class="form-group">
-                <label for="color">Color</label>
-                <input type="text" id="color" name="color" class="form-control" value="{{ car.color if car else '' }}">
-            </div>
-            <div class="form-group">
-                <label for="location_id">Location</label>
-                <select id="location_id" name="location_id" class="form-control">
-                    <option value="">Select Location</option>
-                    {% for loc in locations %}
-                    <option value="{{ loc.id }}" {{ 'selected' if car and car.location_id==loc.id else '' }}>
-                        {{ loc.location }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label for="images">Car Images</label>
-            <input type="file" id="images" name="images" class="form-control" multiple accept="image/*">
-            {% if car and car.images %}
-            <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
-                {% for image_url in car.images.split(',') %}
-                <img src="{{ image_url }}" alt="Car Image"
-                    style="width: 100px; height: 80px; object-fit: cover; border-radius: 6px;">
-                {% endfor %}
+            <div class="form-group"
+                style="background: rgba(16, 185, 129, 0.05); padding: 20px; border-radius: 16px; border: 1px solid rgba(16, 185, 129, 0.1);">
+                <label
+                    style="display: flex; align-items: center; gap: 15px; cursor: pointer; margin-bottom: 0; text-transform: none;">
+                    <div style="position: relative; width: 44px; height: 24px;">
+                        <input type="checkbox" id="active" name="active" style="opacity: 0; width: 0; height: 0;"
+                            {{ 'checked' if not car or car.active else '' }}
+                            onchange="this.nextElementSibling.style.background = this.checked ? 'var(--success)' : '#e2e8f0'; this.nextElementSibling.firstElementChild.style.transform = this.checked ? 'translateX(20px)' : 'translateX(0)';">
+                        <span
+                            style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: {{ 'var(--success)' if not car or car.active else '#e2e8f0' }}; transition: .4s; border-radius: 34px;">
+                            <span
+                                style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; transform: {{ 'translateX(20px)' if not car or car.active else 'translateX(0)' }}; shadow: 0 2px 4px rgba(0,0,0,0.2);"></span>
+                        </span>
+                    </div>
+                    <div>
+                        <span style="display: block; font-weight: 800; color: var(--dark); font-size: 14px;">Market
+                            Visibility</span>
+                        <span style="display: block; font-size: 11px; color: var(--gray); font-weight: 600;">Make this
+                            vehicle available for customer bookings</span>
+                    </div>
+                </label>
             </div>
-                {% endif %}
-            <small style="color: var(--gray);">You can select multiple images</small>
-        </div>
 
-        <div class="form-group">
-            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                <input type="checkbox" id="active" name="active" {{ 'checked' if not car or car.active else '' }}>
-                Active (Car will be visible to users)
-            </label>
-        </div>
-
-        <div style="display: flex; gap: 15px; margin-top: 30px;">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> {{ 'Update' if car else 'Create' }} Car
-            </button>
-            <a href="/admin/cars" class="btn btn-outline">
-                <i class="fas fa-times"></i> Cancel
-            </a>
-        </div>
-    </form>
+            <div style="display: flex; gap: 15px; margin-top: 50px; padding-top: 30px; border-top: 1px solid #f1f5f9;">
+                <button type="submit" class="btn btn-primary" style="padding: 14px 40px; font-size: 15px;">
+                    <i class="fas fa-save"></i> {{ 'Update' if car else 'Deploy' }} Vehicle
+                </button>
+                <a href="/admin/cars" class="btn btn-outline" style="padding: 14px 30px; font-size: 15px;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
+    function previewImages(input) {
+        const preview = document.getElementById('imagePreview');
+        preview.innerHTML = '';
+
+        if (input.files) {
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'position: relative; border-radius: 12px; overflow: hidden; height: 100px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);';
+                    div.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    preview.appendChild(div);
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+
     document.getElementById('carForm').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const formData = new FormData();
+        let carId = null;
         {% if car %}
-        const carId = {{ car.id }};
+        carId = {{ car.id }
+    };
+    {% endif %}
 
-        {% else %}
-        const carId = null;
-        {% endif %}
+    // Helper to append only if value exists
+    const appendIfValue = (name, id) => {
+        const val = document.getElementById(id).value;
+        if (val !== "" && val !== null && val !== undefined) {
+            formData.append(name, val);
+        }
+    };
 
-    // Add form fields
+    // Add mandatory form fields
     formData.append('brand', document.getElementById('brand').value);
     formData.append('car_model', document.getElementById('car_model').value);
-    formData.append('description', document.getElementById('description').value);
     formData.append('car_type', document.getElementById('car_type').value);
     formData.append('fuel_type', document.getElementById('fuel_type').value);
     formData.append('transmission_type', document.getElementById('transmission_type').value);
@@ -178,11 +307,15 @@
     formData.append('damage_price', document.getElementById('damage_price').value);
     formData.append('protection_price', document.getElementById('protection_price').value);
     formData.append('no_of_km', document.getElementById('no_of_km').value);
-    formData.append('registration_number', document.getElementById('registration_number').value);
-    formData.append('year', document.getElementById('year').value);
-    formData.append('color', document.getElementById('color').value);
-    formData.append('location_id', document.getElementById('location_id').value);
     formData.append('active', document.getElementById('active').checked ? 'true' : 'false');
+
+    // Optional fields
+    appendIfValue('description', 'description');
+    appendIfValue('registration_number', 'registration_number');
+    appendIfValue('year', 'year');
+    appendIfValue('color', 'color');
+    appendIfValue('location_id', 'location_id');
+    appendIfValue('maps_link', 'maps_link');
 
     // Add images
     const imagesInput = document.getElementById('images');

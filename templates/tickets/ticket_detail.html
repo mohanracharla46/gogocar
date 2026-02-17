@@ -25,63 +25,54 @@
             line-height: 1.6;
         }
 
-        /* Header */
+        /* Header New Design */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 20px 50px;
-            background: rgba(10, 25, 41, 0.85);
-            backdrop-filter: blur(10px);
+            padding: 15px 80px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            flex-wrap: wrap;
-            gap: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
         }
 
-        .logo {
+        .logo-img {
+            height: 50px;
             display: flex;
-            flex-direction: column;
-            gap: 2px;
+            align-items: center;
         }
 
-        .logo-main {
-            font-size: 32px;
-            font-weight: 700;
-            color: #ff6b35;
-            letter-spacing: -1px;
-        }
-
-        .logo-sub {
-            font-size: 12px;
-            color: #ffffff;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .logo-img img {
+            height: 100%;
+            object-fit: contain;
         }
 
         nav {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         nav a {
-            color: #ffffff;
+            color: #1e293b;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.2s ease;
             position: relative;
-            white-space: nowrap;
         }
 
-        nav a:hover {
-            color: #ff6b35;
+        nav a:hover,
+        nav a.active {
+            color: #2b3990;
         }
 
         nav a::after {
@@ -95,166 +86,121 @@
             transition: width 0.3s ease;
         }
 
+        nav a.active::after,
         nav a:hover::after {
             width: 100%;
         }
 
-        @media (max-width: 768px) {
-            header {
-                padding: 15px 20px;
-                gap: 15px;
-            }
-
-            nav {
-                gap: 12px;
-                font-size: 14px;
-                order: 3;
-                width: 100%;
-                justify-content: center;
-                margin-top: 10px;
-            }
-
-            .logo-main {
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 12px 15px;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            nav {
-                width: 100%;
-                gap: 10px;
-                font-size: 13px;
-                margin-top: 10px;
-            }
-
-            nav a {
-                padding: 5px 0;
-            }
-
-            .logo-main {
-                font-size: 20px;
-            }
-
-            .logo-sub {
-                font-size: 10px;
-            }
-        }
-
         /* Main Container */
         .main-container {
-            max-width: 1200px;
-            margin: 120px auto 40px;
+            max-width: 1000px;
+            margin: 110px auto 60px;
             padding: 0 20px;
         }
 
-        /* Back Button */
         .back-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            color: #4a5568;
+            gap: 10px;
+            color: #64748b;
             text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 24px;
-            transition: color 0.3s;
+            font-weight: 700;
+            margin-bottom: 30px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .back-link:hover {
-            color: #ff6b35;
+            color: #2b3990;
+            transform: translateX(-5px);
         }
 
         /* Ticket Header */
         .ticket-header-card {
             background: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 24px;
+            border-radius: 25px;
+            padding: 30px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            border: 1px solid #f1f5f9;
         }
 
         .ticket-header-top {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
+            align-items: center;
         }
 
         .ticket-title {
             font-size: 28px;
+            font-weight: 800;
+            color: #2b3990;
+            letter-spacing: -0.5px;
+        }
+
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 12px;
             font-weight: 700;
-            color: #1a202c;
-        }
-
-        .ticket-status-badge {
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .status-open {
-            background: #dbeafe;
-            color: #1e40af;
+        .status-OPEN {
+            background: #f0f9ff;
+            color: #0284c7;
+            border: 1px solid #e0f2fe;
         }
 
-        .status-in_progress {
-            background: #fef3c7;
-            color: #92400e;
+        .status-IN_PROGRESS {
+            background: #fff7ed;
+            color: #ea580c;
+            border: 1px solid #ffedd5;
         }
 
-        .status-resolved {
-            background: #d1fae5;
-            color: #065f46;
+        .status-RESOLVED {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #dcfce7;
         }
 
-        .status-closed {
-            background: #e5e7eb;
-            color: #4b5563;
-        }
-
-        .ticket-number-text {
-            font-size: 14px;
+        .status-CLOSED {
+            background: #f1f5f9;
             color: #64748b;
-            margin-top: 8px;
+            border: 1px solid #e2e8f0;
         }
 
-        /* Info Grid */
+        /* Meta Info */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
         }
 
         .info-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
         }
 
         .info-card-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #e2e8f0;
+            font-size: 16px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 15px;
         }
 
         .info-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 10px 0;
+            border-bottom: 1px solid #f8fafc;
         }
 
         .info-row:last-child {
@@ -262,89 +208,121 @@
         }
 
         .info-label {
-            font-size: 14px;
-            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
         }
 
         .info-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a202c;
-            text-align: right;
-        }
-
-        /* Description */
-        .description-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 24px;
-        }
-
-        .description-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 16px;
-        }
-
-        .description-text {
-            color: #4b5563;
-            font-size: 15px;
-            line-height: 1.8;
-            white-space: pre-wrap;
-        }
-
-        /* Resolution Notes */
-        /* Resolution Notes */
-            {
-            % if ticket.resolution_notes %
-        }
-
-        .resolution-card {
-            background: #eff6ff;
-            border-left: 4px solid #3b82f6;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 24px;
-        }
-
-        .resolution-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 12px;
-        }
-
-        .resolution-text {
-            color: #1e3a8a;
             font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* Conversation Thread */
+        .chat-container {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .msg-user {
+            align-self: flex-start;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg-admin {
+            align-self: flex-end;
+            background: #f0f7ff;
+            border: 1px solid #e0effe;
+            border-bottom-right-radius: 4px;
+            margin-left: auto;
+        }
+
+        .msg-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .msg-body {
+            font-size: 15px;
             line-height: 1.6;
-            white-space: pre-wrap;
+            color: #1e293b;
         }
 
-            {
-            % endif %
+        /* Reply Form */
+        .reply-card {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
         }
 
-        /* Responsive */
+        textarea {
+            width: 100%;
+            border: 2px solid #f1f5f9;
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 20px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.05);
+        }
+
+        .submit-btn {
+            background: #ff6b35;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.2);
+        }
+
         @media (max-width: 768px) {
             header {
-                padding: 15px 20px;
+                padding: 15px 30px;
             }
 
-            .main-container {
-                margin: 100px auto 20px;
+            .chat-container {
+                padding: 20px;
             }
 
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .ticket-header-top {
-                flex-direction: column;
-                gap: 12px;
+            .message-bubble {
+                max-width: 95%;
             }
         }
     </style>
@@ -382,57 +360,54 @@
     </header>
 
     <div class="main-container">
-        <a href="/tickets" class="back-link">← Back to My Tickets</a>
+        <a href="/tickets" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to My Tickets
+        </a>
 
         <div class="ticket-header-card">
             <div class="ticket-header-top">
                 <div>
                     <h1 class="ticket-title">{{ ticket.subject }}</h1>
-                    <div class="ticket-number-text">Ticket #{{ ticket.ticket_number }}</div>
+                    <div style="color: #64748b; font-size: 14px; margin-top: 5px; font-weight: 500;">
+                        Ticket {{ ticket.ticket_number }} • Created {{ ticket.created_at.strftime('%B %d, %Y') if
+                        ticket.created_at else 'N/A' }}
+                    </div>
                 </div>
-                <div>
-                    <span class="ticket-status-badge status-{{ ticket.status.value.lower() }}">
-                        {{ ticket.status.value }}
-                    </span>
-                </div>
+                <span class="status-badge status-{{ ticket.status.value.upper() }}">
+                    {{ ticket.status.value }}
+                </span>
             </div>
         </div>
 
         <div class="info-grid">
             <div class="info-card">
-                <h3 class="info-card-title">Ticket Information</h3>
+                <h3 class="info-card-title">General Info</h3>
                 <div class="info-row">
                     <span class="info-label">Priority</span>
-                    <span class="info-value">{{ ticket.priority }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Status</span>
-                    <span class="info-value">{{ ticket.status.value }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Created</span>
-                    <span class="info-value">
-                        {{ ticket.created_at.strftime('%B %d, %Y at %I:%M %p') if ticket.created_at else 'N/A' }}
+                    <span class="info-value"
+                        style="color: {% if ticket.priority.value == 'HIGH' %}#dc2626{% else %}#1e293b{% endif %};">
+                        {{ ticket.priority }}
                     </span>
                 </div>
-                {% if ticket.updated_at %}
                 <div class="info-row">
-                    <span class="info-label">Last Updated</span>
-                    <span class="info-value">
-                        {{ ticket.updated_at.strftime('%B %d, %Y at %I:%M %p') }}
-                    </span>
+                    <span class="info-label">Last Activity</span>
+                    <span class="info-value">{{ ticket.updated_at.strftime('%b %d, %I:%M %p') if ticket.updated_at else
+                        'N/A' }}</span>
                 </div>
-                {% endif %}
             </div>
 
             {% if ticket.order_id %}
             <div class="info-card">
-                <h3 class="info-card-title">Related Order</h3>
+                <h3 class="info-card-title">Related Booking</h3>
                 <div class="info-row">
-                    <span class="info-label">Order ID</span>
+                    <span class="info-label">Booking ID</span>
                     <a href="/orders/detail/{{ ticket.order_id }}" class="info-value"
-                        style="color: #ff6b35; text-decoration: none;">
-                        Order #{{ ticket.order_id }}
+                        style="color: #ff6b35; text-decoration: none; border-bottom: 1px dashed #ff6b35;">
+                        #{{ ticket.order_id }}
                     </a>
                 </div>
             </div>
@@ -442,95 +417,98 @@
             <div class="info-card">
                 <h3 class="info-card-title">Resolution</h3>
                 <div class="info-row">
-                    <span class="info-label">Resolved At</span>
-                    <span class="info-value">
-                        {{ ticket.resolved_at.strftime('%B %d, %Y at %I:%M %p') }}
-                    </span>
+                    <span class="info-label">Resolved On</span>
+                    <span class="info-value">{{ ticket.resolved_at.strftime('%b %d, %Y') }}</span>
                 </div>
             </div>
             {% endif %}
         </div>
 
-        <!-- Conversation Thread -->
-        <div class="description-card">
-            <h3 class="description-title">Conversation</h3>
-            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 20px;">
-                {% if ticket.messages %}
-                {% for message in ticket.messages %}
-                <div
-                    style="display: flex; {% if message.is_admin %}justify-content: flex-end{% else %}justify-content: flex-start{% endif %};">
-                    <div
-                        style="max-width: 70%; background: {% if message.is_admin %}#eff6ff{% else %}#f9fafb{% endif %}; 
-                                    padding: 16px; border-radius: 12px; 
-                                    border-left: {% if message.is_admin %}none; border-right: 4px solid #3b82f6{% else %}4px solid #ff6b35; border-right: none{% endif %};">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <div
-                                style="font-weight: 600; color: {% if message.is_admin %}#1e40af{% else %}#ff6b35{% endif %}; font-size: 14px;">
-                                {% if message.is_admin %}
-                                Support Team
-                                {% else %}
-                                You
-                                {% endif %}
-                            </div>
-                            <div style="font-size: 12px; color: #64748b;">
-                                {{ message.created_at.strftime('%b %d, %Y at %I:%M %p') if message.created_at else 'N/A'
-                                }}
-                            </div>
-                        </div>
-                        <div style="color: #1a202c; white-space: pre-wrap; line-height: 1.6;">{{ message.message }}
-                        </div>
-                        {% if message.attachment_url %}
-                        <div style="margin-top: 12px;">
-                            <a href="{{ message.attachment_url }}" target="_blank"
-                                style="color: #3b82f6; text-decoration: none; font-size: 14px;">
-                                <i class="fas fa-image"></i> View Attachment
-                            </a>
-                        </div>
-                        {% endif %}
+        <!-- Conversation thread -->
+        <div class="chat-container">
+            <h3
+                style="font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 30px; display: flex; align-items: center; gap: 10px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                Conversation History
+            </h3>
+
+            <div style="display: flex; flex-direction: column;">
+                <!-- Initial Description -->
+                <div class="message-bubble msg-user">
+                    <div class="msg-header">
+                        <span>{{ user.firstname if user else 'You' }}</span>
+                        <span>{{ ticket.created_at.strftime('%b %d, %I:%M %p') if ticket.created_at else 'N/A' }}</span>
+                    </div>
+                    <div class="msg-body">
+                        {{ ticket.description }}
                     </div>
                 </div>
-                {% endfor %}
-                {% else %}
-                <div style="text-align: center; color: #64748b; padding: 40px;">
-                    No messages yet
+
+                {% if ticket.messages %}
+                {% for message in ticket.messages %}
+                <!-- Skip initial message if it matches description exactly to avoid duplicates -->
+                {% if not (loop.first and message.message == ticket.description) %}
+                <div class="message-bubble {% if message.is_admin %}msg-admin{% else %}msg-user{% endif %}">
+                    <div class="msg-header">
+                        <span>{% if message.is_admin %}GoGo Team{% else %}You{% endif %}</span>
+                        <span>{{ message.created_at.strftime('%b %d, %I:%M %p') if message.created_at else 'N/A'
+                            }}</span>
+                    </div>
+                    <div class="msg-body">
+                        {{ message.message }}
+                    </div>
+                    {% if message.attachment_url %}
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.05);">
+                        <a href="{{ message.attachment_url }}" target="_blank"
+                            style="display: inline-flex; align-items: center; gap: 8px; color: #2b3990; font-size: 13px; font-weight: 700; text-decoration: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            View Attachment
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
+                {% endif %}
+                {% endfor %}
                 {% endif %}
             </div>
         </div>
 
+        {% if ticket.status.value != 'CLOSED' and ticket.status.value != 'RESOLVED' %}
         <!-- Reply Section -->
-        <div class="description-card" style="margin-top: 24px;">
-            <h3 class="description-title">Reply to Support</h3>
-            <form id="replyForm" onsubmit="submitReply(event)" style="margin-top: 20px;">
-                <div style="margin-bottom: 16px;">
-                    <label for="replyMessage"
-                        style="display: block; font-weight: 600; margin-bottom: 8px; color: #1a202c;">Your Message
-                        *</label>
-                    <textarea id="replyMessage" name="message" rows="5" required placeholder="Type your reply here..."
-                        style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: inherit; resize: vertical; font-size: 14px;"></textarea>
-                </div>
-                <div style="margin-bottom: 16px;">
-                    <label for="replyFile"
-                        style="display: block; font-weight: 600; margin-bottom: 8px; color: #1a202c;">Attach Image
-                        (Optional, Max 5MB)</label>
-                    <input type="file" id="replyFile" name="file" accept="image/*"
-                        style="width: 100%; padding: 8px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
-                    <small style="color: #64748b; font-size: 12px; display: block; margin-top: 4px;">Allowed: JPG, PNG,
-                        GIF, WEBP. Maximum size: 5MB</small>
-                </div>
-                <div style="display: flex; gap: 12px;">
-                    <button type="submit"
-                        style="background: #ff6b35; color: #ffffff; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; transition: background 0.3s;">
-                        <i class="fas fa-paper-plane"></i> Send Reply
-                    </button>
-                    <button type="button" onclick="document.getElementById('replyForm').reset()"
-                        style="background: transparent; color: #64748b; padding: 12px 24px; border: 2px solid #e2e8f0; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s;">
-                        <i class="fas fa-times"></i> Clear
+        <div class="reply-card">
+            <h3 style="font-size: 20px; font-weight: 800; color: #1e293b; margin-bottom: 25px;">Send a Reply</h3>
+            <form id="replyForm" onsubmit="submitReply(event)">
+                <textarea id="replyMessage" name="message" rows="5" required
+                    placeholder="Describe your response or provide more details..."></textarea>
+
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <label for="replyFile"
+                            style="display: block; font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Attach
+                            Image (Optional)</label>
+                        <input type="file" id="replyFile" name="file" accept="image/*"
+                            style="font-size: 13px; color: #64748b;">
+                    </div>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        Send Message
                     </button>
                 </div>
             </form>
         </div>
+        {% else %}
+        <div
+            style="text-align: center; padding: 30px; background: #f8fafc; border-radius: 20px; border: 1px dashed #e2e8f0; color: #64748b; font-weight: 600;">
+            This ticket is closed and cannot be replied to.
+        </div>
+        {% endif %}
     </div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>

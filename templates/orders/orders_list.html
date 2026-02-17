@@ -8,80 +8,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body {
-            background: #f7fafc;
-            color: #1a202c;
-            line-height: 1.6;
-        }
-
-        /* Header */
+        /* Header New Design */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 20px 50px;
-            background: rgba(10, 25, 41, 0.85);
-            backdrop-filter: blur(10px);
+            padding: 15px 80px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            flex-wrap: wrap;
-            gap: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
         }
 
-        .logo {
+        .logo-img {
+            height: 50px;
             display: flex;
-            flex-direction: column;
-            gap: 2px;
+            align-items: center;
         }
 
-        .logo-main {
-            font-size: 32px;
-            font-weight: 700;
-            color: #ff6b35;
-            letter-spacing: -1px;
-        }
-
-        .logo-sub {
-            font-size: 12px;
-            color: #ffffff;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .logo-img img {
+            height: 100%;
+            object-fit: contain;
         }
 
         nav {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         nav a {
-            color: #ffffff;
+            color: #1e293b;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.2s ease;
             position: relative;
-            white-space: nowrap;
         }
 
-        nav a:hover {
-            color: #ff6b35;
+        nav a:hover,
+        nav a.active {
+            color: #2b3990;
         }
 
         nav a::after {
@@ -95,8 +69,242 @@
             transition: width 0.3s ease;
         }
 
+        nav a.active::after,
         nav a:hover::after {
             width: 100%;
+        }
+
+        .login-btn-new {
+            color: #1a202c;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1100px;
+            margin: 110px auto 60px;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #2b3990;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 17px;
+            color: #64748b;
+        }
+
+        /* Orders List */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .order-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .order-main-content {
+            display: grid;
+            grid-template-columns: 240px 1fr 200px;
+            align-items: stretch;
+        }
+
+        .order-car-image {
+            background: #f8fafc;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #f1f5f9;
+        }
+
+        .order-car-image img {
+            width: 100%;
+            height: auto;
+            max-height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+        }
+
+        .order-info-section {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .order-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .order-id-badge {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .car-display-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .booking-timeline {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .timeline-point {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .timeline-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .timeline-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .timeline-arrow {
+            color: #cbd5e1;
+        }
+
+        .order-status-section {
+            padding: 25px;
+            background: #fafbfc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+            border-left: 1px solid #f1f5f9;
+        }
+
+        .status-pill {
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-PENDING {
+            background: #fff7ed;
+            color: #ea580c;
+            border: 1px solid #ffedd5;
+        }
+
+        .status-BOOKED {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #dcfce7;
+        }
+
+        .status-COMPLETED {
+            background: #f0f9ff;
+            color: #0284c7;
+            border: 1px solid #e0f2fe;
+        }
+
+        .status-CANCELLED {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fee2e2;
+        }
+
+        .status-ONGOING {
+            background: #f5f3ff;
+            color: #7c3aed;
+            border: 1px solid #ede9fe;
+        }
+
+        .price-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ff6b35;
+        }
+
+        .view-action-btn {
+            width: 100%;
+            background: #2b3990;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .view-action-btn:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            background: #ffffff;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-illustration {
+            width: 200px;
+            margin-bottom: 30px;
+            opacity: 0.6;
+        }
+
+        .empty-state-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2b3990;
+            margin-bottom: 15px;
         }
 
         /* Hamburger Menu */
@@ -108,378 +316,59 @@
             border: none;
             cursor: pointer;
             padding: 5px;
-            z-index: 1001;
         }
 
         .menu-toggle span {
             width: 25px;
             height: 3px;
-            background: #ffffff;
+            background: #1e293b;
             border-radius: 2px;
             transition: all 0.3s ease;
         }
 
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 15px 20px;
-                gap: 15px;
+        @media (max-width: 992px) {
+            .order-main-content {
+                grid-template-columns: 200px 1fr;
             }
 
-            .menu-toggle {
-                display: flex;
-                order: 2;
-            }
-
-            nav {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(10, 25, 41, 0.98);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                gap: 0;
-                padding: 20px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-                order: 4;
-                margin-top: 0;
-            }
-
-            nav.active {
-                display: flex;
-            }
-
-            nav a {
-                padding: 12px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                width: 100%;
-                font-size: 16px;
-            }
-
-            nav a:last-child {
-                border-bottom: none;
-            }
-
-            .logo-main {
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 12px 15px;
+            .order-status-section {
+                grid-column: 1 / -1;
                 flex-direction: row;
-                align-items: center;
-                position: relative;
+                justify-content: space-between;
+                border-left: none;
+                border-top: 1px solid #f1f5f9;
+                padding: 15px 25px;
             }
 
-            .menu-toggle {
-                display: flex;
-                order: 2;
-            }
-
-            nav {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(10, 25, 41, 0.98);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                gap: 0;
-                padding: 15px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-                order: 4;
-                margin-top: 0;
-            }
-
-            nav.active {
-                display: flex;
-            }
-
-            nav a {
-                padding: 12px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                width: 100%;
-                font-size: 15px;
-            }
-
-            nav a:last-child {
-                border-bottom: none;
-            }
-
-            .logo-main {
-                font-size: 20px;
-            }
-
-            .logo-sub {
-                font-size: 10px;
+            .view-action-btn {
+                width: auto;
+                padding: 10px 25px;
             }
         }
 
-        /* Main Container */
-        .main-container {
-            max-width: 1200px;
-            margin: 120px auto 40px;
-            padding: 0 20px;
-        }
-
-        .page-header {
-            margin-bottom: 30px;
-        }
-
-        .page-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 8px;
-        }
-
-        .page-subtitle {
-            font-size: 16px;
-            color: #4a5568;
-        }
-
-        /* Orders List */
-        .orders-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .order-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
-
-        .order-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .order-id {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1a202c;
-        }
-
-        .order-date {
-            font-size: 14px;
-            color: #4a5568;
-            margin-top: 4px;
-        }
-
-        .order-status {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-approved {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .status-booked {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-ongoing {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .status-completed {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-cancelled {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .status-successful {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-failed {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .order-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .detail-item {}
-
-        .detail-label {
-            font-size: 12px;
-            color: #64748b;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .detail-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a202c;
-        }
-
-        .detail-value.amount {
-            font-size: 20px;
-            color: #ff6b35;
-        }
-
-        .order-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 16px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .view-details-btn {
-            background: #ff6b35;
-            color: #ffffff;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .view-details-btn:hover {
-            background: #e55a2b;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .empty-state-icon {
-            font-size: 64px;
-            color: #cbd5e0;
-            margin-bottom: 16px;
-        }
-
-        .empty-state-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 8px;
-        }
-
-        .empty-state-text {
-            font-size: 16px;
-            color: #4a5568;
-        }
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            margin-top: 40px;
-            padding: 20px;
-        }
-
-        .pagination a,
-        .pagination span {
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .pagination a {
-            background: #ffffff;
-            color: #1a202c;
-            border: 1px solid #e2e8f0;
-        }
-
-        .pagination a:hover {
-            background: #ff6b35;
-            color: #ffffff;
-            border-color: #ff6b35;
-        }
-
-        .pagination .current {
-            background: #ff6b35;
-            color: #ffffff;
-            border: 1px solid #ff6b35;
-        }
-
-        .pagination .disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             header {
-                padding: 15px 20px;
+                padding: 15px 30px;
             }
 
-            .main-container {
-                margin: 100px auto 20px;
-            }
-
-            .order-details {
+            .order-main-content {
                 grid-template-columns: 1fr;
             }
 
-            .order-header {
+            .order-car-image {
+                border-right: none;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .booking-timeline {
                 flex-direction: column;
-                gap: 12px;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .timeline-arrow {
+                transform: rotate(90deg);
+                margin-left: 5px;
             }
         }
     </style>
@@ -526,18 +415,15 @@
             style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
                 <h1 class="page-title">My Bookings</h1>
-                <p class="page-subtitle">View and manage your bookings</p>
+                <p class="page-subtitle">Track your journeys and manage your rentals</p>
             </div>
             <div style="display: flex; align-items: center; gap: 12px;">
-                <label for="pageSizeSelect" style="font-size: 14px; color: #64748b; font-weight: 500;">Items per
-                    page:</label>
+                <label for="pageSizeSelect" style="font-size: 14px; color: #64748b; font-weight: 600;">Show:</label>
                 <select id="pageSizeSelect" onchange="changePageSize()"
-                    style="padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 6px; font-size: 14px; background: #ffffff; cursor: pointer;">
-                    <option value="5" {% if pagination.page_size==5 %}selected{% endif %}>5</option>
-                    <option value="10" {% if pagination.page_size==10 %}selected{% endif %}>10</option>
-                    <option value="20" {% if pagination.page_size==20 %}selected{% endif %}>20</option>
-                    <option value="50" {% if pagination.page_size==50 %}selected{% endif %}>50</option>
-                    <option value="100" {% if pagination.page_size==100 %}selected{% endif %}>100</option>
+                    style="padding: 10px 15px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; background: #ffffff; cursor: pointer; font-weight: 600; color: #1e293b; outline: none; transition: border-color 0.3s;">
+                    <option value="5" {% if pagination.page_size==5 %}selected{% endif %}>5 per page</option>
+                    <option value="10" {% if pagination.page_size==10 %}selected{% endif %}>10 per page</option>
+                    <option value="20" {% if pagination.page_size==20 %}selected{% endif %}>20 per page</option>
                 </select>
             </div>
         </div>
@@ -546,167 +432,158 @@
         <div class="orders-list">
             {% for order in orders %}
             <div class="order-card" onclick="window.location.href='/orders/detail/{{ order.id }}'">
-                <div class="order-header">
-                    <div>
-                        <div class="order-id">Order #{{ order.id }}</div>
-                        <div class="order-date">
-                            {{ order.start_time.strftime('%B %d, %Y at %I:%M %p') if order.start_time else 'N/A' }}
+                <div class="order-main-content">
+                    <div class="order-car-image">
+                        {% set car_img = order.car.images.split(',')[0] if order.car and order.car.images else
+                        '/static/img/landing.png' %}
+                        <img src="{{ car_img }}" alt="{{ order.car.car_model if order.car else 'Car' }}"
+                            onerror="this.src='/static/img/landing.png'">
+                    </div>
+
+                    <div class="order-info-section">
+                        <div class="order-top-row">
+                            <span class="order-id-badge">ID: #{{ order.id }}</span>
+                            <span style="font-size: 13px; color: #94a3b8; font-weight: 500;">
+                                Booked on {{ order.created_at.strftime('%b %d, %Y') if order.created_at else 'N/A' }}
+                            </span>
+                        </div>
+
+                        <h3 class="car-display-name" style="display: flex; align-items: center; gap: 12px;">
+                            {{ order.car.brand }} {{ order.car.car_model }}
+                            {% if order.order_status.value == 'COMPLETED' and order_review_status.get(order.id) %}
+                            {% if order_review_status[order.id].can_review %}
+                            <span
+                                style="font-size: 11px; color: #ff6b35; background: #fff7ed; padding: 2px 8px; border-radius: 4px; border: 1px solid #ffedd5; font-weight: 700;">
+                                ⭐ REVIEW AVAILABLE
+                            </span>
+                            {% elif order_review_status[order.id].has_review %}
+                            <span
+                                style="font-size: 11px; color: #059669; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; border: 1px solid #dcfce7; font-weight: 700;">
+                                ✓ REVIEWED
+                            </span>
+                            {% endif %}
+                            {% endif %}
+                        </h3>
+
+                        <div class="booking-timeline">
+                            <div class="timeline-point">
+                                <span class="timeline-label">Pickup</span>
+                                <span class="timeline-value">{{ order.start_time.strftime('%b %d, %H:%M %p') if
+                                    order.start_time else 'N/A' }}</span>
+                            </div>
+                            <div class="timeline-arrow">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </div>
+                            <div class="timeline-point">
+                                <span class="timeline-label">Return</span>
+                                <span class="timeline-value">{{ order.end_time.strftime('%b %d, %H:%M %p') if
+                                    order.end_time else 'N/A' }}</span>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <span class="order-status status-{{ order.order_status.value.lower() }}">
+
+                    <div class="order-status-section">
+                        <div class="price-display">₹{{ "{:,.0f}".format(order.total_amount) if order.total_amount else
+                            "{:,.0f}".format(order.pay_advance_amount) }}</div>
+                        <span class="status-pill status-{{ order.order_status.value.upper() }}">
                             {{ order.order_status.value }}
                         </span>
+                        <a href="/orders/detail/{{ order.id }}" class="view-action-btn"
+                            onclick="event.stopPropagation();">
+                            View Details
+                        </a>
                     </div>
-                </div>
-
-                <div class="order-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Car</div>
-                        <div class="detail-value">
-                            {% if order.car %}
-                            {{ order.car.brand }} {{ order.car.car_model }}
-                            {% else %}
-                            Car #{{ order.car_id }}
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Pickup Date</div>
-                        <div class="detail-value">
-                            {{ order.start_time.strftime('%b %d, %Y') if order.start_time else 'N/A' }}
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Return Date</div>
-                        <div class="detail-value">
-                            {{ order.end_time.strftime('%b %d, %Y') if order.end_time else 'N/A' }}
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Total Amount</div>
-                        <div class="detail-value amount">
-                            ₹{{ "{:,.0f}".format(order.total_amount) if order.total_amount else
-                            "{:,.0f}".format(order.pay_advance_amount) }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="order-footer">
-                    <div>
-                        <span style="font-size: 14px; color: #64748b;">
-                            Payment:
-                            <strong
-                                style="color: {% if order.advance_amount_status.value == 'SUCCESSFUL' %}#059669{% else %}#dc2626{% endif %};">
-                                {{ order.advance_amount_status.value }}
-                            </strong>
-                        </span>
-                        {% if order.order_status.value == 'COMPLETED' and order_review_status.get(order.id) %}
-                        {% if order_review_status[order.id].can_review %}
-                        <span style="font-size: 12px; color: #ff6b35; margin-left: 12px; font-weight: 600;">
-                            ⭐ Review Available
-                        </span>
-                        {% elif order_review_status[order.id].has_review %}
-                        <span style="font-size: 12px; color: #059669; margin-left: 12px;">
-                            ✓ Reviewed
-                        </span>
-                        {% endif %}
-                        {% endif %}
-                    </div>
-                    <a href="/orders/detail/{{ order.id }}" class="view-details-btn" onclick="event.stopPropagation();">
-                        View Details →
-                    </a>
                 </div>
             </div>
             {% endfor %}
         </div>
 
-        <!-- Pagination -->
-        {% if pagination.total > 0 %}
-        <div
-            style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding: 20px; background: #ffffff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); flex-wrap: wrap; gap: 16px;">
-            <div style="color: #64748b; font-size: 14px;">
-                Showing {{ ((pagination.page - 1) * pagination.page_size) + 1 }} to {{ pagination.page *
-                pagination.page_size if pagination.page * pagination.page_size < pagination.total else pagination.total
-                    }} of {{ pagination.total }} order{{ 's' if pagination.total !=1 else '' }} </div>
-                    {% if pagination.total_pages > 1 %}
-                    <div class="pagination" style="margin: 0;">
-                        {% if pagination.has_prev %}
-                        <a href="/orders/view?page={{ pagination.page - 1 }}&page_size={{ pagination.page_size }}">←
-                            Previous</a>
-                        {% else %}
-                        <span class="disabled">← Previous</span>
-                        {% endif %}
-
-                        {% for page_num in range(1, pagination.total_pages + 1) %}
-                        {% if page_num == pagination.page %}
-                        <span class="current">{{ page_num }}</span>
-                        {% elif page_num <= 3 or page_num> pagination.total_pages - 3 or (page_num >= pagination.page -
-                            1 and page_num <= pagination.page + 1) %} <a
-                                href="/orders/view?page={{ page_num }}&page_size={{ pagination.page_size }}">{{ page_num
-                                }}</a>
-                                {% elif page_num == 4 or page_num == pagination.total_pages - 3 %}
-                                <span style="padding: 8px 4px;">...</span>
-                                {% endif %}
-                                {% endfor %}
-
-                                {% if pagination.has_next %}
-                                <a
-                                    href="/orders/view?page={{ pagination.page + 1 }}&page_size={{ pagination.page_size }}">Next
-                                    →</a>
-                                {% else %}
-                                <span class="disabled">Next →</span>
-                                {% endif %}
-                    </div>
-                    {% endif %}
-            </div>
-            {% endif %}
-
-            {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">📦</div>
-                <div class="empty-state-title">No Orders Yet</div>
-                <div class="empty-state-text">You haven't made any bookings yet. Start exploring our cars!</div>
-                <a href="/cars"
-                    style="display: inline-block; margin-top: 20px; padding: 12px 24px; background: #ff6b35; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600;">
-                    Browse Cars
+        <!-- Pagination Section -->
+        {% if pagination.total > 0 and pagination.total_pages > 1 %}
+        <div class="pagination-container" style="display: flex; justify-content: center; margin-top: 50px;">
+            <div class="pagination" style="display: flex; gap: 10px; align-items: center;">
+                {% if pagination.has_prev %}
+                <a href="/orders/view?page={{ pagination.page - 1 }}&page_size={{ pagination.page_size }}"
+                    style="background: white; border: 1px solid #e2e8f0; color: #2b3990; padding: 10px 18px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 14px; transition: all 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                    Prev
                 </a>
+                {% endif %}
+
+                {% for page_num in range(1, pagination.total_pages + 1) %}
+                {% if page_num == pagination.page %}
+                <span
+                    style="background: #2b3990; color: white; padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 15px rgba(43, 57, 144, 0.2);">
+                    {{ page_num }}
+                </span>
+                {% else %}
+                <a href="/orders/view?page={{ page_num }}&page_size={{ pagination.page_size }}"
+                    style="background: white; border: 1px solid #e2e8f0; color: #1e293b; padding: 10px 18px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s;">
+                    {{ page_num }}
+                </a>
+                {% endif %}
+                {% endfor %}
+
+                {% if pagination.has_next %}
+                <a href="/orders/view?page={{ pagination.page + 1 }}&page_size={{ pagination.page_size }}"
+                    style="background: white; border: 1px solid #e2e8f0; color: #2b3990; padding: 10px 18px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 14px; transition: all 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                    Next
+                </a>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
-        <script>
-            function changePageSize() {
-                const pageSize = document.getElementById('pageSizeSelect').value;
-                const url = new URL(window.location.href);
-                url.searchParams.set('page_size', pageSize);
-                url.searchParams.set('page', '1'); // Reset to first page
-                window.location.href = url.toString();
-            }
-            // Mobile menu toggle
-            const menuToggle = document.getElementById('menuToggle');
-            const mainNav = document.getElementById('mainNav');
+        {% endif %}
 
-            if (menuToggle && mainNav) {
-                menuToggle.addEventListener('click', function () {
-                    this.classList.toggle('active');
-                    mainNav.classList.toggle('active');
-                });
+        {% else %}
+        <div class="empty-state">
+            <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-cart-2130356-1800917.png"
+                alt="No bookings" class="empty-illustration">
+            <h2 class="empty-state-title">No Bookings Yet</h2>
+            <p class="empty-state-text" style="color: #64748b; margin-bottom: 30px;">Your upcoming journeys will appear
+                here once you book a car.</p>
+            <a href="/cars"
+                style="display: inline-block; padding: 15px 35px; background: #ff6b35; color: #ffffff; text-decoration: none; border-radius: 15px; font-weight: 700; font-size: 16px; box-shadow: 0 10px 20px rgba(255, 107, 53, 0.2); transition: all 0.3s;">
+                Browse Available Cars
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        function changePageSize() {
+            const pageSize = document.getElementById('pageSizeSelect').value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('page_size', pageSize);
+            url.searchParams.set('page', '1'); // Reset to first page
+            window.location.href = url.toString();
+        }
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
 
-                document.addEventListener('click', function (e) {
-                    if (!menuToggle.contains(e.target) && !mainNav.contains(e.target)) {
-                        menuToggle.classList.remove('active');
-                        mainNav.classList.remove('active');
-                    }
-                });
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', function () {
+                this.classList.toggle('active');
+                mainNav.classList.toggle('active');
+            });
 
-                mainNav.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', function () {
-                        menuToggle.classList.remove('active');
-                        mainNav.classList.remove('active');
-                    });
+            document.addEventListener('click', function (e) {
+                if (!menuToggle.contains(e.target) && !mainNav.contains(e.target)) {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                }
+            });
+
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function () {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
                 });
-            }
-        </script>
+            });
+        }
+    </script>
 </body>
 
 </html>

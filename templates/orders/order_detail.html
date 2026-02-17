@@ -8,80 +8,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body {
-            background: #f7fafc;
-            color: #1a202c;
-            line-height: 1.6;
-        }
-
-        /* Header */
+        /* Header New Design */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 20px 50px;
-            background: rgba(10, 25, 41, 0.85);
-            backdrop-filter: blur(10px);
+            padding: 15px 80px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            flex-wrap: wrap;
-            gap: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
         }
 
-        .logo {
+        .logo-img {
+            height: 50px;
             display: flex;
-            flex-direction: column;
-            gap: 2px;
+            align-items: center;
         }
 
-        .logo-main {
-            font-size: 32px;
-            font-weight: 700;
-            color: #ff6b35;
-            letter-spacing: -1px;
-        }
-
-        .logo-sub {
-            font-size: 12px;
-            color: #ffffff;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .logo-img img {
+            height: 100%;
+            object-fit: contain;
         }
 
         nav {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         nav a {
-            color: #ffffff;
+            color: #1e293b;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.2s ease;
             position: relative;
-            white-space: nowrap;
         }
 
-        nav a:hover {
-            color: #ff6b35;
+        nav a:hover,
+        nav a.active {
+            color: #2b3990;
         }
 
         nav a::after {
@@ -95,194 +69,139 @@
             transition: width 0.3s ease;
         }
 
+        nav a.active::after,
         nav a:hover::after {
             width: 100%;
         }
 
-        @media (max-width: 768px) {
-            header {
-                padding: 15px 20px;
-                gap: 15px;
-            }
-
-            nav {
-                gap: 12px;
-                font-size: 14px;
-                order: 3;
-                width: 100%;
-                justify-content: center;
-                margin-top: 10px;
-            }
-
-            .logo-main {
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 12px 15px;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            nav {
-                width: 100%;
-                gap: 10px;
-                font-size: 13px;
-                margin-top: 10px;
-            }
-
-            nav a {
-                padding: 5px 0;
-            }
-
-            .logo-main {
-                font-size: 20px;
-            }
-
-            .logo-sub {
-                font-size: 10px;
-            }
-        }
-
         /* Main Container */
         .main-container {
-            max-width: 1200px;
-            margin: 120px auto 40px;
+            max-width: 1100px;
+            margin: 110px auto 60px;
             padding: 0 20px;
         }
 
-        /* Back Button */
         .back-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            color: #4a5568;
+            gap: 10px;
+            color: #64748b;
             text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 24px;
-            transition: color 0.3s;
+            font-weight: 700;
+            margin-bottom: 30px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .back-link:hover {
-            color: #ff6b35;
-        }
-
-        .goto-location-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: #3b82f6;
-            color: #ffffff;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .goto-location-btn:hover {
-            background: #2563eb;
+            color: #2b3990;
+            transform: translateX(-5px);
         }
 
         /* Order Header */
         .order-header-card {
             background: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 24px;
+            border-radius: 25px;
+            padding: 30px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            border: 1px solid #f1f5f9;
         }
 
         .order-header-top {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
+            align-items: center;
         }
 
         .order-title {
-            font-size: 28px;
+            font-size: 32px;
+            font-weight: 800;
+            color: #2b3990;
+            letter-spacing: -0.5px;
+        }
+
+        .status-badge {
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 12px;
             font-weight: 700;
-            color: #1a202c;
-        }
-
-        .order-status-badge {
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
+        /* Status Colors to match bookings list */
+        .status-PENDING {
+            background: #fff7ed;
+            color: #ea580c;
+            border: 1px solid #ffedd5;
         }
 
-        .status-approved {
-            background: #dbeafe;
-            color: #1e40af;
+        .status-BOOKED {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #dcfce7;
         }
 
-        .status-booked {
-            background: #d1fae5;
-            color: #065f46;
+        .status-COMPLETED {
+            background: #f0f9ff;
+            color: #0284c7;
+            border: 1px solid #e0f2fe;
         }
 
-        .status-ongoing {
-            background: #dbeafe;
-            color: #1e40af;
+        .status-CANCELLED {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fee2e2;
         }
 
-        .status-completed {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-cancelled {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .order-id-text {
-            font-size: 14px;
-            color: #64748b;
-            margin-top: 8px;
+        .status-ONGOING {
+            background: #f5f3ff;
+            color: #7c3aed;
+            border: 1px solid #ede9fe;
         }
 
         /* Info Grid */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
         }
 
         .info-card {
             background: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
         }
 
         .info-card-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #e2e8f0;
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-card-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #f1f5f9;
         }
 
         .info-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
+            align-items: flex-start;
+            padding: 15px 0;
+            border-bottom: 1px solid #f8fafc;
         }
 
         .info-row:last-child {
@@ -290,99 +209,117 @@
         }
 
         .info-label {
-            font-size: 14px;
-            color: #64748b;
+            font-size: 13px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .info-value {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
-            color: #1a202c;
+            color: #1e293b;
             text-align: right;
         }
 
         .info-value.amount {
-            font-size: 20px;
+            font-size: 18px;
             color: #ff6b35;
+            font-weight: 800;
         }
 
-        .info-value.status {
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .status-successful {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-failed {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .status-initiated {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-order-created {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        /* Car Info */
-        .car-info {
+        /* Car Info Section */
+        .car-info-display {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             align-items: center;
-            padding: 16px;
             background: #f8fafc;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 20px;
         }
 
-        .car-image {
-            width: 120px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-            background: #e2e8f0;
+        .car-image-detail {
+            width: 140px;
+            height: 90px;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.08));
         }
 
-        .car-details h3 {
+        .car-text h3 {
             font-size: 20px;
-            font-weight: 700;
-            color: #1a202c;
+            font-weight: 800;
+            color: #1e293b;
             margin-bottom: 8px;
         }
 
-        .car-specs {
+        .specs-pills {
             display: flex;
-            gap: 16px;
-            font-size: 14px;
-            color: #64748b;
+            gap: 10px;
         }
 
-        /* Responsive */
+        .spec-pill {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            border: 1px solid #f1f5f9;
+            text-transform: uppercase;
+        }
+
+        /* Review Section */
+        .star-rating {
+            display: flex;
+            gap: 10px;
+        }
+
+        .star-input {
+            font-size: 36px !important;
+        }
+
+        .submit-btn {
+            background: #2b3990;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 15px;
+            border: none;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(43, 57, 144, 0.1);
+        }
+
+        .submit-btn:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(43, 57, 144, 0.2);
+        }
+
         @media (max-width: 768px) {
             header {
-                padding: 15px 20px;
+                padding: 15px 30px;
             }
 
-            .main-container {
-                margin: 100px auto 20px;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
+            .order-header-card {
+                padding: 20px;
             }
 
             .order-header-top {
                 flex-direction: column;
-                gap: 12px;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .order-title {
+                font-size: 24px;
+            }
+
+            .car-info-display {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -420,203 +357,169 @@
     </header>
 
     <div class="main-container">
-        <a href="/orders/view" class="back-link">← Back to My Bookings</a>
+        <a href="/orders/view" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to My Bookings
+        </a>
 
         <!-- Order Header -->
         <div class="order-header-card">
             <div class="order-header-top">
                 <div>
-                    <h1 class="order-title">Order #{{ order.id }}</h1>
-                    <div class="order-id-text">
-                        {% if order.order_id %}Order ID: {{ order.order_id }}{% endif %}
+                    <h1 class="order-title">Booking #{{ order.id }}</h1>
+                    <div style="color: #64748b; font-size: 14px; margin-top: 5px; font-weight: 500;">
+                        Placed on {{ order.created_at.strftime('%B %d, %Y') if order.created_at else 'Unknown' }}
                     </div>
                 </div>
-                <span class="order-status-badge status-{{ order.order_status.value.lower() }}">
+                <span class="status-badge status-{{ order.order_status.value.upper() }}">
                     {{ order.order_status.value }}
                 </span>
             </div>
         </div>
 
-        <!-- Info Grid -->
         <div class="info-grid">
-            <!-- Booking Information -->
+            <!-- Booking Details -->
             <div class="info-card">
-                <h2 class="info-card-title">Booking Information</h2>
+                <h2 class="info-card-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Booking Period
+                </h2>
                 <div class="info-row">
-                    <span class="info-label">Pickup Date & Time</span>
-                    <span class="info-value">
-                        {{ order.start_time.strftime('%B %d, %Y at %I:%M %p') if order.start_time else 'N/A' }}
-                    </span>
+                    <span class="info-label">Pickup Time</span>
+                    <span class="info-value">{{ order.start_time.strftime('%b %d, %Y - %I:%M %p') if order.start_time
+                        else 'N/A' }}</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Return Date & Time</span>
-                    <span class="info-value">
-                        {{ order.end_time.strftime('%B %d, %Y at %I:%M %p') if order.end_time else 'N/A' }}
-                    </span>
+                    <span class="info-label">Return Time</span>
+                    <span class="info-value">{{ order.end_time.strftime('%b %d, %Y - %I:%M %p') if order.end_time else
+                        'N/A' }}</span>
                 </div>
                 {% if order.actual_start_time %}
                 <div class="info-row">
                     <span class="info-label">Actual Pickup</span>
-                    <span class="info-value">
-                        {{ order.actual_start_time.strftime('%B %d, %Y at %I:%M %p') }}
-                    </span>
-                </div>
-                {% endif %}
-                {% if order.actual_end_time %}
-                <div class="info-row">
-                    <span class="info-label">Actual Return</span>
-                    <span class="info-value">
-                        {{ order.actual_end_time.strftime('%B %d, %Y at %I:%M %p') }}
-                    </span>
+                    <span class="info-value" style="color: #2b3990;">{{ order.actual_start_time.strftime('%b %d, %I:%M
+                        %p') }}</span>
                 </div>
                 {% endif %}
                 {% if order.home_delivery %}
-                <div class="info-row">
-                    <span class="info-label">Delivery Type</span>
-                    <span class="info-value">Home Delivery</span>
-                </div>
-                {% if order.delivery_address %}
-                <div class="info-row">
-                    <span class="info-label">Delivery Address</span>
-                    <span class="info-value" style="text-align: right; max-width: 200px;">{{ order.delivery_address
+                <div class="info-row" style="flex-direction: column; align-items: flex-start;">
+                    <span class="info-label" style="margin-bottom: 5px;">Delivery Address</span>
+                    <span class="info-value" style="text-align: left;">{{ order.delivery_address or 'Home Delivery'
                         }}</span>
                 </div>
                 {% endif %}
-                {% endif %}
             </div>
 
-            <!-- Payment Information -->
+            <!-- Car Section -->
             <div class="info-card">
-                <h2 class="info-card-title">Payment Information</h2>
-                <div class="info-row">
-                    <span class="info-label">Advance Amount</span>
-                    <span class="info-value amount">₹{{ "{:,.0f}".format(order.pay_advance_amount) }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Advance Status</span>
-                    <span
-                        class="info-value status status-{{ order.advance_amount_status.value.lower().replace('_', '-') }}">
-                        {{ order.advance_amount_status.value }}
-                    </span>
-                </div>
-                {% if order.total_amount %}
-                <div class="info-row">
-                    <span class="info-label">Total Amount</span>
-                    <span class="info-value amount">₹{{ "{:,.0f}".format(order.total_amount) }}</span>
-                </div>
-                {% endif %}
-                {% if order.pay_at_car %}
-                <div class="info-row">
-                    <span class="info-label">Pay at Car</span>
-                    <span class="info-value amount">₹{{ "{:,.0f}".format(order.pay_at_car) }}</span>
-                </div>
-                {% endif %}
-                {% if order.payment_mode %}
-                <div class="info-row">
-                    <span class="info-label">Payment Mode</span>
-                    <span class="info-value">{{ order.payment_mode }}</span>
-                </div>
-                {% endif %}
-                {% if order.payment_id %}
-                <div class="info-row">
-                    <span class="info-label">Payment ID</span>
-                    <span class="info-value">{{ order.payment_id }}</span>
-                </div>
-                {% endif %}
-            </div>
-
-            <!-- Car Information -->
-            <div class="info-card">
-                <h2 class="info-card-title">Car Information</h2>
-                {% if order.car %}
-                <div class="car-info">
-                    {% if order.car.images %}
-                    {% set image_urls = order.car.images.split(',') if ',' in order.car.images else [order.car.images]
-                    %}
-                    <img src="{{ image_urls[0] }}" alt="Car" class="car-image"
+                <h2 class="info-card-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9C2.1 11.6 2 12.2 2 12.8V16c0 .6.4 1 1 1h2">
+                        </path>
+                        <circle cx="7" cy="17" r="2"></circle>
+                        <circle cx="17" cy="17" r="2"></circle>
+                    </svg>
+                    Vehicle Details
+                </h2>
+                <div class="car-info-display">
+                    {% if order.car and order.car.images %}
+                    {% set image_urls = order.car.images.split(',') %}
+                    <img src="{{ image_urls[0] }}" alt="Car" class="car-image-detail"
                         onerror="this.src='/static/img/landing.png'">
                     {% else %}
-                    <img src="/static/img/landing.png" alt="Car" class="car-image">
+                    <img src="/static/img/landing.png" alt="Car" class="car-image-detail">
                     {% endif %}
-                    <div class="car-details">
+                    <div class="car-text">
                         <h3>{{ order.car.brand }} {{ order.car.car_model }}</h3>
-                        <div class="car-specs">
-                            <span>{{ order.car.transmission_type.value.title() }}</span>
-                            <span>{{ order.car.fuel_type.value.title() }}</span>
-                            <span>{{ order.car.no_of_seats.value }} Seats</span>
+                        <div class="specs-pills">
+                            <span class="spec-pill">{{ order.car.transmission_type.value }}</span>
+                            <span class="spec-pill">{{ order.car.fuel_type.value }}</span>
                         </div>
-                        {% if order.car.location %}
-                        <div class="car-location" style="margin-top: 12px;">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    style="color: #64748b;">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                                <span style="color: #4a5568; font-size: 14px;">{{ order.car.location.location }}</span>
-                            </div>
-                            {% if order.car.location.maps_link %}
-                            <a href="{{ order.car.location.maps_link }}" target="_blank" rel="noopener noreferrer"
-                                class="goto-location-btn">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                                Go to Location
-                            </a>
-                            {% endif %}
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
-                {% else %}
-                <div class="info-row">
-                    <span class="info-label">Car ID</span>
-                    <span class="info-value">#{{ order.car_id }}</span>
+                {% if order.car.location %}
+                <div style="margin-top: 15px;">
+                    <div class="info-label" style="margin-bottom: 8px;">Pickup Location</div>
+                    <div
+                        style="font-size: 14px; font-weight: 600; color: #1e293b; display: flex; align-items: flex-start; gap: 8px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" style="margin-top: 2px;">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        {{ order.car.location.location }}
+                    </div>
                 </div>
                 {% endif %}
             </div>
 
-            <!-- Additional Information -->
-            {% if order.no_of_km_travelled or order.extra_hours_charge or order.extra_km_charge or order.deposit_amount
-            %}
+            <!-- Payment Details -->
             <div class="info-card">
-                <h2 class="info-card-title">Additional Charges</h2>
+                <h2 class="info-card-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
+                    Payment Summary
+                </h2>
+                <div class="info-row">
+                    <span class="info-label">Full Amount</span>
+                    <span class="info-value amount">₹{{ "{:,.0f}".format(order.total_amount or 0) }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Advance Paid</span>
+                    <span class="info-value" style="color: #16a34a;">- ₹{{ "{:,.0f}".format(order.pay_advance_amount or
+                        0) }}</span>
+                </div>
+                <div class="info-row"
+                    style="background: #f8fafc; margin: 0 -30px; padding: 15px 30px; border-top: 1px dashed #e2e8f0; border-bottom: 1px dashed #e2e8f0;">
+                    <span class="info-label" style="color: #1e293b;">Balance Due</span>
+                    <span class="info-value amount" style="font-size: 22px;">₹{{ "{:,.0f}".format((order.total_amount or
+                        0) - (order.pay_advance_amount or 0)) }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Payment Mode</span>
+                    <span class="info-value">{{ order.payment_mode or 'Online' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Extra Charges -->
+        {% if order.extra_hours_charge or order.extra_km_charge or order.deposit_amount %}
+        <div class="info-card" style="margin-top: 30px;">
+            <h2 class="info-card-title">Additional Information & Charges</h2>
+            <div class="info-grid"
+                style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; box-shadow: none; padding: 0; border: none;">
                 {% if order.no_of_km_travelled %}
                 <div class="info-row">
-                    <span class="info-label">Distance Travelled</span>
-                    <span class="info-value">{{ "{:,.0f}".format(order.no_of_km_travelled) }} km</span>
+                    <span class="info-label">Total Distance</span>
+                    <span class="info-value">{{ "{:,.0f}".format(order.no_of_km_travelled) }} KM</span>
                 </div>
                 {% endif %}
                 {% if order.extra_hours_charge %}
                 <div class="info-row">
-                    <span class="info-label">Extra Hours Charge</span>
+                    <span class="info-label">Extra Hours</span>
                     <span class="info-value amount">₹{{ "{:,.0f}".format(order.extra_hours_charge) }}</span>
-                </div>
-                {% endif %}
-                {% if order.extra_km_charge %}
-                <div class="info-row">
-                    <span class="info-label">Extra KM Charge</span>
-                    <span class="info-value amount">₹{{ "{:,.0f}".format(order.extra_km_charge) }}</span>
                 </div>
                 {% endif %}
                 {% if order.deposit_amount %}
                 <div class="info-row">
                     <span class="info-label">Security Deposit</span>
-                    <span class="info-value amount">₹{{ "{:,.0f}".format(order.deposit_amount) }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Deposit Returned</span>
-                    <span class="info-value">
-                        {% if order.deposit_returned %}Yes{% else %}No{% endif %}
-                    </span>
+                    <span class="info-value">₹{{ "{:,.0f}".format(order.deposit_amount) }}</span>
                 </div>
                 {% endif %}
             </div>
-            {% endif %}
         </div>
+        {% endif %}
 
         <!-- Review Section -->
         {% if order.order_status.value == 'COMPLETED' %}
@@ -716,6 +619,7 @@
         window.location.reload();
             } catch (error) {
             alert('Error submitting review: ' + error.message);
+        }
         }
         }
     </script>

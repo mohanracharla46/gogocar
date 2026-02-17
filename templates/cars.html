@@ -731,7 +731,7 @@
                             <span class="spec-item"><i class="fas fa-cog"></i> {{ transmission_display }}</span>
                         </div>
                         <div class="car-card-bottom">
-                            <div class="car-card-price">?{{ "{:,.0f}".format(car.base_price) }} <span>per hour</span>
+                            <div class="car-card-price">₹{{ "{:,.0f}".format(car.base_price) }} <span>per day</span>
                             </div>
                             <a href="/cars/{{ car.id }}" class="book-btn-new book-now-card-btn"
                                 onclick="const p=document.getElementById('top-pickup-datetime').value; const r=document.getElementById('top-return-datetime').value; let u=this.href+'?location=Hyderabad'; if(p)u+='&pickup_datetime='+p; if(r)u+='&end_datetime='+r; window.location.assign(u); return false;">

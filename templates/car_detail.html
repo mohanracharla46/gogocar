@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -503,7 +503,7 @@
         }
 
         .feature-item::before {
-            content: '✓';
+            content: 'âœ“';
             color: #2b3990;
             font-weight: 700;
             font-size: 18px;
@@ -1246,7 +1246,7 @@
         }
 
         .hover-info-list li::before {
-            content: "•";
+            content: "â€¢";
             color: #f59e0b;
             font-weight: bold;
         }
@@ -1498,11 +1498,11 @@
         <!-- Breadcrumb -->
         <div class="breadcrumb">
             <a href="/">Home</a>
-            <span>›</span>
+            <span>â€º</span>
             <a href="/cars">Rentals</a>
-            <span>›</span>
+            <span>â€º</span>
             <a href="#">{{ car.car_type.value|title }}</a>
-            <span>›</span>
+            <span>â€º</span>
             <span>{{ car.brand }} {{ car.car_model }}</span>
         </div>
 
@@ -1513,21 +1513,21 @@
                 <div class="car-title-header">
                     <div>
                         <h1 class="car-title">{{ car.brand }} {{ car.car_model }}</h1>
-                        <p class="car-subtitle">{{ car.no_of_seats.value }} • {{ car.fuel_type.value }} • {{
+                        <p class="car-subtitle">{{ car.no_of_seats.value }} â€¢ {{ car.fuel_type.value }} â€¢ {{
                             car.transmission_type.value|title }}</p>
                     </div>
-                    <button class="share-btn">🔗 Share</button>
+                    <button class="share-btn">ðŸ”— Share</button>
                 </div>
                 <div class="rating-section">
                     <div class="stars">
                         {% for i in range(5) %}
                         {% if avg_rating >= i + 1 %}
-                        <span class="star">★</span>
+                        <span class="star">â˜…</span>
                         {% elif avg_rating >= i + 0.5 %}
                         <span class="star"
-                            style="background: linear-gradient(90deg, #f59e0b 50%, #cbd5e0 50%); -webkit-background-clip: text; color: transparent;">★</span>
+                            style="background: linear-gradient(90deg, #f59e0b 50%, #cbd5e0 50%); -webkit-background-clip: text; color: transparent;">â˜…</span>
                         {% else %}
-                        <span class="star" style="color: #cbd5e0;">★</span>
+                        <span class="star" style="color: #cbd5e0;">â˜…</span>
                         {% endif %}
                         {% endfor %}
                     </div>
@@ -1546,8 +1546,8 @@
                         id="mainImage" onerror="this.src='/static/img/landing.png'">
 
                     {% if image_list|length > 1 %}
-                    <button class="gallery-nav prev" onclick="changeImage(-1)">‹</button>
-                    <button class="gallery-nav next" onclick="changeImage(1)">›</button>
+                    <button class="gallery-nav prev" onclick="changeImage(-1)">â€¹</button>
+                    <button class="gallery-nav next" onclick="changeImage(1)">â€º</button>
                     {% endif %}
                 </div>
                 <div class="thumbnail-grid">
@@ -1639,11 +1639,11 @@
                                 <span class="review-date">2 days ago</span>
                             </div>
                             <div class="review-stars">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
                             </div>
                             <p class="review-text">
                                 Excellent car for family trips! The 7-seater configuration was perfect for our weekend
@@ -1659,11 +1659,11 @@
                                 <span class="review-date">1 week ago</span>
                             </div>
                             <div class="review-stars">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star" style="color: #cbd5e0;">★</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
+                                <span class="star" style="color: #cbd5e0;">â˜…</span>
                             </div>
                             <p class="review-text">
                                 Good value for money. The car is spacious and comfortable. AC works great.
@@ -1678,11 +1678,11 @@
                                 <span class="review-date">2 weeks ago</span>
                             </div>
                             <div class="review-stars">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
+                                <span class="star">â˜…</span>
                             </div>
                             <p class="review-text">
                                 Perfect for city driving and highway trips. Fuel efficient and easy to handle.
@@ -1768,7 +1768,7 @@
                         <div class="faq-item">
                             <div class="faq-question" onclick="toggleFaq(this)">
                                 <span>What documents do I need to rent this car?</span>
-                                <span class="faq-icon">▼</span>
+                                <span class="faq-icon">â–¼</span>
                             </div>
                             <div class="faq-answer">
                                 You will need a valid driver's license, Aadhar card or passport for identity
@@ -1780,7 +1780,7 @@
                         <div class="faq-item">
                             <div class="faq-question" onclick="toggleFaq(this)">
                                 <span>Can I extend my rental period?</span>
-                                <span class="faq-icon">▼</span>
+                                <span class="faq-icon">â–¼</span>
                             </div>
                             <div class="faq-answer">
                                 Yes, you can extend your rental period subject to availability. Please contact the host
@@ -1791,7 +1791,7 @@
                         <div class="faq-item">
                             <div class="faq-question" onclick="toggleFaq(this)">
                                 <span>Is the car available for outstation trips?</span>
-                                <span class="faq-icon">▼</span>
+                                <span class="faq-icon">â–¼</span>
                             </div>
                             <div class="faq-answer">
                                 Yes, this car is available for outstation trips. Please note that additional mileage
@@ -1803,7 +1803,7 @@
                         <div class="faq-item">
                             <div class="faq-question" onclick="toggleFaq(this)">
                                 <span>What happens if I return the car late?</span>
-                                <span class="faq-icon">▼</span>
+                                <span class="faq-icon">â–¼</span>
                             </div>
                             <div class="faq-answer">
                                 A grace period of 1 hour is provided. Beyond that, you will be charged ₹200 per hour
@@ -1819,21 +1819,21 @@
                 <h2>Inclusion/Exclusions</h2>
                 <div class="inclusion-list">
                     <div class="inclusion-item">
-                        <span class="inclusion-icon check">✓</span>
+                        <span class="inclusion-icon check">âœ“</span>
                         <span>Security deposit (if applied) will automatically be refunded within 2-3 days after the
                             trip completion.</span>
                     </div>
                     <div class="inclusion-item">
-                        <span class="inclusion-icon cross">✕</span>
+                        <span class="inclusion-icon cross">âœ•</span>
                         <span>Fuel not included. Guest should return the car with the same fuel level as at
                             start.</span>
                     </div>
                     <div class="inclusion-item">
-                        <span class="inclusion-icon cross">✕</span>
+                        <span class="inclusion-icon cross">âœ•</span>
                         <span>Toll/Fastag charges not included. Check with host for Fastag recharge.</span>
                     </div>
                     <div class="inclusion-item">
-                        <span class="inclusion-icon cross">✕</span>
+                        <span class="inclusion-icon cross">âœ•</span>
                         <span>Trip Protection excludes: Off-road use, driving under influence, over-speeding, illegal
                             use, restricted zones.</span>
                     </div>
@@ -1861,7 +1861,7 @@
                     </div>
                     <div class="overall-rating">
                         <span class="rating-number">4.9 / 5</span>
-                        <div class="rating-stars">★★★★★</div>
+                        <div class="rating-stars">â˜…â˜…â˜…â˜…â˜…</div>
                         <span class="reviews-count">Based on 1,240+ live reviews</span>
                     </div>
                 </div>
@@ -1877,7 +1877,7 @@
                                 <span class="review-time">Verified Local Guide</span>
                             </div>
                         </div>
-                        <span class="card-stars">★★★★★</span>
+                        <span class="card-stars">â˜…â˜…â˜…â˜…â˜…</span>
                         <p class="review-content">"Amazing service! The car was in perfect condition and the paperwork
                             was handled very professionally. Best car rental experience in the city."</p>
                     </div>
@@ -1891,7 +1891,7 @@
                                 <span class="review-time">Verified Google User</span>
                             </div>
                         </div>
-                        <span class="card-stars">★★★★★</span>
+                        <span class="card-stars">â˜…â˜…â˜…â˜…â˜…</span>
                         <p class="review-content">"Highly recommend GoGo Cars! Very transparent pricing and the staff is
                             super helpful. The doorstep delivery was on time."</p>
                     </div>
@@ -1911,21 +1911,21 @@
                     <div class="similar-card">
                         <div class="similar-badge">POPULAR</div>
                         <div class="similar-name">Tata Altroz</div>
-                        <div class="similar-specs">Hatchback • Petrol • 5 Seats</div>
+                        <div class="similar-specs">Hatchback â€¢ Petrol â€¢ 5 Seats</div>
                         <div class="similar-price">₹1,200</div>
                         <div class="similar-period">Per day</div>
                     </div>
                     <div class="similar-card">
                         <div class="similar-badge">FEATURED</div>
                         <div class="similar-name">Maruti Swift</div>
-                        <div class="similar-specs">Hatchback • Petrol • 5 Seats</div>
+                        <div class="similar-specs">Hatchback â€¢ Petrol â€¢ 5 Seats</div>
                         <div class="similar-price">₹1,100</div>
                         <div class="similar-period">Per day</div>
                     </div>
                     <div class="similar-card">
                         <div class="similar-badge">NEW</div>
                         <div class="similar-name">Hyundai i20</div>
-                        <div class="similar-specs">Hatchback • Petrol • 5 Seats</div>
+                        <div class="similar-specs">Hatchback â€¢ Petrol â€¢ 5 Seats</div>
                         <div class="similar-price">₹1,400</div>
                         <div class="similar-period">Per day</div>
                     </div>
@@ -2067,7 +2067,7 @@
                     <div class="host-avatar">PK</div>
                     <div class="host-details">
                         <div class="host-name">Pradeep Kumar</div>
-                        <div class="host-rating">⭐ 4.8 • 156 trips</div>
+                        <div class="host-rating">â­ 4.8 â€¢ 156 trips</div>
                     </div>
                     <button class="host-cta">Chat</button>
                 </div>
