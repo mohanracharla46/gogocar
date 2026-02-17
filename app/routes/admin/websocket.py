@@ -48,8 +48,8 @@ async def websocket_notifications(websocket: WebSocket):
             return
         
         # Get current user from token
-        from app.routes.auth import decode_token
-        token_data = decode_token(access_token)
+        from app.core.security import decode_access_token
+        token_data = decode_access_token(access_token)
         
         if token_data.get("error"):
             await websocket.close(code=1008, reason="Invalid token")
@@ -59,7 +59,7 @@ async def websocket_notifications(websocket: WebSocket):
         # Get user from database
         from app.db.models import UserProfile
         user = db.query(UserProfile).filter(
-            UserProfile.username == token_data.get("username")
+            UserProfile.username == token_data.get("sub")
         ).first()
         
         if not user:
