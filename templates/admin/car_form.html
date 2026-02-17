@@ -282,10 +282,7 @@
         e.preventDefault();
 
         const formData = new FormData();
-        let carId = null;
-        {% if car %}
-        carId = {{ car.id }};
-        {% endif %}
+        const carId = {{ car.id if car else "null" }};
 
 
     // Helper to append only if value exists
