@@ -284,9 +284,8 @@
         const formData = new FormData();
         let carId = null;
         {% if car %}
-                carId = {{ car.id }};
-        
-    {% endif %}
+        carId = {{ car.id }};
+        {% endif %}
 
 
     // Helper to append only if value exists
@@ -295,7 +294,7 @@
         if (val !== "" && val !== null && val !== undefined) {
             formData.append(name, val);
         }
-        
+    };
 
     // Add mandatory form fields
     formData.append('brand', document.getElementById('brand').value);
