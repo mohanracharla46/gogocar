@@ -49,15 +49,19 @@ def setup_logging(
             project_root = Path(__file__).parent.parent.parent
             log_path = project_root / log_file
             
-            if os.getenv("RENDER") is None:
-                log_path.parent.mkdir(parents=True, exist_ok=True)
-                file_handler = logging.FileHandler(str(log_path))
-                file_handler.setLevel(getattr(logging, log_level.upper()))
-                file_handler.setFormatter(logging.Formatter(log_format))
-                root_logger.addHandler(file_handler)
-                print(f"File logging configured to: {log_path}")
+            # Skip file logging on cloud platforms (Render, Heroku) or if explicitly disabled
+            if os.getenv("RENDER") or os.getenv("DYNO") or os.getenv("DISABLE_FILE_LOGGING"):
+                print("Running on cloud infrastructure, skipping file logging. Logging to stdout only.")
             else:
-                print("Running on Render, skipping file logging. Logging to stdout only.")
+                try:
+                    log_path.parent.mkdir(parents=True, exist_ok=True)
+                    file_handler = logging.FileHandler(str(log_path))
+                    file_handler.setLevel(getattr(logging, log_level.upper()))
+                    file_handler.setFormatter(logging.Formatter(log_format))
+                    root_logger.addHandler(file_handler)
+                    print(f"File logging configured to: {log_path}")
+                except Exception as e:
+                     print(f"Could not setup file logging (likely permission issue): {e}. Logging to stdout only.")
         except Exception as e:
             print(f"Failed to setup file logging: {e}. Falling back to stdout.")
     
