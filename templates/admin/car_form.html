@@ -1,4 +1,4 @@
-{% extends "admin/base.html" %}
+﻿{% extends "admin/base.html" %}
 
 {% block title %}{{ 'Edit' if car else 'Create' }} Car - Admin Panel{% endblock %}
 
@@ -184,7 +184,7 @@
                 </div>
             </div>
 
-            <!-- Section 5: Gallery -->
+            <!-- Section 5: Media Gallery -->
             <div style="margin-bottom: 40px;">
                 <h4
                     style="font-size: 16px; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
@@ -284,10 +284,9 @@
         const formData = new FormData();
         let carId = null;
         {% if car %}
-        carId = {{ car.id }
-    };
+                carId = {{ car.id }};
+        
     {% endif %}
-
 
 
     // Helper to append only if value exists
@@ -296,7 +295,7 @@
         if (val !== "" && val !== null && val !== undefined) {
             formData.append(name, val);
         }
-    };
+        
 
     // Add mandatory form fields
     formData.append('brand', document.getElementById('brand').value);
