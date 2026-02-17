@@ -183,7 +183,7 @@ class AnalyticsService:
         
         growth = {}
         for daily in daily_counts:
-            date_str = daily.date.strftime('%Y-%m-%d')
+            date_str = daily.date.strftime('%Y-%m-%d') if hasattr(daily.date, 'strftime') else str(daily.date)
             growth[date_str] = daily.count
         
         return growth
@@ -232,7 +232,7 @@ class AnalyticsService:
         
         timeseries = {}
         for daily in daily_counts:
-            date_str = daily.date.strftime('%Y-%m-%d')
+            date_str = daily.date.strftime('%Y-%m-%d') if hasattr(daily.date, 'strftime') else str(daily.date)
             timeseries[date_str] = daily.count
         
         return timeseries
@@ -258,7 +258,7 @@ class AnalyticsService:
         
         timeseries = {}
         for daily in daily_revenue:
-            date_str = daily.date.strftime('%Y-%m-%d')
+            date_str = daily.date.strftime('%Y-%m-%d') if hasattr(daily.date, 'strftime') else str(daily.date)
             timeseries[date_str] = float(daily.revenue or 0)
         
         return timeseries
