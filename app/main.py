@@ -35,9 +35,19 @@ app = FastAPI(
 )
 
 # CORS middleware
+origins = [
+    "http://localhost:8000",
+    "http://localhost:3000",
+    settings.DOMAIN_URL,
+]
+# Add Render domains if possible
+if "onrender.com" in settings.DOMAIN_URL:
+    render_domain = settings.DOMAIN_URL
+    origins.append(render_domain)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"] if settings.DEBUG else [],
+    allow_origins=["*"] if settings.DEBUG else origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

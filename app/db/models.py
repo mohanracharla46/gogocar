@@ -137,10 +137,10 @@ class Cars(Base):
     brand = Column(String, nullable=False)
     car_model = Column(String, nullable=False)
     description = Column(Text, nullable=True)
-    base_price = Column(Integer, nullable=False)  # Base hourly price
-    damage_price = Column(Integer, nullable=False)
+    base_price = Column(Float, nullable=False)  # Base hourly price
+    damage_price = Column(Float, nullable=False)
     active = Column(Boolean, default=True, nullable=False)
-    protection_price = Column(Integer, nullable=False)
+    protection_price = Column(Float, nullable=False)
     images = Column(String, nullable=True)  # Comma-separated image URLs
     no_of_km = Column(Integer, nullable=False)
     fuel_type = Column(Enum(FuelType), nullable=False)
