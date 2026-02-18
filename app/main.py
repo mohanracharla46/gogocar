@@ -121,6 +121,8 @@ async def general_exception_handler(request: Request, exc: Exception):
 app.include_router(auth.router)
 app.include_router(payments.router)
 app.include_router(bookings.router)
+from app.routes import mobile
+app.include_router(mobile.router, prefix="/api/mobile")
 from app.routes import reviews, tickets
 app.include_router(reviews.router)
 app.include_router(tickets.router)
