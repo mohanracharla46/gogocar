@@ -740,7 +740,7 @@ async def payment_failure(
         )
 
 
-@router.get("/cancel")
+@router.post("/cancel")
 async def payment_cancel(
     request: Request,
     order_id: Optional[int] = None
