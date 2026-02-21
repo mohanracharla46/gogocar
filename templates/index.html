@@ -75,221 +75,10 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
-
-        /* Header New Design */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 80px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-img {
-            width: 200px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .logo-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .logo {
-            display: flex;
-            flex-direction: column;
-            justify-self: start;
-        }
-
-        .logo-main {
-            font-size: 32px;
-            font-weight: 800;
-            color: #2b3990;
-            /* Dark Blue */
-            letter-spacing: -1px;
-            line-height: 1;
-        }
-
-        .logo-sub {
-            font-size: 11px;
-            color: #475569;
-            letter-spacing: 0.5px;
-            font-weight: 500;
-        }
-
-        nav {
-            display: flex;
-            gap: 40px;
-            justify-content: center;
-            align-items: center;
-            justify-self: center;
-        }
-
-        nav a {
-            color: #1e293b;
-            /* Dark Slate */
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: color 0.2s ease;
-            position: relative;
-        }
-
-        nav a:hover {
-            color: #2b3990;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #ff6b35;
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
-            z-index: 1001;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #ffffff;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        /* Login Button New Design */
-        .auth-buttons {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .host-btn {
-            padding: 10px 25px;
-            border: 2px solid #061a40;
-            color: #061a40;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .host-btn:hover {
-            background: #061a40;
-            color: #ffffff;
-        }
-
-        .login-btn-new {
-            background: #061a40;
-            color: #ffffff;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(6, 26, 64, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .login-btn-new:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 26, 64, 0.3);
-            background: #0a295c;
-        }
-
-        .user-icon {
-            width: 20px;
-            height: 20px;
-            fill: #2b3990;
-        }
-
-        /* Mobile adjustments */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
-            z-index: 1001;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #2b3990;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        /* Consolidated media queries moved to bottom */
-
+    </style>
+    {% include '_header_css.html' %}
+    {% include '_footer_css.html' %}
+    <style>
         /* Hero Section Refined Design */
         /* Hero Section Redesign */
         .hero {
@@ -645,17 +434,7 @@
             animation: modalSlideIn 0.3s ease-out;
         }
 
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
         .location-modal-header {
             display: flex;
@@ -855,130 +634,7 @@
             opacity: 0.5;
         }
 
-        /* Terms and Conditions Modal */
-        .terms-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            backdrop-filter: blur(5px);
-            overflow-y: auto;
-        }
 
-        .terms-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .terms-modal-content {
-            background: #ffffff;
-            border-radius: 16px;
-            max-width: 800px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            animation: modalSlideIn 0.3s ease-out;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .terms-modal-header {
-            position: sticky;
-            top: 0;
-            background: #ffffff;
-            padding: 25px 30px;
-            border-bottom: 2px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .terms-modal-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: #1a202c;
-            margin: 0;
-        }
-
-        .terms-modal-close {
-            background: transparent;
-            border: none;
-            font-size: 32px;
-            color: #64748b;
-            cursor: pointer;
-            padding: 0;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .terms-modal-close:hover {
-            background: #f1f5f9;
-            color: #1a202c;
-        }
-
-        .terms-modal-body {
-            padding: 30px;
-            color: #1a202c;
-            line-height: 1.8;
-        }
-
-        .terms-modal-body h2 {
-            font-size: 22px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-
-        .terms-modal-body h2:first-child {
-            margin-top: 0;
-        }
-
-        .terms-modal-body h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: #334155;
-            margin: 20px 0 10px 0;
-        }
-
-        .terms-modal-body p {
-            margin-bottom: 15px;
-            color: #475569;
-        }
-
-        .terms-modal-body ul,
-        .terms-modal-body ol {
-            margin: 15px 0;
-            padding-left: 30px;
-        }
-
-        .terms-modal-body li {
-            margin-bottom: 10px;
-            color: #475569;
-        }
-
-        .terms-modal-footer {
-            position: sticky;
-            bottom: 0;
-            background: #ffffff;
-            padding: 20px 30px;
-            border-top: 2px solid #e2e8f0;
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-        }
 
         .terms-checkbox-container {
             display: flex;
@@ -2109,174 +1765,6 @@
             text-transform: uppercase;
         }
 
-        /* Main Footer */
-        .main-footer {
-            background-color: #1e293b;
-            background-image:
-                linear-gradient(rgba(30, 41, 59, 0.95), rgba(30, 41, 59, 0.95)),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.83L.83 55.457l-.83-.83L54.627 0zm-53.797 0l.83.83L.83 1.66l-.83-.83L.83 0zm58.337 0l.83.83-58.337 58.337-.83-.83L59.167 0zM.83 60l-.83-.83L59.167 0l.83.83L.83 60z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
-            padding: 80px 50px 30px;
-            color: #ffffff;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1.2fr 1.3fr;
-            gap: 40px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .logo-img-footer {
-            width: 200px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-img-footer img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .logo-main-footer {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-sub-footer {
-            font-size: 10px;
-            opacity: 0.8;
-            font-weight: 500;
-        }
-
-        .footer-desc {
-            font-size: 14px;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .footer-col-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 25px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-col-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background: #3b82f6;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s ease, padding-left 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: #ffffff;
-            padding-left: 5px;
-        }
-
-        .footer-gallery {
-            display: flex;
-            gap: 10px;
-        }
-
-        .footer-gallery img {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .social-icons-wrapper {
-            margin-top: 20px;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .social-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background: #ffffff;
-        }
-
-        .social-icon:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .social-icon img {
-            width: 25px;
-            height: 25px;
-        }
-
-        .contact-info {
-            list-style: none;
-            padding: 0;
-        }
-
-        .contact-info li {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.5;
-        }
-
-        .contact-icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            color: #3b82f6;
-        }
-
-        .footer-bottom {
-            margin-top: 60px;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
-        }
 
 
         /* Trending Offers Section */
@@ -2668,55 +2156,7 @@
 
 <body>
     <!-- Header -->
-    <header>
-        <div class="logo-container">
-            <a href="/" class="logo-img">
-                <img src="/static/img/logo.png?v=2" alt="GoGo Cars Logo" onerror="this.style.display='none'">
-            </a>
-        </div>
-
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
-        <nav id="mainNav">
-            <a href="/cars">Car Rentals <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg></a>
-            <a href="/#why-choose-us">About Us</a>
-            <a href="/contact">Contact Us</a>
-            {% if is_authenticated %}
-            <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
-            {% endif %}
-            {% if is_admin %}
-            <a href="/admin/dashboard" style="color: #ff6b35;">Admin Panel</a>
-            {% endif %}
-        </nav>
-
-        <div class="auth-buttons">
-            <a href="/host" class="host-btn">Become a HOST</a>
-            {% if is_authenticated %}
-            <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
-                <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
-                    <span class="user-avatar-mini"
-                        style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
-                        {{ current_user.firstname[0] if current_user else 'U' }}
-                    </span>
-                    {{ current_user.firstname if current_user else 'User' }}
-                </a>
-                <a href="/auth/logout" class="logout-link"
-                    style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
-            </div>
-            {% else %}
-            <a href="/auth/login" class="login-btn-new">
-                Login or Signup
-            </a>
-            {% endif %}
-        </div>
-    </header>
+    {% include '_header.html' %}
 
     <section class="hero">
         <div class="wavy-pattern"></div>
@@ -2881,7 +2321,12 @@
             <div class="featured-category">
                 <div class="category-header">
                     <h2 class="category-title">Top Selling Cars in Hyderabad</h2>
-                    <div class="category-nav"> <a href="/cars" style="text-decoration: none; color: #ff6b35; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-right: 20px;">View All Cars <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+                    <div class="category-nav"> <a href="/cars"
+                            style="text-decoration: none; color: #ff6b35; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-right: 20px;">View
+                            All Cars <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg></a>
                         <button class="nav-arrow prev" aria-label="Previous">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                 <polyline points="15 18 9 12 15 6"></polyline>
@@ -3055,7 +2500,12 @@
             <div class="featured-category" style="margin-top: 80px;">
                 <div class="category-header">
                     <h2 class="category-title">Premium Cars</h2>
-                    <div class="category-nav"> <a href="/cars" style="text-decoration: none; color: #ff6b35; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-right: 20px;">View All Cars <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+                    <div class="category-nav"> <a href="/cars"
+                            style="text-decoration: none; color: #ff6b35; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-right: 20px;">View
+                            All Cars <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg></a>
                         <button class="nav-arrow prev" aria-label="Previous">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                 <polyline points="15 18 9 12 15 6"></polyline>
@@ -3453,96 +2903,7 @@
     </section>
 
     <!-- Footer Section -->
-    <footer class="main-footer" id="footer">
-        <div class="footer-container">
-            <!-- Column 1: Logo & Desc -->
-            <div class="footer-col" id="about-us">
-                <div class="footer-logo">
-                    <div class="logo-img-footer">
-                        <img src="/static/img/logo.png?v=2" alt="GOGO CARS">
-                    </div>
-                </div>
-                <p class="footer-desc">
-                    GoGo Cars offers reliable car rentals with well-maintained vehicles, flexible plans, and complete
-                    freedom for every journey.
-                </p>
-            </div>
-
-            <!-- Column 2: Quick Links -->
-            <div class="footer-col">
-                <h3 class="footer-col-title">Quick Links</h3>
-                <ul class="footer-links">
-                    <li><a href="/cars">Car Rentals</a></li>
-                    <li><a href="#" onclick="showTermsModal(event)">Privacy Policy</a></li>
-                    <li><a href="#" onclick="showTermsModal(event)">Terms & Conditions</a></li>
-                    <li><a href="#" onclick="showTermsModal(event)">Refund Policy</a></li>
-                    <li><a href="#faqs">FAQs</a></li>
-                </ul>
-            </div>
-
-            <!-- Column 3: Social & Gallery -->
-            <div class="footer-col">
-                <div class="footer-gallery">
-                    <img src="/static/img/car-suv.png" alt="Car 1">
-                    <img src="/static/img/toggle-car.png" alt="Car 2">
-                    <img src="/static/img/image.png" alt="Car 3">
-                </div>
-                <div class="social-icons-wrapper">
-                    <h3 class="footer-col-title" style="margin-bottom: 20px;">Social Links</h3>
-                    <div class="social-icons">
-                        <a href="#" class="social-icon instagram">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"
-                                alt="Instagram">
-                        </a>
-                        <a href="#" class="social-icon facebook">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg"
-                                alt="Facebook">
-                        </a>
-                        <a href="#" class="social-icon youtube">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
-                                alt="YouTube">
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Column 4: Contact -->
-            <div class="footer-col">
-                <h3 class="footer-col-title">Contact Us</h3>
-                <ul class="contact-info">
-                    <li>
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        <span>146, Road No.8, Road, Ayyappa Society, Madhapur, Hyderabad, Telangana 500081</span>
-                    </li>
-                    <li>
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path
-                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.83 12.83 0 0 0 .62 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.62A2 2 0 0 1 22 16.92z">
-                            </path>
-                        </svg>
-                        <span>8121765714 - 9052775477</span>
-                    </li>
-                    <li>
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                            </path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        <span>gogocars5477@gmail.com</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 GoGo Cars. All rights reserved.</p>
-        </div>
-    </footer>
+    {% include '_footer.html' %}
 
     <script>
         // Location Modal functionality
@@ -4249,6 +3610,7 @@
             </div>
         </div>
     </div>
+    {% include '_header_js.html' %}
 </body>
 
 </html>

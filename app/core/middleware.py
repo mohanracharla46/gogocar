@@ -32,6 +32,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         "/payment",
         "/booking",
         "/contact",
+        "/about",
         "/admin/login",
     ]
     

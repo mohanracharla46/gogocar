@@ -232,8 +232,10 @@
                             onchange="this.nextElementSibling.style.background = this.checked ? 'var(--success)' : '#e2e8f0'; this.nextElementSibling.firstElementChild.style.transform = this.checked ? 'translateX(20px)' : 'translateX(0)';">
                         <span
                             style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: {{ 'var(--success)' if not car or car.active else '#e2e8f0' }}; transition: .4s; border-radius: 34px;">
-                            <span
-                                style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; transform: {{ 'translateX(20px)' if not car or car.active else 'translateX(0)' }}; shadow: 0 2px 4px rgba(0,0,0,0.2);"></span>
+                            style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px;
+                            background: white; transition: .4s; border-radius: 50%; transform: {{ 'translateX(20px)' if
+                            not car or car.active else 'translateX(0)' }}; box-shadow: 0 2px 4px
+                            rgba(0,0,0,0.2);"></span>
                         </span>
                     </div>
                     <div>
@@ -282,7 +284,10 @@
         e.preventDefault();
 
         const formData = new FormData();
-        const carId = {{ car.id if car else "null" }};
+        const carId = {{ car.id if car else "null" }
+    };
+
+
 
 
     // Helper to append only if value exists

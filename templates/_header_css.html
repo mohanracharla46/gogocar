@@ -1,0 +1,182 @@
+<style>
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px 80px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    header .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    header .logo-img {
+        width: 200px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    header .logo-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    header nav {
+        display: flex;
+        gap: 40px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    header nav a {
+        color: #1e293b;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 600;
+        transition: color 0.2s ease;
+        position: relative;
+    }
+
+    header nav a:hover,
+    header nav a.active {
+        color: #2b3990;
+    }
+
+    header nav a::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #ff6b35;
+        transition: width 0.3s ease;
+    }
+
+    header nav a:hover::after,
+    header nav a.active::after {
+        width: 100%;
+    }
+
+    header .menu-toggle {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        z-index: 1001;
+    }
+
+    header .menu-toggle span {
+        width: 25px;
+        height: 3px;
+        background: #2b3990;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+
+    header .menu-toggle.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    header .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    header .menu-toggle.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    header .auth-buttons {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    header .host-btn {
+        padding: 10px 25px;
+        border: 2px solid #061a40;
+        color: #061a40;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    header .host-btn:hover {
+        background: #061a40;
+        color: #ffffff;
+    }
+
+    header .login-btn-new {
+        background: #061a40;
+        color: #ffffff;
+        padding: 12px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(6, 26, 64, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    header .login-btn-new:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(6, 26, 64, 0.3);
+        background: #0a295c;
+    }
+
+    @media (max-width: 768px) {
+        header {
+            padding: 15px 20px;
+        }
+
+        header nav {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid #f1f5f9;
+        }
+
+        header nav.active {
+            display: flex;
+        }
+
+        header .menu-toggle {
+            display: flex;
+        }
+
+        header .auth-buttons .host-btn {
+            display: none;
+        }
+    }
+</style>

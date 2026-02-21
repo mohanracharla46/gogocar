@@ -821,6 +821,38 @@ async def contact_page(
         )
 
 
+@app.get("/about")
+async def about_page(
+    request: Request,
+    current_user: dict = Depends(auth.get_current_user)
+):
+    """About page - render about.html"""
+    logger.info("About page accessed")
+    
+    try:
+        # Check authentication using current_user dependency
+        is_authenticated = not current_user.get("error")
+        is_admin = current_user.get("isadmin", False)
+        
+        return templates.TemplateResponse(
+            "about.html",
+            {
+                "request": request,
+                "is_authenticated": is_authenticated,
+                "is_admin": is_admin,
+                "login_url": settings.LOGIN_URL,
+                "current_user": current_user
+            }
+        )
+    except Exception as e:
+        logger.error(f"Error rendering about.html: {str(e)}", exc_info=True)
+        from fastapi.responses import HTMLResponse
+        return HTMLResponse(
+            content="<h1>Error loading about page</h1>",
+            status_code=500
+        )
+
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
