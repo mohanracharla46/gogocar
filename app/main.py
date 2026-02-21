@@ -28,6 +28,7 @@ logger.info(f"Starting {settings.APP_NAME} in {'DEBUG' if settings.DEBUG else 'P
 
 # Initialize FastAPI app
 app = FastAPI(
+    # docs_url=None,
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="GoGoCar - Self Drive Car Rental Application",
@@ -123,6 +124,12 @@ app.include_router(payments.router)
 app.include_router(bookings.router)
 from app.routes import mobile
 app.include_router(mobile.router, prefix="/api/mobile")
+from app.routes.api import cars as api_cars
+app.include_router(api_cars.router, prefix="/api/cars", tags=["Mobile Cars"])
+from app.routes.api import bookings as api_bookings
+app.include_router(api_bookings.router, prefix="/api/bookings", tags=["Mobile Bookings"])
+from app.routes.api import payments as api_payments
+app.include_router(api_payments.router, prefix="/api/payments", tags=["Mobile Payments"])
 from app.routes import reviews, tickets
 app.include_router(reviews.router)
 app.include_router(tickets.router)
