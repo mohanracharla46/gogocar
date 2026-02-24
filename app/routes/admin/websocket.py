@@ -29,6 +29,7 @@ async def websocket_notifications(websocket: WebSocket):
         # Get access token from cookies in query string or headers
         # WebSocket doesn't support Cookie() dependency, so we need to get it manually
         access_token = None
+        user = None
         
         # Try to get from query parameters (client can pass it)
         query_params = dict(websocket.query_params)
@@ -45,8 +46,6 @@ async def websocket_notifications(websocket: WebSocket):
             # Admin specific session cookies
             admin_user_id = cookies.get('admin_user_id')
             admin_session = cookies.get('admin_session')
-            
-            user = None
             
             if admin_user_id and admin_session:
                 # Authenticate via admin session
