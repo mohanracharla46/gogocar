@@ -1,0 +1,53 @@
+<header>
+    <div class="logo-container">
+        <a href="/" class="logo-img">
+            <img src="/static/img/logo.png?v=2" alt="GoGo Cars Logo" onerror="this.style.display='none'">
+        </a>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav id="mainNav">
+        <a href="/" {% if request.path=='/' %}class="active" {% endif %}>Home</a>
+        <a href="/cars" {% if request.path=='/cars' %}class="active" {% endif %}>Cars</a>
+        <a href="/about" {% if request.path=='/about' %}class="active" {% endif %}>About Us</a>
+        <a href="/contact" {% if request.path=='/contact' %}class="active" {% endif %}>Contact Us</a>
+        {% if is_authenticated %}
+        <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
+        {% endif %}
+        {% if is_admin %}
+        <a href="/admin/dashboard" style="color: #ff6b35;">Admin Panel</a>
+        {% endif %}
+        {% if is_authenticated %}
+        <a href="/profile" class="nav-auth-mobile">My Profile</a>
+        <a href="/auth/logout" class="nav-auth-mobile">Logout</a>
+        {% else %}
+        <a href="/auth/login" class="nav-auth-mobile">Login / Signup</a>
+        {% endif %}
+    </nav>
+
+    <div class="auth-buttons">
+        <a href="/host" class="host-btn">Become a HOST</a>
+        {% if is_authenticated %}
+        <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
+            <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
+                <span class="user-avatar-mini"
+                    style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
+                    {{ current_user.firstname[0] if current_user else 'U' }}
+                </span>
+                {{ current_user.firstname if current_user else 'User' }}
+            </a>
+            <a href="/auth/logout" class="logout-link"
+                style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
+        </div>
+        {% else %}
+        <a href="/auth/login" class="login-btn-new">
+            Login or Signup
+        </a>
+        {% endif %}
+    </div>
+</header>

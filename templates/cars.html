@@ -58,106 +58,13 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
-
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 80px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-img {
-            width: 200px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .logo-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .logo-main {
-            font-size: 28px;
-            font-weight: 800;
-            color: #2b3990;
-            letter-spacing: -1px;
-            line-height: 1;
-        }
-
-        .logo-sub {
-            font-size: 11px;
-            color: #475569;
-            letter-spacing: 0.5px;
-            font-weight: 500;
-            text-transform: uppercase;
-        }
-
-        nav {
-            display: flex;
-            gap: 40px;
-            align-items: center;
-        }
-
-        nav a {
-            color: #1e293b;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
-            transition: color 0.2s ease;
-            position: relative;
-        }
-
-        nav a:hover {
-            color: #2b3990;
-        }
-
-        .nav-btn {
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .host-btn {
-            border: 2px solid #2b3990;
-            color: #2b3990;
-        }
-
-        .host-btn:hover {
-            background: #2b3990;
-            color: #ffffff;
-        }
-
-        .auth-btn {
-            background: #061a40;
-            color: #ffffff;
-        }
-
-        .auth-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(6, 26, 64, 0.3);
+    </style>
+    {% include '_header_css.html' %}
+    {% include '_footer_css.html' %}
+    <style>
+        /* Mobile adjustments */
+        .menu-toggle {
+            display: none;
         }
 
         .cars-page-container {
@@ -451,11 +358,125 @@
             }
 
             .sidebar {
+                position: fixed;
+                top: 0;
+                left: -320px;
+                width: 300px;
+                height: 100vh;
+                z-index: 2000;
+                border-radius: 0 24px 24px 0;
+                overflow-y: auto;
+                transition: left 0.3s ease;
+                display: block;
+                /* Show as drawer */
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .sidebar-overlay {
                 display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1999;
+                backdrop-filter: blur(4px);
+            }
+
+            .sidebar-overlay.active {
+                display: block;
             }
 
             .cars-display-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .top-booking-bar {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .total-time-badge {
+                grid-column: span 2;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .top-booking-bar {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+
+            .total-time-badge {
+                grid-column: span 1;
+            }
+
+            .car-card-new {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .car-card-img-container {
+                order: -1;
+                width: 100%;
+                height: 180px;
+            }
+
+            .mobile-filter-btn {
+                display: flex;
+            }
+
+            .top-date-card {
+                height: 65px;
+            }
+        }
+
+        /* Mobile Filter Button */
+        .mobile-filter-btn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff6b35;
+            color: #ffffff;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+            z-index: 1000;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-filter-btn:active {
+            transform: scale(0.9);
+        }
+
+        .sidebar-close-btn {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: #2b3990;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        @media (max-width: 1200px) {
+            .sidebar-close-btn {
+                display: block;
             }
         }
 
@@ -573,49 +594,14 @@
 </head>
 
 <body>
-    <header>
-        <div class="logo-container">
-            <a href="/" class="logo-img">
-                <img src="/static/img/logo.png?v=2" alt="GoGo Cars Logo" onerror="this.style.display='none'">
-            </a>
-        </div>
-        <nav id="mainNav">
-            <a href="/">Home</a>
-            <a href="/cars" class="active">Cars</a>
-            <a href="/#why-choose-us">About Us</a>
-            <a href="/contact">Contact Us</a>
-            {% if is_authenticated %}
-            <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
-            {% endif %}
-            {% if is_admin %}
-            <a href="/admin/dashboard" style="color: #ff6b35;">Admin Panel</a>
-            {% endif %}
-        </nav>
-
-        <div class="auth-buttons">
-            <a href="/host" class="host-btn">Become a HOST</a>
-            {% if is_authenticated %}
-            <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
-                <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
-                    <span class="user-avatar-mini"
-                        style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
-                        {{ current_user.firstname[0] if current_user else 'U' }}
-                    </span>
-                    {{ current_user.firstname if current_user else 'User' }}
-                </a>
-                <a href="/auth/logout" class="logout-link"
-                    style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
-            </div>
-            {% else %}
-            <a href="/auth/login" class="login-btn-new">
-                Login or Signup
-            </a>
-            {% endif %}
-        </div>
-    </header>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <button class="mobile-filter-btn" id="mobileFilterBtn" aria-label="Open Filters">
+        <i class="fas fa-filter"></i>
+    </button>
 
     <div class="cars-page-container">
-        <aside class="sidebar">
+        <aside class="sidebar" id="filterSidebar">
+            <button class="sidebar-close-btn" id="closeSidebar">&times;</button>
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Delivery Option</h3>
                 <div class="home-delivery-toggle-row" id="homeDeliveryToggle">
@@ -678,7 +664,8 @@
                 <div class="top-date-card">
                     <span class="top-date-label">Location</span>
                     <div class="top-date-value" style="justify-content: space-between;">
-                        <span style="font-size: 15px; font-weight: 700; color: #2b3990;">Hyderabad</span>
+                        <span id="selected-location-display"
+                            style="font-size: 15px; font-weight: 700; color: #2b3990;">Hyderabad</span>
                     </div>
                 </div>
                 <div class="top-date-card" style="cursor: pointer; position: relative;"
@@ -689,7 +676,7 @@
                             Date</span>
                         <span id="pickup-time-display"
                             style="font-size: 13px; font-weight: 600; color: #64748b;">--:--</span>
-                        <input type="datetime-local" id="top-pickup-datetime"
+                        <input type="datetime-local" id="top-pickup-datetime" step="3600"
                             style="position: absolute; opacity: 0; width: 100%; height: 100%; left: 0; top: 0; cursor: pointer;">
                     </div>
                 </div>
@@ -701,7 +688,7 @@
                             Date</span>
                         <span id="return-time-display"
                             style="font-size: 13px; font-weight: 600; color: #64748b;">--:--</span>
-                        <input type="datetime-local" id="top-return-datetime"
+                        <input type="datetime-local" id="top-return-datetime" step="3600"
                             style="position: absolute; opacity: 0; width: 100%; height: 100%; left: 0; top: 0; cursor: pointer;">
                     </div>
                 </div>
@@ -768,7 +755,12 @@
             const returnDateDisplay = document.getElementById('return-date-display');
             const returnTimeDisplay = document.getElementById('return-time-display');
             const durationDisplay = document.getElementById('totalDuration');
-            const selectedLocation = 'Hyderabad';
+            const urlParams = new URLSearchParams(window.location.search);
+            let selectedLocation = urlParams.get('location') || 'Hyderabad';
+            const locationDisplay = document.getElementById('selected-location-display');
+            if (locationDisplay && urlParams.get('location')) {
+                locationDisplay.textContent = urlParams.get('location');
+            }
 
             // Format date for display (e.g., "10-Feb-2026")
             function formatDateDisplay(dateStr) {
@@ -786,11 +778,10 @@
                 if (!dateStr) return '--:--';
                 const date = new Date(dateStr);
                 let hours = date.getHours();
-                const minutes = date.getMinutes().toString().padStart(2, '0');
                 const ampm = hours >= 12 ? 'PM' : 'AM';
                 hours = hours % 12;
                 hours = hours ? hours : 12;
-                return `${hours}:${minutes} ${ampm}`;
+                return `${hours} ${ampm}`;
             }
 
             // Update displays when input changes
@@ -815,7 +806,6 @@
             }
 
             // Parse URL params and set initial values
-            const urlParams = new URLSearchParams(window.location.search);
             const pickupParam = urlParams.get('pickup_datetime');
             const returnParam = urlParams.get('end_datetime');
 
@@ -924,10 +914,35 @@
             const deliverySwitch = document.getElementById('deliverySwitch');
             const deliveryGroup = document.getElementById('deliveryGroup');
 
-            deliveryToggle.addEventListener('click', function () {
-                deliverySwitch.classList.toggle('active');
-                deliveryGroup.classList.toggle('active');
-            });
+            if (deliveryToggle && deliverySwitch && deliveryGroup) {
+                deliveryToggle.addEventListener('click', function () {
+                    deliverySwitch.classList.toggle('active');
+                    deliveryGroup.classList.toggle('active');
+                });
+            }
+
+            // Mobile Sidebar Toggle Logic
+            const mobileFilterBtn = document.getElementById('mobileFilterBtn');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const filterSidebar = document.getElementById('filterSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            if (mobileFilterBtn && filterSidebar && sidebarOverlay) {
+                mobileFilterBtn.addEventListener('click', function () {
+                    filterSidebar.classList.add('active');
+                    sidebarOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+
+                const closeSidebarFn = function () {
+                    filterSidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+
+                if (closeSidebar) closeSidebar.addEventListener('click', closeSidebarFn);
+                sidebarOverlay.addEventListener('click', closeSidebarFn);
+            }
         });
 
         // Mapping Logic (Geolocation)
@@ -969,6 +984,8 @@
 
         function clearAllFilters() { document.querySelectorAll('.filter-check').forEach(b => b.checked = false); window.location.reload(); }
     </script>
+    {% include '_footer.html' %}
+    {% include '_header_js.html' %}
 </body>
 
 </html>

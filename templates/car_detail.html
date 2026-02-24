@@ -8,7 +8,10 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="/static/img/logo.png">
+    {% include '_header_css.html' %}
+    {% include '_footer_css.html' %}
     <style>
         * {
             margin: 0;
@@ -28,179 +31,7 @@
             min-height: 100vh;
         }
 
-        /* Header - Home Page Design */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 80px;
-            background: #ffffff;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-img {
-            width: 200px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .logo-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .logo {
-            display: flex;
-            flex-direction: column;
-            justify-self: start;
-        }
-
-        .logo-main {
-            font-size: 32px;
-            font-weight: 800;
-            color: #2b3990;
-            letter-spacing: -1px;
-            line-height: 1;
-        }
-
-        .logo-sub {
-            font-size: 11px;
-            color: #475569;
-            letter-spacing: 0.5px;
-            font-weight: 500;
-        }
-
-        nav {
-            display: flex;
-            gap: 40px;
-            justify-content: center;
-            align-items: center;
-            justify-self: center;
-        }
-
-        nav a {
-            color: #1e293b;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: color 0.2s ease;
-            position: relative;
-        }
-
-        nav a:hover {
-            color: #2b3990;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #ff6b35;
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
-            z-index: 1001;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #2b3990;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        /* Login Button - Home Page Design */
-        .auth-buttons {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .host-btn {
-            padding: 10px 25px;
-            border: 2px solid #061a40;
-            color: #061a40;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .host-btn:hover {
-            background: #061a40;
-            color: #ffffff;
-        }
-
-        .login-btn-new {
-            background: #061a40;
-            color: #ffffff;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(6, 26, 64, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .login-btn-new:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 26, 64, 0.3);
-            background: #0a295c;
-        }
-
-        .user-icon {
-            width: 20px;
-            height: 20px;
-            fill: #2b3990;
-        }
 
         /* Main Container */
         .main-container {
@@ -904,121 +735,102 @@
         }
 
         .price-amount {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 800;
             color: #1e293b;
         }
 
-        .price-period {
+        .price-label {
             font-size: 14px;
             color: #64748b;
-            font-weight: 500;
+            margin-bottom: 24px;
         }
 
-        .price-label {
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 20px;
-        }
-
-        /* Trip Details */
         .trip-details {
-            background: #f8f9fa;
-            padding: 12px;
+            background: #f8fafc;
             border-radius: 12px;
-            margin-bottom: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .trip-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .trip-item:last-child {
-            border-bottom: none;
         }
 
         .trip-label {
             font-size: 13px;
+            font-weight: 600;
             color: #64748b;
-            font-weight: 500;
         }
 
         .trip-value {
             font-size: 14px;
+            font-weight: 700;
             color: #1e293b;
-            font-weight: 600;
         }
 
         .date-input {
-            border: none;
-            background: transparent;
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
             font-family: inherit;
-            font-size: 13px;
-            font-weight: 600;
             color: #1e293b;
-            cursor: pointer;
-            text-align: right;
-            outline: none;
+            background: #ffffff;
         }
 
-        .date-input::-webkit-calendar-picker-indicator {
-            cursor: pointer;
-            opacity: 0.6;
-        }
-
-        .date-input::-webkit-calendar-picker-indicator:hover {
-            opacity: 1;
-        }
-
-        /* Delivery Toggle */
         .delivery-toggle {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             padding: 16px;
-            background: #eff6ff;
+            background: #f0f9ff;
+            border: 1px solid #e0f2fe;
             border-radius: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .delivery-toggle:hover {
-            background: #dbeafe;
+            border-color: #bae6fd;
         }
 
         .delivery-info {
             display: flex;
-            align-items: center;
             gap: 12px;
+            align-items: center;
         }
 
         .delivery-icon {
             width: 24px;
             height: 24px;
-            color: #2b3990;
+            color: #0369a1;
         }
 
         .delivery-text {
             font-size: 14px;
-            font-weight: 600;
-            color: #1e293b;
+            font-weight: 700;
+            color: #0c4a6e;
         }
 
         .delivery-subtext {
             font-size: 12px;
-            color: #64748b;
+            color: #0369a1;
+            opacity: 0.8;
         }
 
         .toggle-switch {
-            width: 48px;
-            height: 26px;
-            background: #2b3990;
-            border-radius: 13px;
+            width: 44px;
+            height: 24px;
+            background: #cbd5e1;
+            border-radius: 12px;
             position: relative;
             transition: all 0.3s;
         }
@@ -1026,309 +838,258 @@
         .toggle-switch::after {
             content: '';
             position: absolute;
+            top: 2px;
+            left: 2px;
             width: 20px;
             height: 20px;
             background: #ffffff;
             border-radius: 50%;
-            top: 3px;
-            right: 3px;
             transition: all 0.3s;
         }
 
-        /* Security Deposit */
+        .toggle-switch.active {
+            background: #10b981;
+        }
+
+        .toggle-switch.active::after {
+            left: 22px;
+        }
+
         .security-deposit-block {
-            background: #f5f3ff;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
         }
 
         .security-deposit-header {
             display: flex;
-            align-items: center;
             gap: 8px;
-            margin-bottom: 8px;
+            align-items: center;
+            margin-bottom: 12px;
         }
 
         .security-deposit-title {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             color: #1e293b;
         }
 
-        .security-deposit-main-text {
-            font-size: 13px;
-            font-weight: 600;
-            color: #6d28d9;
-            margin-bottom: 4px;
-        }
-
-        .security-deposit-subtext {
-            font-size: 12px;
-            color: #64748b;
-            line-height: 1.5;
-        }
-
         .deposit-options-grid {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 8px;
-            margin: 12px 0;
+            margin-bottom: 8px;
         }
 
         .deposit-option {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 14px;
-            background: #ffffff;
-            border: 1.5px solid #e2e8f0;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
+            font-size: 13px;
+            font-weight: 500;
         }
 
         .deposit-option:hover {
-            border-color: #7c3aed;
-            background: #fdfcff;
+            border-color: #cbd5e1;
+            background: #f8fafc;
         }
 
         .deposit-option.selected {
             border-color: #7c3aed;
-            background: #fdfcff;
-            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.1);
+            background: #f5f3ff;
+            color: #5b21b6;
         }
 
-        .deposit-option input[type="radio"] {
+        .deposit-option input {
             accent-color: #7c3aed;
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
         }
 
-        .deposit-option span {
-            font-size: 13px;
+        .security-deposit-subtext {
+            font-size: 12px;
+            color: #ef4444;
             font-weight: 600;
-            color: #475569;
         }
 
-        .deposit-option.selected span {
-            color: #6d28d9;
-        }
-
-        /* Protection Package */
         .protection-package {
-            background: #fffbeb;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .protection-header {
             display: flex;
-            align-items: center;
             gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .protection-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        .protection-desc {
-            font-size: 12px;
-            color: #64748b;
-            line-height: 1.5;
+            align-items: center;
             margin-bottom: 12px;
         }
 
+        .protection-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
         .protection-options-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
         }
 
         .protection-option {
-            padding: 12px 14px;
-            background: #ffffff;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
             position: relative;
+            padding: 12px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
         .protection-option:hover {
+            background: #fef3c7;
             border-color: #f59e0b;
-            background: #fffcf0;
         }
 
         .protection-option.selected {
+            background: #fffbeb;
             border-color: #f59e0b;
-            background: #fffdf5;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+            color: #92400e;
+            font-weight: 700;
         }
 
         .protection-option-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: #1e293b;
-            display: block;
+            font-size: 12px;
         }
 
-        .protection-option.selected .protection-option-name {
-            color: #b45309;
-        }
-
-        /* Hover Flyout Styling */
         .protection-hover-info {
+            display: none;
             position: absolute;
-            right: calc(100% + 15px);
-            top: 50%;
-            transform: translateY(-50%) translateX(10px);
-            width: 280px;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
             background: #ffffff;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             border: 1px solid #e2e8f0;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             z-index: 100;
-            pointer-events: none;
         }
 
         .protection-option:hover .protection-hover-info {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(-50%) translateX(0);
-        }
-
-        .protection-hover-info::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 100%;
-            transform: translateY(-50%);
-            border-width: 8px;
-            border-style: solid;
-            border-color: transparent transparent transparent #ffffff;
+            display: block;
         }
 
         .hover-info-title {
             display: block;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 12px;
-            border-bottom: 2px solid #fecaca;
+            margin-bottom: 8px;
             padding-bottom: 4px;
-            width: fit-content;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .hover-info-list {
             list-style: none;
             padding: 0;
             margin: 0;
+            font-size: 12px;
+            text-align: left;
         }
 
         .hover-info-list li {
-            font-size: 13px;
+            position: relative;
+            padding-left: 15px;
+            margin-bottom: 4px;
             color: #475569;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .hover-info-list li::before {
-            content: "â€¢";
+            content: '•';
+            position: absolute;
+            left: 0;
             color: #f59e0b;
-            font-weight: bold;
         }
 
-        /* Total Price */
         .total-price {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
-            border-top: 2px solid #e2e8f0;
-            border-bottom: 2px solid #e2e8f0;
-            margin-bottom: 20px;
+            padding: 16px 0;
+            border-top: 1px solid #f1f5f9;
+            margin-bottom: 16px;
         }
 
         .total-label {
             font-size: 16px;
-            font-weight: 600;
-            color: #64748b;
-        }
-
-        .total-amount {
-            font-size: 28px;
-            font-weight: 800;
+            font-weight: 700;
             color: #1e293b;
         }
 
-        /* CTA Buttons */
+        .total-amount {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2b3990;
+        }
+
         .cta-button {
             width: 100%;
             padding: 16px;
-            border: none;
             border-radius: 12px;
+            border: none;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             margin-bottom: 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .cta-primary {
             background: #2b3990;
             color: #ffffff;
-            box-shadow: 0 4px 12px rgba(43, 57, 144, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .cta-primary:hover {
-            background: #061a40;
+            background: #1e2a78;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(43, 57, 144, 0.4);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         .cta-secondary {
-            background: #f8f9fa;
-            color: #1e293b;
-            border: 2px solid #e2e8f0;
+            background: #ffffff;
+            color: #2b3990;
+            border: 2px solid #2b3990;
         }
 
         .cta-secondary:hover {
-            background: #f1f5f9;
-            border-color: #cbd5e0;
+            background: #f8fafc;
         }
 
-        /* Host Info */
         .host-info {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 16px;
-            background: #f8f9fa;
+            background: #f8fafc;
             border-radius: 12px;
+            margin-top: 20px;
         }
 
         .host-avatar {
             width: 48px;
             height: 48px;
+            background: #2b3990;
+            color: #ffffff;
             border-radius: 50%;
-            background: linear-gradient(135deg, #2b3990 0%, #061a40 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
             font-weight: 700;
             font-size: 18px;
         }
@@ -1338,22 +1099,21 @@
         }
 
         .host-name {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             color: #1e293b;
-            margin-bottom: 2px;
         }
 
         .host-rating {
-            font-size: 12px;
+            font-size: 13px;
             color: #64748b;
         }
 
         .host-cta {
+            padding: 8px 16px;
             background: #2b3990;
             color: #ffffff;
             border: none;
-            padding: 8px 16px;
             border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
@@ -1364,145 +1124,22 @@
         .host-cta:hover {
             background: #061a40;
         }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .main-container {
-                grid-template-columns: 1fr;
-            }
-
-            .right-sidebar {
-                order: -1;
-            }
-
-            .pricing-card {
-                position: static;
-            }
-
-            .car-details-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .similar-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .faq-section {
-                padding: 24px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 15px 20px;
-            }
-
-            .main-container {
-                padding: 90px 20px 40px;
-            }
-
-            .car-title {
-                font-size: 24px;
-            }
-
-            .main-image-container {
-                height: 300px;
-            }
-
-            .thumbnail-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .car-details-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .tabs-header {
-                overflow-x: auto;
-            }
-
-            .tab-btn {
-                white-space: nowrap;
-            }
-
-            .faq-section {
-                padding: 20px;
-            }
-
-            .faq-section h2 {
-                font-size: 20px;
-                margin-bottom: 16px;
-            }
-
-            .faq-question {
-                font-size: 15px;
-            }
-
-            .faq-answer {
-                font-size: 13px;
-            }
-        }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
-    <header>
-        <div class="logo-container">
-            <a href="/" class="logo-img">
-                <img src="/static/img/logo.png?v=2" alt="GoGo Cars Logo" onerror="this.style.display='none'">
-            </a>
-        </div>
-
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <nav id="mainNav">
-            <a href="/">Home</a>
-            <a href="/cars">Cars</a>
-            <a href="/#why-choose-us">About Us</a>
-            <a href="/contact">Contact Us</a>
-            {% if is_authenticated %}
-            <a href="/orders/view" style="color: #2b3990; font-weight: 700;">My Bookings</a>
-            {% endif %}
-            {% if is_admin %}
-            <a href="/admin/dashboard" style="color: #ff6b35;">Admin Panel</a>
-            {% endif %}
-        </nav>
-        <div class="auth-buttons">
-            <a href="/host" class="host-btn">Become a HOST</a>
-            {% if is_authenticated %}
-            <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
-                <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
-                    <span class="user-avatar-mini"
-                        style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
-                        {{ current_user.firstname[0] if current_user else 'U' }}
-                    </span>
-                    {{ current_user.firstname if current_user else 'User' }}
-                </a>
-                <a href="/auth/logout" class="logout-link"
-                    style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
-            </div>
-            {% else %}
-            <a href="/auth/login" class="login-btn-new">
-                Login or Signup
-            </a>
-            {% endif %}
-        </div>
-    </header>
+    {% include '_header.html' %}
 
     <!-- Main Container -->
     <div class="main-container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
             <a href="/">Home</a>
-            <span>â€º</span>
+            <span>&rsaquo;</span>
             <a href="/cars">Rentals</a>
-            <span>â€º</span>
+            <span>&rsaquo;</span>
             <a href="#">{{ car.car_type.value|title }}</a>
-            <span>â€º</span>
+            <span>&rsaquo;</span>
             <span>{{ car.brand }} {{ car.car_model }}</span>
         </div>
 
@@ -1513,16 +1150,17 @@
                 <div class="car-title-header">
                     <div>
                         <h1 class="car-title">{{ car.brand }} {{ car.car_model }}</h1>
-                        <p class="car-subtitle">{{ car.no_of_seats.value }} â€¢ {{ car.fuel_type.value }} â€¢ {{
+                        <p class="car-subtitle">{{ car.no_of_seats.value }} Seats &#8226; {{ car.fuel_type.value }}
+                            &#8226; {{
                             car.transmission_type.value|title }}</p>
                     </div>
-                    <button class="share-btn">ðŸ”— Share</button>
+                    <button class="share-btn">&#128279; Share</button>
                 </div>
                 <div class="rating-section">
                     <div class="stars">
                         {% for i in range(5) %}
                         {% if avg_rating >= i + 1 %}
-                        <span class="star">â˜…</span>
+                        <span class="star">&#9733;</span>
                         {% elif avg_rating >= i + 0.5 %}
                         <span class="star"
                             style="background: linear-gradient(90deg, #f59e0b 50%, #cbd5e0 50%); -webkit-background-clip: text; color: transparent;">â˜…</span>
@@ -1546,8 +1184,8 @@
                         id="mainImage" onerror="this.src='/static/img/landing.png'">
 
                     {% if image_list|length > 1 %}
-                    <button class="gallery-nav prev" onclick="changeImage(-1)">â€¹</button>
-                    <button class="gallery-nav next" onclick="changeImage(1)">â€º</button>
+                    <button class="gallery-nav prev" onclick="changeImage(-1)">&lsaquo;</button>
+                    <button class="gallery-nav next" onclick="changeImage(1)">&rsaquo;</button>
                     {% endif %}
                 </div>
                 <div class="thumbnail-grid">
@@ -1639,11 +1277,11 @@
                                 <span class="review-date">2 days ago</span>
                             </div>
                             <div class="review-stars">
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
                             </div>
                             <p class="review-text">
                                 Excellent car for family trips! The 7-seater configuration was perfect for our weekend
@@ -1659,10 +1297,10 @@
                                 <span class="review-date">1 week ago</span>
                             </div>
                             <div class="review-stars">
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
                                 <span class="star" style="color: #cbd5e0;">â˜…</span>
                             </div>
                             <p class="review-text">
@@ -1678,11 +1316,11 @@
                                 <span class="review-date">2 weeks ago</span>
                             </div>
                             <div class="review-stars">
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
-                                <span class="star">â˜…</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
+                                <span class="star">&#9733;</span>
                             </div>
                             <p class="review-text">
                                 Perfect for city driving and highway trips. Fuel efficient and easy to handle.
@@ -1768,7 +1406,7 @@
                         <div class="faq-item">
                             <div class="faq-question" onclick="toggleFaq(this)">
                                 <span>What documents do I need to rent this car?</span>
-                                <span class="faq-icon">â–¼</span>
+                                <span class="faq-icon">&#9660;</span>
                             </div>
                             <div class="faq-answer">
                                 You will need a valid driver's license, Aadhar card or passport for identity
@@ -1780,7 +1418,7 @@
                         <div class="faq-item">
                             <div class="faq-question" onclick="toggleFaq(this)">
                                 <span>Can I extend my rental period?</span>
-                                <span class="faq-icon">â–¼</span>
+                                <span class="faq-icon">&#9660;</span>
                             </div>
                             <div class="faq-answer">
                                 Yes, you can extend your rental period subject to availability. Please contact the host
@@ -1791,7 +1429,7 @@
                         <div class="faq-item">
                             <div class="faq-question" onclick="toggleFaq(this)">
                                 <span>Is the car available for outstation trips?</span>
-                                <span class="faq-icon">â–¼</span>
+                                <span class="faq-icon">&#9660;</span>
                             </div>
                             <div class="faq-answer">
                                 Yes, this car is available for outstation trips. Please note that additional mileage
@@ -1803,7 +1441,7 @@
                         <div class="faq-item">
                             <div class="faq-question" onclick="toggleFaq(this)">
                                 <span>What happens if I return the car late?</span>
-                                <span class="faq-icon">â–¼</span>
+                                <span class="faq-icon">&#9660;</span>
                             </div>
                             <div class="faq-answer">
                                 A grace period of 1 hour is provided. Beyond that, you will be charged ₹200 per hour
@@ -1819,21 +1457,21 @@
                 <h2>Inclusion/Exclusions</h2>
                 <div class="inclusion-list">
                     <div class="inclusion-item">
-                        <span class="inclusion-icon check">âœ“</span>
+                        <span class="inclusion-icon check">&#10003;</span>
                         <span>Security deposit (if applied) will automatically be refunded within 2-3 days after the
                             trip completion.</span>
                     </div>
                     <div class="inclusion-item">
-                        <span class="inclusion-icon cross">âœ•</span>
+                        <span class="inclusion-icon cross">&#10005;</span>
                         <span>Fuel not included. Guest should return the car with the same fuel level as at
                             start.</span>
                     </div>
                     <div class="inclusion-item">
-                        <span class="inclusion-icon cross">âœ•</span>
+                        <span class="inclusion-icon cross">&#10005;</span>
                         <span>Toll/Fastag charges not included. Check with host for Fastag recharge.</span>
                     </div>
                     <div class="inclusion-item">
-                        <span class="inclusion-icon cross">âœ•</span>
+                        <span class="inclusion-icon cross">&#10005;</span>
                         <span>Trip Protection excludes: Off-road use, driving under influence, over-speeding, illegal
                             use, restricted zones.</span>
                     </div>
@@ -1945,11 +1583,13 @@
                 <div class="trip-details">
                     <div class="trip-item">
                         <span class="trip-label">Start Date</span>
-                        <input type="datetime-local" class="date-input" id="startDate" value="2026-01-20T10:00">
+                        <input type="datetime-local" class="date-input" id="startDate" step="3600"
+                            value="2026-01-20T10:00">
                     </div>
                     <div class="trip-item">
                         <span class="trip-label">End Date</span>
-                        <input type="datetime-local" class="date-input" id="endDate" value="2026-01-22T10:00">
+                        <input type="datetime-local" class="date-input" id="endDate" step="3600"
+                            value="2026-01-22T10:00">
                     </div>
                     <div class="trip-item">
                         <span class="trip-label">Duration</span>
@@ -2223,8 +1863,7 @@
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            return `${year}-${month}-${day}T${hours}:${minutes}`;
+            return `${year}-${month}-${day}T${hours}:00`;
         }
 
         if (pParam) {
@@ -2291,6 +1930,8 @@
             window.location.href = url;
         });
     </script>
+    {% include '_footer.html' %}
+    {% include '_header_js.html' %}
 </body>
 
 </html>

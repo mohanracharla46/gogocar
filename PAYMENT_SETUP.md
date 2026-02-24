@@ -59,7 +59,7 @@ CCAvenue Configuration Test
    Merchant ID: OK
    Access Code: OK
    Working Key: OK
-   Environment: test
+   Environment: production
 
 2. Testing Encryption/Decryption:
    [OK] Encryption successful
@@ -123,9 +123,9 @@ python test_ccavenue.py
 You MUST update these URLs in your `.env` file to your production domain:
 
 ```env
-CCAVENUE_REDIRECT_URL=https://yourdomain.com/payments/callback
-CCAVENUE_CANCEL_URL=https://yourdomain.com/payments/cancel
-DOMAIN_URL=https://yourdomain.com
+CCAVENUE_REDIRECT_URL=https://gogocar.in/payments/callback
+CCAVENUE_CANCEL_URL=https://gogocar.in/payments/cancel
+DOMAIN_URL=https://gogocar.in
 ```
 
 Also, change the environment from `test` to `production`:

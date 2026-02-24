@@ -156,6 +156,8 @@ class Cars(Base):
     registration_number = Column(String, nullable=True)
     year = Column(Integer, nullable=True)
     color = Column(String, nullable=True)
+    is_top_selling = Column(Boolean, default=False, nullable=False, server_default='0')
+    is_premium = Column(Boolean, default=False, nullable=False, server_default='0')
     created_at = Column(DateTime, server_default=func.now(), nullable=True)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=True)
     

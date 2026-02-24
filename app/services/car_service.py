@@ -52,6 +52,8 @@ class CarService:
                 year=car_data.year,
                 color=car_data.color,
                 active=car_data.active,
+                is_top_selling=car_data.is_top_selling,
+                is_premium=car_data.is_premium,
                 images=None  # Will be set after upload
             )
             
