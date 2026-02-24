@@ -2,7 +2,7 @@
 Pagination utilities for list endpoints
 """
 from typing import Generic, TypeVar, List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from sqlalchemy.orm import Query
 from math import ceil
 
@@ -36,6 +36,8 @@ class PaginatedResponse(BaseModel, Generic[T]):
     total_pages: int
     has_next: bool
     has_prev: bool
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 def paginate_query(

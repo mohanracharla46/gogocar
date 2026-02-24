@@ -35,40 +35,44 @@ async def websocket_notifications(websocket: WebSocket):
         if 'token' in query_params:
             access_token = query_params['token']
         else:
-            # Try to get from cookies in headers
-            cookie_header = websocket.headers.get('cookie', '')
-            if cookie_header:
-                cookies = dict(item.split('=', 1) for item in cookie_header.split('; ') if '=' in item)
-                access_token = cookies.get('access_token')
+        # Try to get from cookies in headers
+        cookie_header = websocket.headers.get('cookie', '')
+        cookies = {}
+        if cookie_header:
+            cookies = dict(item.split('=', 1) for item in cookie_header.split('; ') if '=' in item)
+            access_token = cookies.get('access_token')
+            
+        # Admin specific session cookies
+        admin_user_id = cookies.get('admin_user_id')
+        admin_session = cookies.get('admin_session')
         
-        # Authenticate user via cookie
-        if not access_token:
-            await websocket.close(code=1008, reason="Authentication required")
-            db.close()
-            return
+        user = None
         
-        # Get current user from token
-        from app.core.security import decode_access_token
-        token_data = decode_access_token(access_token)
+        if admin_user_id and admin_session:
+            # Authenticate via admin session
+            try:
+                from app.db.models import UserProfile
+                u_id = int(admin_user_id)
+                user = db.query(UserProfile).filter(
+                    UserProfile.id == u_id,
+                    UserProfile.isadmin == True,
+                    UserProfile.is_active == True
+                ).first()
+            except:
+                pass
+                
+        if not user and access_token:
+            # Fall back to access_token (Cognito)
+            from app.core.security import decode_access_token
+            token_data = decode_access_token(access_token)
+            
+            if not token_data.get("error"):
+                from app.db.models import UserProfile
+                user = db.query(UserProfile).filter(
+                    UserProfile.username == token_data.get("sub")
+                ).first()
         
-        if token_data.get("error"):
-            await websocket.close(code=1008, reason="Invalid token")
-            db.close()
-            return
-        
-        # Get user from database
-        from app.db.models import UserProfile
-        user = db.query(UserProfile).filter(
-            UserProfile.username == token_data.get("sub")
-        ).first()
-        
-        if not user:
-            await websocket.close(code=1008, reason="User not found")
-            db.close()
-            return
-        
-        # Check if user is admin
-        if not user.isadmin or not user.is_active:
+        if not user or not user.isadmin or not user.is_active:
             await websocket.close(code=1008, reason="Admin access required")
             db.close()
             return

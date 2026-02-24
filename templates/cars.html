@@ -63,9 +63,6 @@
     {% include '_footer_css.html' %}
     <style>
         /* Mobile adjustments */
-        .menu-toggle {
-            display: none;
-        }
 
         .cars-page-container {
             display: grid;
@@ -591,9 +588,11 @@
             align-items: center;
         }
     </style>
+    {% include '_header_css.html' %}
 </head>
 
 <body>
+    {% include '_header.html' %}
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <button class="mobile-filter-btn" id="mobileFilterBtn" aria-label="Open Filters">
         <i class="fas fa-filter"></i>

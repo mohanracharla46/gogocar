@@ -4,7 +4,7 @@ Pydantic schemas for Car operations
 from __future__ import annotations
 from typing import Optional, List, Dict, Union
 from datetime import datetime
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 from app.db.models import FuelType, TransmissionType, NoOfSeats, CarType
 
@@ -117,8 +117,7 @@ class CarResponse(BaseModel):
             return v
         return None
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CarAvailabilityCreate(BaseModel):
