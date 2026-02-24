@@ -30,11 +30,16 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+    print("SECRET_KEY:", SECRET_KEY)
+
+    
 
 def decode_access_token(token: str) -> Optional[dict]:
     """Decode and validate a JWT access token"""
     try:
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return decoded_token if decoded_token.get("exp") >= datetime.utcnow().timestamp() else None
-    except Exception:
+        return decoded_token
+    except Exception as e:
+        print("JWT Decode Error:", str(e))
         return None
+
