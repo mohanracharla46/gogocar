@@ -22,9 +22,9 @@ async def websocket_notifications(websocket: WebSocket):
     Sends real-time notifications for new bookings and support tickets.
     """
     logger.info("New WebSocket connection attempt started")
-    db = None
+    from app.db.session import SessionLocal
+    db = SessionLocal()
     try:
-        db = next(get_db())
         # Accept connection first (required before we can send/close)
         await websocket.accept()
         

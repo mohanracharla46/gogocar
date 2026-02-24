@@ -854,6 +854,7 @@
                 // Get WebSocket URL (ws:// or wss:// based on current protocol)
                 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
                 var wsUrl = protocol + '//' + window.location.host + '/admin/ws/notifications';
+                console.log('Connecting to WebSocket:', wsUrl);
 
                 // Add token as query parameter if available
                 if (accessToken) {
