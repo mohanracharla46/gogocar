@@ -35,31 +35,31 @@ async def websocket_notifications(websocket: WebSocket):
         if 'token' in query_params:
             access_token = query_params['token']
         else:
-        # Try to get from cookies in headers
-        cookie_header = websocket.headers.get('cookie', '')
-        cookies = {}
-        if cookie_header:
-            cookies = dict(item.split('=', 1) for item in cookie_header.split('; ') if '=' in item)
-            access_token = cookies.get('access_token')
+            # Try to get from cookies in headers
+            cookie_header = websocket.headers.get('cookie', '')
+            cookies = {}
+            if cookie_header:
+                cookies = dict(item.split('=', 1) for item in cookie_header.split('; ') if '=' in item)
+                access_token = cookies.get('access_token')
             
-        # Admin specific session cookies
-        admin_user_id = cookies.get('admin_user_id')
-        admin_session = cookies.get('admin_session')
-        
-        user = None
-        
-        if admin_user_id and admin_session:
-            # Authenticate via admin session
-            try:
-                from app.db.models import UserProfile
-                u_id = int(admin_user_id)
-                user = db.query(UserProfile).filter(
-                    UserProfile.id == u_id,
-                    UserProfile.isadmin == True,
-                    UserProfile.is_active == True
-                ).first()
-            except:
-                pass
+            # Admin specific session cookies
+            admin_user_id = cookies.get('admin_user_id')
+            admin_session = cookies.get('admin_session')
+            
+            user = None
+            
+            if admin_user_id and admin_session:
+                # Authenticate via admin session
+                try:
+                    from app.db.models import UserProfile
+                    u_id = int(admin_user_id)
+                    user = db.query(UserProfile).filter(
+                        UserProfile.id == u_id,
+                        UserProfile.isadmin == True,
+                        UserProfile.is_active == True
+                    ).first()
+                except:
+                    pass
                 
         if not user and access_token:
             # Fall back to access_token (Cognito)
