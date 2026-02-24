@@ -21,8 +21,10 @@ async def websocket_notifications(websocket: WebSocket):
     Only authenticated admin users can connect.
     Sends real-time notifications for new bookings and support tickets.
     """
-    db = next(get_db())
+    logger.info("New WebSocket connection attempt started")
+    db = None
     try:
+        db = next(get_db())
         # Accept connection first (required before we can send/close)
         await websocket.accept()
         
@@ -126,5 +128,6 @@ async def websocket_notifications(websocket: WebSocket):
         except:
             pass
     finally:
-        db.close()
+        if db:
+            db.close()
 
