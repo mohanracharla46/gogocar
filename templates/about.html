@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - GoGo Self Drive Cars</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    {% include '_header_css.html' %}
+    {% include '_footer_css.html' %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #061a40;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(32, 76, 79, 0.1) 0%, transparent 40%),
+                linear-gradient(135deg, #061a3d 0%, #0c2a5c 40%, #1e4d4e 100%);
+            z-index: -2;
+        }
+
+        /* About Page Content */
+        .about-hero {
+            padding: 160px 40px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .about-title {
+            font-size: 56px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #ffffff, #00d2ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .about-subtitle {
+            font-size: 24px;
+            font-weight: 600;
+            color: #00d2ff;
+            margin-bottom: 40px;
+        }
+
+        .about-intro {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto 60px;
+        }
+
+        /* Why Choose Section */
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            animation: slideInUp 0.8s ease-out both;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            border-color: #00d2ff;
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        /* Grid Section */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            color: #1e293b;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            animation: fadeIn 1s ease-out both;
+        }
+
+        .info-card.dark {
+            background: #2b3990;
+            color: #ffffff;
+        }
+
+        .info-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .info-card h3 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            margin-bottom: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card li::before {
+            content: '\2713';
+            color: #ff6b35;
+            font-weight: 800;
+        }
+
+        /* Banner */
+        .big-moves-banner {
+            background: linear-gradient(135deg, #2b3990 0%, #061a40 100%);
+            border-radius: 30px;
+            padding: 60px;
+            text-align: center;
+            margin-bottom: 80px;
+            border: 2px solid rgba(0, 210, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .big-moves-banner h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .big-moves-banner p {
+            font-size: 20px;
+            color: #00d2ff;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .big-moves-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* Contact Section */
+        .contact-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 25px;
+            padding: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .contact-details h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .contact-item svg {
+            width: 20px;
+            height: 20px;
+            color: #00d2ff;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .about-title {
+                font-size: 40px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include '_header.html' %}
+
+    <section class="about-hero">
+        <h1 class="about-title">Driving Freedom in Hyderabad</h1>
+        <p class="about-subtitle">The most transparent and reliable self-drive car rental service.</p>
+        <p class="about-intro">
+            At <strong>GoGo Cars</strong>, we believe travel should be on your own terms. We've simplified car rentals
+            to give you total control, zero hidden costs, and the widest selection of well-maintained vehicles in the
+            city. Whether it's a quick city errand or a long-distance road trip, we're here to get you behind the wheel
+            with confidence.
+        </p>
+
+        <!-- How It Works Section -->
+        <h2 style="font-size: 42px; font-weight: 800; margin: 80px 0 40px; text-align: center; color: #00d2ff;">How It
+            Works</h2>
+        <div class="features-container" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <div class="feature-item"
+                style="flex-direction: column; align-items: center; text-align: center; padding: 40px;">
+                <div style="font-size: 50px; margin-bottom: 20px;">🔍</div>
+                <h3 style="margin-bottom: 15px; color: #00d2ff;">1. Find Your Car</h3>
+                <p style="opacity: 0.8;">Browse our extensive fleet of hatchbacks, sedans, and SUVs. Filter by your
+                    needs and view real photos of the actual cars.</p>
+            </div>
+            <div class="feature-item"
+                style="flex-direction: column; align-items: center; text-align: center; padding: 40px; animation-delay: 0.2s;">
+                <div style="font-size: 50px; margin-bottom: 20px;">📅</div>
+                <h3 style="margin-bottom: 15px; color: #00d2ff;">2. Book in Minutes</h3>
+                <p style="opacity: 0.8;">Select your dates and pay just a 10% advance to secure your booking. No
+                    complicated paperwork—just simple, digital verification.</p>
+            </div>
+            <div class="feature-item"
+                style="flex-direction: column; align-items: center; text-align: center; padding: 40px; animation-delay: 0.4s;">
+                <div style="font-size: 50px; margin-bottom: 20px;">🔑</div>
+                <h3 style="margin-bottom: 15px; color: #00d2ff;">3. Drive Away</h3>
+                <p style="opacity: 0.8;">Pick up your car or have it delivered. Enjoy unlimited kilometers and 24/7
+                    support while you explore the open road.</p>
+            </div>
+        </div>
+
+        <h3 style="font-size: 32px; font-weight: 800; margin-bottom: 40px; text-align: center;">Why Drivers Choose Us
+        </h3>
+        <div class="features-container">
+            <div class="feature-item" style="animation-delay: 0.1s;">
+                <span class="feature-icon">🚗</span>
+                <span class="feature-text"><strong>Diverse Fleet</strong><br><small style="opacity: 0.7;">From compact
+                        city cars to rugged family SUVs.</small></span>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.2s;">
+                <span class="feature-icon">🏎️</span>
+                <span class="feature-text"><strong>Total Flexibility</strong><br><small style="opacity: 0.7;">Rent by
+                        the hour, day, or week.</small></span>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.3s;">
+                <span class="feature-icon">🛠️</span>
+                <span class="feature-text"><strong>24/7 Roadside</strong><br><small style="opacity: 0.7;">Peace of mind
+                        with around-the-clock assistance.</small></span>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.4s;">
+                <span class="feature-icon">🛣️</span>
+                <span class="feature-text"><strong>Go Anywhere</strong><br><small style="opacity: 0.7;">Unlimited KMs -
+                        no over-mileage worries.</small></span>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.5s;">
+                <span class="feature-icon">📸</span>
+                <span class="feature-text"><strong>WYSIWYG</strong><br><small style="opacity: 0.7;">What you see
+                        (photos) is what you get.</small></span>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.6s;">
+                <span class="feature-icon">💸</span>
+                <span class="feature-text"><strong>Best Rates</strong><br><small style="opacity: 0.7;">Starting at just
+                        ₹1277/day.</small></span>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.7s;">
+                <span class="feature-icon">🏷️</span>
+                <span class="feature-text"><strong>Price Match</strong><br><small style="opacity: 0.7;">We guarantee the
+                        lowest local prices.</small></span>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.8s;">
+                <span class="feature-icon">✅</span>
+                <span class="feature-text"><strong>Easy Booking</strong><br><small style="opacity: 0.7;">Book with only
+                        10% advance payment.</small></span>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card dark">
+                <h3><span style="font-size: 24px;">💎</span> Transparent Pricing</h3>
+                <p>We hate hidden fees as much as you do. Our pricing is upfront. The price you see includes insurance
+                    and all standard taxes. No "convenience fees" or "cleanliness charges" at the end of your trip.</p>
+            </div>
+            <div class="info-card">
+                <h3><span style="font-size: 24px;">📋</span> Simple Documentation</h3>
+                <p>We've streamlined our check-in process. To rent a GoGo Car, you only need:</p>
+                <ul style="margin-left: 10px;">
+                    <li style="margin-bottom: 8px;">Valid Aadhar Card</li>
+                    <li style="margin-bottom: 8px;">Valid Driving License (Class B)</li>
+                </ul>
+                <p style="margin-top: 15px; font-size: 14px; font-style: italic;">Verification takes less than 15
+                    minutes on your first booking!</p>
+            </div>
+            <div class="info-card">
+                <h3><span style="font-size: 24px;">🛡️</span> Drive With Protection</h3>
+                <p>Our comprehensive damage protection plans ensure that a minor dent won't ruin your finances. We offer
+                    standard and premium coverage options so you can choose the level of protection that fits your trip.
+                </p>
+            </div>
+            <div class="info-card dark">
+                <h3><span style="font-size: 24px;">📞</span> 24/7 Human Support</h3>
+                <p>No bots, no endless phone menus. Real people are ready to help you 24 hours a day. Whether you're
+                    lost or need mechanical help, we're just a call away.</p>
+                <p style="font-weight: 800; font-size: 20px; margin-top: 15px; color: #00d2ff;">+91 90527 75477</p>
+            </div>
+        </div>
+
+        <div class="big-moves-banner">
+            <h2>The Future is Electric</h2>
+            <p>We are currently working on adding EV options to our fleet. Stay tuned!</p>
+        </div>
+
+        <div class="contact-card">
+            <div class="contact-details">
+                <h3 style="text-align: left; color: #ffffff; font-size: 32px; margin-bottom: 25px;">Ready to Start?</h3>
+                <div class="contact-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+                    </svg>
+                    <span>+91 90527 75477</span>
+                </div>
+                <div class="contact-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    <span>Ayyappa Society, Madhapur, Hyderabad</span>
+                </div>
+            </div>
+            <div class="cta-section">
+                <a href="/cars" class="login-btn-new"
+                    style="font-size: 20px; padding: 20px 50px; background: #ff6b35; text-transform: uppercase; letter-spacing: 1px;">Find
+                    a Car Now</a>
+            </div>
+        </div>
+    </section>
+
+    {% include '_footer.html' %}
+    {% include '_header_js.html' %}
+</body>
+
+</html>

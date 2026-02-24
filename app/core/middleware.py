@@ -28,7 +28,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         "/payment",
         "/booking",
         "/contact",
-    ]
+
 
     EXEMPTED_PREFIXES: List[str] = [
         "/static",

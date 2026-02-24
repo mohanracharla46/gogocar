@@ -1,4 +1,4 @@
-﻿{% extends "admin/base.html" %}
+{% extends "admin/base.html" %}
 
 {% block title %}{{ 'Edit' if car else 'Create' }} Car - Admin Panel{% endblock %}
 
@@ -222,6 +222,64 @@
                 </div>
             </div>
 
+            <!-- Section 6: Homepage Tags -->
+            <div style="margin-bottom: 40px;">
+                <h4
+                    style="font-size: 16px; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
+                    <i class="fas fa-star"></i> Homepage Display
+                </h4>
+                <div class="form-row">
+                    <div class="form-group"
+                        style="background: rgba(255, 107, 53, 0.05); padding: 20px; border-radius: 16px; border: 1px solid rgba(255, 107, 53, 0.1);">
+                        <label
+                            style="display: flex; align-items: center; gap: 15px; cursor: pointer; margin-bottom: 0; text-transform: none;">
+                            <div style="position: relative; width: 44px; height: 24px;">
+                                <input type="checkbox" id="is_top_selling" name="is_top_selling"
+                                    style="opacity: 0; width: 0; height: 0;" {{ 'checked' if car and car.is_top_selling
+                                    else '' }}
+                                    onchange="this.nextElementSibling.style.background = this.checked ? '#ff6b35' : '#e2e8f0'; this.nextElementSibling.firstElementChild.style.transform = this.checked ? 'translateX(20px)' : 'translateX(0)';">
+                                <span
+                                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: {{ '#ff6b35' if car and car.is_top_selling else '#e2e8f0' }}; transition: .4s; border-radius: 34px;">
+                                    <span
+                                        style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; transform: {{ 'translateX(20px)' if car and car.is_top_selling else 'translateX(0)' }}; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></span>
+                                </span>
+                            </div>
+                            <div>
+                                <span style="display: block; font-weight: 800; color: var(--dark); font-size: 14px;">🔥
+                                    Top Selling Car</span>
+                                <span
+                                    style="display: block; font-size: 11px; color: var(--gray); font-weight: 600;">Show
+                                    in "Top Selling Cars" section on homepage</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form-group"
+                        style="background: rgba(43, 57, 144, 0.05); padding: 20px; border-radius: 16px; border: 1px solid rgba(43, 57, 144, 0.1);">
+                        <label
+                            style="display: flex; align-items: center; gap: 15px; cursor: pointer; margin-bottom: 0; text-transform: none;">
+                            <div style="position: relative; width: 44px; height: 24px;">
+                                <input type="checkbox" id="is_premium" name="is_premium"
+                                    style="opacity: 0; width: 0; height: 0;" {{ 'checked' if car and car.is_premium
+                                    else '' }}
+                                    onchange="this.nextElementSibling.style.background = this.checked ? '#2b3990' : '#e2e8f0'; this.nextElementSibling.firstElementChild.style.transform = this.checked ? 'translateX(20px)' : 'translateX(0)';">
+                                <span
+                                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: {{ '#2b3990' if car and car.is_premium else '#e2e8f0' }}; transition: .4s; border-radius: 34px;">
+                                    <span
+                                        style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; transform: {{ 'translateX(20px)' if car and car.is_premium else 'translateX(0)' }}; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></span>
+                                </span>
+                            </div>
+                            <div>
+                                <span style="display: block; font-weight: 800; color: var(--dark); font-size: 14px;">💎
+                                    Premium Car</span>
+                                <span
+                                    style="display: block; font-size: 11px; color: var(--gray); font-weight: 600;">Show
+                                    in "Premium Cars" section on homepage</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group"
                 style="background: rgba(16, 185, 129, 0.05); padding: 20px; border-radius: 16px; border: 1px solid rgba(16, 185, 129, 0.1);">
                 <label
@@ -233,7 +291,7 @@
                         <span
                             style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: {{ 'var(--success)' if not car or car.active else '#e2e8f0' }}; transition: .4s; border-radius: 34px;">
                             <span
-                                style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; transform: {{ 'translateX(20px)' if not car or car.active else 'translateX(0)' }}; shadow: 0 2px 4px rgba(0,0,0,0.2);"></span>
+                                style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; transform: {{ 'translateX(20px)' if not car or car.active else 'translateX(0)' }}; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></span>
                         </span>
                     </div>
                     <div>
@@ -284,66 +342,67 @@
         const formData = new FormData();
         const carId = {{ car.id if car else "null" }};
 
+        // Helper to append only if value exists
+        const appendIfValue = (name, id) => {
+            const val = document.getElementById(id).value;
+            if (val !== "" && val !== null && val !== undefined) {
+                formData.append(name, val);
+            }
+        };
 
-    // Helper to append only if value exists
-    const appendIfValue = (name, id) => {
-        const val = document.getElementById(id).value;
-        if (val !== "" && val !== null && val !== undefined) {
-            formData.append(name, val);
-        }
-    };
+        // Add mandatory form fields
+        formData.append('brand', document.getElementById('brand').value);
+        formData.append('car_model', document.getElementById('car_model').value);
+        formData.append('car_type', document.getElementById('car_type').value);
+        formData.append('fuel_type', document.getElementById('fuel_type').value);
+        formData.append('transmission_type', document.getElementById('transmission_type').value);
+        formData.append('no_of_seats', document.getElementById('no_of_seats').value);
+        formData.append('base_price', document.getElementById('base_price').value);
+        formData.append('damage_price', document.getElementById('damage_price').value);
+        formData.append('protection_price', document.getElementById('protection_price').value);
+        formData.append('no_of_km', document.getElementById('no_of_km').value);
+        formData.append('active', document.getElementById('active').checked ? 'true' : 'false');
+        formData.append('is_top_selling', document.getElementById('is_top_selling').checked ? 'true' : 'false');
+        formData.append('is_premium', document.getElementById('is_premium').checked ? 'true' : 'false');
 
-    // Add mandatory form fields
-    formData.append('brand', document.getElementById('brand').value);
-    formData.append('car_model', document.getElementById('car_model').value);
-    formData.append('car_type', document.getElementById('car_type').value);
-    formData.append('fuel_type', document.getElementById('fuel_type').value);
-    formData.append('transmission_type', document.getElementById('transmission_type').value);
-    formData.append('no_of_seats', document.getElementById('no_of_seats').value);
-    formData.append('base_price', document.getElementById('base_price').value);
-    formData.append('damage_price', document.getElementById('damage_price').value);
-    formData.append('protection_price', document.getElementById('protection_price').value);
-    formData.append('no_of_km', document.getElementById('no_of_km').value);
-    formData.append('active', document.getElementById('active').checked ? 'true' : 'false');
+        // Optional fields
+        appendIfValue('description', 'description');
+        appendIfValue('registration_number', 'registration_number');
+        appendIfValue('year', 'year');
+        appendIfValue('color', 'color');
+        appendIfValue('location_id', 'location_id');
+        appendIfValue('maps_link', 'maps_link');
 
-    // Optional fields
-    appendIfValue('description', 'description');
-    appendIfValue('registration_number', 'registration_number');
-    appendIfValue('year', 'year');
-    appendIfValue('color', 'color');
-    appendIfValue('location_id', 'location_id');
-    appendIfValue('maps_link', 'maps_link');
-
-    // Add images
-    const imagesInput = document.getElementById('images');
-    if (imagesInput.files.length > 0) {
-        for (let i = 0; i < imagesInput.files.length; i++) {
-            formData.append('images', imagesInput.files[i]);
-        }
-    }
-
-    try {
-        const url = carId ? `/cars/${carId}` : '/cars';
-        const method = carId ? 'PUT' : 'POST';
-
-        const response = await fetch(API_BASE + url, {
-            method: method,
-            body: formData,
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            const error = await response.json().catch(() => ({ detail: 'Request failed' }));
-            throw new Error(error.detail || 'Request failed');
+        // Add images
+        const imagesInput = document.getElementById('images');
+        if (imagesInput.files.length > 0) {
+            for (let i = 0; i < imagesInput.files.length; i++) {
+                formData.append('images', imagesInput.files[i]);
+            }
         }
 
-        showAlert(`Car ${carId ? 'updated' : 'created'} successfully!`, 'success');
-        setTimeout(() => {
-            window.location.href = '/admin/cars';
-        }, 1500);
-    } catch (error) {
-        showAlert('Error saving car: ' + error.message, 'danger');
-    }
+        try {
+            const url = carId ? `/cars/${carId}` : '/cars';
+            const method = carId ? 'PUT' : 'POST';
+
+            const response = await fetch(API_BASE + url, {
+                method: method,
+                body: formData,
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({ detail: 'Request failed' }));
+                throw new Error(error.detail || 'Request failed');
+            }
+
+            showAlert(`Car ${carId ? 'updated' : 'created'} successfully!`, 'success');
+            setTimeout(() => {
+                window.location.href = '/admin/cars';
+            }, 1500);
+        } catch (error) {
+            showAlert('Error saving car: ' + error.message, 'danger');
+        }
     });
 </script>
 {% endblock %}
