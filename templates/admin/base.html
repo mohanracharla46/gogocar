@@ -857,7 +857,7 @@
 
                 // Add token as query parameter if available
                 if (accessToken) {
-                    wsUrl += `?token=${encodeURIComponent(accessToken)}`;
+                    wsUrl += "?token=" + encodeURIComponent(accessToken);
                 }
 
                 ws = new WebSocket(wsUrl);

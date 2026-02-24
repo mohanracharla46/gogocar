@@ -26,55 +26,69 @@ async def websocket_notifications(websocket: WebSocket):
         # Accept connection first (required before we can send/close)
         await websocket.accept()
         
-        # Get access token from cookies in query string or headers
-        # WebSocket doesn't support Cookie() dependency, so we need to get it manually
-        access_token = None
+        # 1. Collect all possible credentials
+        query_params = dict(websocket.query_params)
+        access_token = query_params.get('token')
+        
+        cookie_header = websocket.headers.get('cookie', '')
+        cookies = {}
+        if cookie_header:
+            try:
+                for item in cookie_header.split(';'):
+                    if '=' in item:
+                        k, v = item.split('=', 1)
+                        cookies[k.strip()] = v.strip()
+            except Exception as e:
+                logger.warning(f"Error parsing cookies: {str(e)}")
+
+        if not access_token:
+            access_token = cookies.get('access_token')
+            
+        admin_user_id = cookies.get('admin_user_id')
+        admin_session = cookies.get('admin_session')
+        
         user = None
         
-        # Try to get from query parameters (client can pass it)
-        query_params = dict(websocket.query_params)
-        if 'token' in query_params:
-            access_token = query_params['token']
-        else:
-            # Try to get from cookies in headers
-            cookie_header = websocket.headers.get('cookie', '')
-            cookies = {}
-            if cookie_header:
-                cookies = dict(item.split('=', 1) for item in cookie_header.split('; ') if '=' in item)
-                access_token = cookies.get('access_token')
-            
-            # Admin specific session cookies
-            admin_user_id = cookies.get('admin_user_id')
-            admin_session = cookies.get('admin_session')
-            
-            if admin_user_id and admin_session:
-                # Authenticate via admin session
-                try:
-                    from app.db.models import UserProfile
-                    u_id = int(admin_user_id)
-                    user = db.query(UserProfile).filter(
-                        UserProfile.id == u_id,
-                        UserProfile.isadmin == True,
-                        UserProfile.is_active == True
-                    ).first()
-                except:
-                    pass
-                
-        if not user and access_token:
-            # Fall back to access_token (Cognito)
-            from app.core.security import decode_access_token
-            token_data = decode_access_token(access_token)
-            
-            if not token_data.get("error"):
+        # 2. Try Admin Session authentication first
+        if admin_user_id and admin_session:
+            try:
                 from app.db.models import UserProfile
+                u_id = int(admin_user_id)
                 user = db.query(UserProfile).filter(
-                    UserProfile.username == token_data.get("sub")
+                    UserProfile.id == u_id,
+                    UserProfile.isadmin == True,
+                    UserProfile.is_active == True
                 ).first()
+            except Exception as e:
+                logger.warning(f"Admin session auth failed: {str(e)}")
+                
+        # 3. Try Cognito/Access Token as fallback
+        if not user and access_token:
+            try:
+                from app.core.security import decode_access_token
+                token_data = decode_access_token(access_token)
+                
+                if not token_data.get("error"):
+                    from app.db.models import UserProfile
+                    user = db.query(UserProfile).filter(
+                        UserProfile.username == token_data.get("sub")
+                    ).first()
+            except Exception as e:
+                logger.warning(f"Token auth failed: {str(e)}")
         
+        # 4. Final authorization check
         if not user or not user.isadmin or not user.is_active:
+            # We must accept before we can close with a custom code in some environments
+            # but Starlette allows closing before accept. To be safe:
+            # The connection has already been accepted at the start of the function.
             await websocket.close(code=1008, reason="Admin access required")
-            db.close()
             return
+            
+        # 5. Success - Proceed with connection
+        # The connection has already been accepted at the start of the function.
+        # This check is redundant if accept() was called at the beginning.
+        # if websocket.client_state.name == "CONNECTING":
+        #     await websocket.accept()
         
         # Register the connection (connection already accepted above)
         await websocket_manager.connect(websocket, user.id)
