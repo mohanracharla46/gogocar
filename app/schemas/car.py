@@ -39,6 +39,8 @@ class CarCreate(BaseModel):
     registration_number: Optional[str] = None
     year: Optional[int] = None
     color: Optional[str] = None
+    is_top_selling: bool = False
+    is_premium: bool = False
     active: bool = True
 
 
@@ -63,6 +65,8 @@ class CarUpdate(BaseModel):
     registration_number: Optional[str] = None
     year: Optional[int] = None
     color: Optional[str] = None
+    is_top_selling: Optional[bool] = None
+    is_premium: Optional[bool] = None
     active: Optional[bool] = None
 
 
@@ -90,6 +94,8 @@ class CarResponse(BaseModel):
     registration_number: Optional[str] = None
     year: Optional[int] = None
     color: Optional[str] = None
+    is_top_selling: bool = False
+    is_premium: bool = False
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     

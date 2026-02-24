@@ -300,6 +300,36 @@ async def root(
                 "expiration_time": offer.expiration_time.isoformat() if offer.expiration_time else None,
                 "max_discount": float(offer.max_discount) if offer.max_discount else None
             })
+        # Query cars tagged for homepage display
+        top_selling_cars = db.query(Cars).filter(
+            Cars.active == True,
+            Cars.is_top_selling == True
+        ).order_by(Cars.id.desc()).all()
+        
+        premium_cars = db.query(Cars).filter(
+            Cars.active == True,
+            Cars.is_premium == True
+        ).order_by(Cars.id.desc()).all()
+        
+        # Convert to template-friendly format
+        def car_to_dict(car):
+            first_image = car.images.split(',')[0] if car.images else '/static/img/landing.png'
+            seats_map = {'FIVE': '5', 'SEVEN': '7'}
+            return {
+                "id": car.id,
+                "brand": car.brand,
+                "car_model": car.car_model,
+                "base_price": float(car.base_price),
+                "images": car.images,
+                "first_image": first_image,
+                "car_type": car.car_type.value if car.car_type else '',
+                "transmission_type": car.transmission_type.value.title() if car.transmission_type else '',
+                "no_of_seats": seats_map.get(car.no_of_seats.value, '5') if car.no_of_seats else '5',
+                "fuel_type": car.fuel_type.value.title() if car.fuel_type else '',
+            }
+        
+        top_selling_data = [car_to_dict(c) for c in top_selling_cars]
+        premium_cars_data = [car_to_dict(c) for c in premium_cars]
         
         return templates.TemplateResponse(
             "index.html",
@@ -312,7 +342,9 @@ async def root(
                 "is_admin": is_admin,
                 "featured_cars": featured_cars_data,
                 "reviews": reviews_data,
-                "offers": offers_data
+                "offers": offers_data,
+                "top_selling_cars": top_selling_data,
+                "premium_cars": premium_cars_data
             }
         )
     
