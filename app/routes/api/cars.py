@@ -1,50 +1,105 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
+from datetime import datetime
 from app.db.session import get_db
-from app.db.models import Cars, NoOfSeats, FuelType, TransmissionType, CarType
+from app.db.models import Cars, NoOfSeats, FuelType, TransmissionType, CarType, Orders, BookingStatus, Location, CarAvailability
 from app.schemas.car import MobileCarListing, CarDetailResponse
 from app.core.config import settings
 
 router = APIRouter()
 
 @router.get("/", response_model=List[MobileCarListing])
-async def get_mobile_cars(db: Session = Depends(get_db)):
+async def get_mobile_cars(
+    location_id: Optional[int] = Query(None),
+    pickup_date: Optional[datetime] = Query(None),
+    return_date: Optional[datetime] = Query(None),
+    seats: Optional[int] = Query(None),
+    min_price: Optional[float] = Query(None),
+    max_price: Optional[float] = Query(None),
+    db: Session = Depends(get_db)
+):
     """
-    Fetch cars for mobile listing.
+    Fetch cars for mobile listing with production-ready filtering.
     Returns JSON list of cars with specific fields.
-    Includes temporary debug logging.
     """
-    # Debug logging as requested
-    print(f"DEBUG MOBILE API: Database URL: {settings.DATABASE_URL}")
-    
-    # Fetch all cars (no filters as requested)
-    cars_query = db.query(Cars).all()
-    print(f"DEBUG MOBILE API: Total number of cars fetched: {len(cars_query)}")
+    # 1. Base query: Active cars only
+    query = db.query(Cars).filter(Cars.active == True)
+
+    # 2. Location filter (using location_id)
+    if location_id:
+        query = query.filter(Cars.location_id == location_id)
+
+    # 3. Seats filter (Keeping for convenience unless explicitly told to remove)
+    if seats:
+        valid_seats = []
+        if seats <= 5:
+            valid_seats.extend([NoOfSeats.FIVE, NoOfSeats.SEVEN])
+        elif seats <= 7:
+            valid_seats.append(NoOfSeats.SEVEN)
+        
+        if valid_seats:
+            query = query.filter(Cars.no_of_seats.in_(valid_seats))
+        else:
+            return []
+
+    # 4. Availability filter (pickup_date and return_date)
+    if pickup_date and return_date:
+        # Exclude cars that have bookings with overlapping dates
+        # booking.status in: PENDING, APPROVED, BOOKED, ONGOING
+        # (Assuming INITIATED/CONFIRMED map to these statuses in logic)
+        booked_car_ids = db.query(Orders.car_id).filter(
+            Orders.order_status.in_([
+                BookingStatus.PENDING,
+                BookingStatus.APPROVED,
+                BookingStatus.BOOKED,
+                BookingStatus.ONGOING
+            ]),
+            # Overlap logic: NOT (booking.end_time <= pickup_date OR booking.start_time >= return_date)
+            Orders.end_time > pickup_date,
+            Orders.start_time < return_date
+        ).distinct()
+        
+        # Exclude cars blocked in CarAvailability table
+        blocked_car_ids = db.query(CarAvailability.car_id).filter(
+            # Overlap logic: NOT (availability.end_date <= pickup_date OR availability.start_date >= return_date)
+            CarAvailability.end_date > pickup_date,
+            CarAvailability.start_date < return_date
+        ).distinct()
+        
+        query = query.filter(~Cars.id.in_(booked_car_ids))
+        query = query.filter(~Cars.id.in_(blocked_car_ids))
+
+    cars_query = query.all()
     
     result = []
     for car in cars_query:
-        # seats mapping: FIVE -> 5, SEVEN -> 7
+        # seats mapping
         seats_map = {
             NoOfSeats.FIVE: 5,
             NoOfSeats.SEVEN: 7
         }
         
-        # image mapping: take first image from comma-separated string
-        first_image = ""
-        if car.images:
-            images_list = car.images.split(',')
-            if images_list:
-                first_image = images_list[0].strip()
-
         # Determine price_per_day
-        # Default to base_price if daily is not specified in JSON
         price_per_day = float(car.base_price)
         if car.prices and isinstance(car.prices, dict) and 'daily' in car.prices:
             try:
                 price_per_day = float(car.prices['daily'])
             except (ValueError, TypeError):
                 pass
+
+        # Price range filter
+        if min_price is not None and price_per_day < min_price:
+            continue
+        if max_price is not None and price_per_day > max_price:
+            continue
+
+        # image mapping
+        first_image = ""
+        if car.images:
+            images_list = car.images.split(',')
+            if images_list:
+                first_image = images_list[0].strip()
 
         # Construct the response object
         car_data = {

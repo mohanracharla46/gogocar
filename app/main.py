@@ -124,6 +124,8 @@ app.include_router(payments.router)
 app.include_router(bookings.router)
 from app.routes import mobile
 app.include_router(mobile.router, prefix="/api/mobile")
+from app.routes.api import kyc as api_kyc
+app.include_router(api_kyc.router, prefix="/api/mobile/kyc", tags=["Mobile KYC"])
 from app.routes.api import cars as api_cars
 app.include_router(api_cars.router, prefix="/api/cars", tags=["Mobile Cars"])
 from app.routes.api import bookings as api_bookings
