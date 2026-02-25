@@ -1755,8 +1755,8 @@
                                 </div>
                                 <div>
                                     <p><strong>Corporate office</strong></p>
-                                    <p>5 â€“ 307/3, Opp Power sub station<br>
-                                        Rtc, colony, Chilakaluripeta,<br>
+                                    <p>5 – 307/3, Opp Power sub station<br>
+                                        Rtc, colony, Chilakalurupet,<br>
                                         Guntur, Andrapradesh - 522616</p>
                                     <p>+91 9133135477</p>
                                 </div>
@@ -1841,8 +1841,9 @@
             // Current pricing data (will be fetched from backend)
             let currentPricing = null;
             let appliedCoupon = null;
-            let selectedDamageProtection = 0; // 0, 277, or 477
-            let selectedDeposit = 'bike_rc'; // bike_rc, laptop, cheque, cash
+            const pmUrlParams = new URLSearchParams(window.location.search);
+            let selectedDamageProtection = parseInt(pmUrlParams.get('damage_protection')) || 0;
+            let selectedDeposit = pmUrlParams.get('deposit_type') || 'bike_rc';
 
             // Damage protection buttons
             const damageProtectionButtons = document.querySelectorAll('.damage-protection-btn');
@@ -1858,9 +1859,17 @@
                 });
             });
 
-            // Set default selection (â‚¹0)
-            if (damageProtectionButtons.length > 0) {
+            // Set default selection based on URL defaults
+            let foundProtectionBtn = false;
+            damageProtectionButtons.forEach(btn => {
+                if (parseInt(btn.getAttribute('data-protection')) === selectedDamageProtection) {
+                    btn.classList.add('selected');
+                    foundProtectionBtn = true;
+                }
+            });
+            if (!foundProtectionBtn && damageProtectionButtons.length > 0) {
                 damageProtectionButtons[0].classList.add('selected');
+                selectedDamageProtection = parseInt(damageProtectionButtons[0].getAttribute('data-protection')) || 0;
             }
 
             // Deposit option selection
@@ -1889,7 +1898,16 @@
             });
 
             // Set default selected deposit card
-            if (depositCards.length > 0 && depositOptions[0]) {
+            let foundDepositBtn = false;
+            depositOptions.forEach((opt, index) => {
+                if (opt.value === selectedDeposit) {
+                    opt.checked = true;
+                    document.querySelectorAll('.deposit-option-card').forEach(c => c.classList.remove('selected'));
+                    if (depositCards[index]) depositCards[index].classList.add('selected');
+                    foundDepositBtn = true;
+                }
+            });
+            if (!foundDepositBtn && depositCards.length > 0 && depositOptions[0]) {
                 depositOptions[0].checked = true;
                 depositCards[0].classList.add('selected');
             }

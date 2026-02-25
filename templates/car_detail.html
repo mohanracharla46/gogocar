@@ -1656,7 +1656,7 @@
                     </div>
 
                     <div class="protection-options-grid">
-                        <div class="protection-option selected" data-protection="basic">
+                        <div class="protection-option selected" data-protection="0">
                             <span class="protection-option-name">Basic Protection</span>
                             <div class="protection-hover-info">
                                 <span class="hover-info-title">Basic Coverage</span>
@@ -1667,7 +1667,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="protection-option" data-protection="plus">
+                        <div class="protection-option" data-protection="277">
                             <span class="protection-option-name">Plus Protection</span>
                             <div class="protection-hover-info">
                                 <span class="hover-info-title" style="border-color: #fca5a5;">Plus Benefits</span>
@@ -1677,7 +1677,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="protection-option" data-protection="premium">
+                        <div class="protection-option" data-protection="477">
                             <span class="protection-option-name">Premium Protection</span>
                             <div class="protection-hover-info">
                                 <span class="hover-info-title" style="border-color: #f87171;">Full Premium</span>
@@ -1806,6 +1806,7 @@
         });
 
         // Protection Selection
+        let selectedProtectionPrice = 0; // Default is basic
         document.querySelectorAll('.protection-option').forEach(option => {
             option.addEventListener('click', function () {
                 document.querySelectorAll('.protection-option').forEach(opt => {
@@ -1813,7 +1814,8 @@
                 });
                 this.classList.add('selected');
                 // Protection level updated
-                console.log('Selected protection:', this.dataset.protection);
+                selectedProtectionPrice = parseInt(this.dataset.protection) || 0;
+                updateTripDetails();
             });
         });
 
@@ -1837,8 +1839,8 @@
 
                 // Update Total Price
                 // Total Price = no. of days * price of 24 hrs
-                const newTotal = basePrice * diffDays;
-                totalAmountDisplay.textContent = `₹${newTotal.toLocaleString()}`;
+                const newTotal = basePrice * diffDays + selectedProtectionPrice;
+                totalAmountDisplay.textContent = `₹${newTotal.toLocaleString('en-IN')}`;
             } else {
                 durationDisplay.textContent = 'Invalid duration';
             }
@@ -1880,6 +1882,19 @@
             tomorrow.setDate(tomorrow.getDate() + 1);
             endDateInput.value = formatForInput(tomorrow);
         }
+
+        // Force minutes to 00 logic for all datetime-local inputs
+        document.querySelectorAll('input[type="datetime-local"]').forEach(input => {
+            input.addEventListener('change', function (e) {
+                if (this.value) {
+                    const parts = this.value.split(':');
+                    if (parts.length >= 2 && parts[1] !== '00') {
+                        this.value = parts[0] + ':00';
+                        this.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+        });
 
         // Set min values
         const nowObj = new Date();
@@ -1925,8 +1940,13 @@
             const deliveryToggle = document.querySelector('.delivery-toggle .toggle-switch');
             const homeDelivery = deliveryToggle && deliveryToggle.classList.contains('active');
 
-            // Redirect to payment page
-            const url = `/payment?car_id={{ car.id }}&pickup_datetime=${encodeURIComponent(start)}&end_datetime=${encodeURIComponent(end)}&home_delivery=${homeDelivery}`;
+            let url = `/payment?car_id={{ car.id }}&pickup_datetime=${encodeURIComponent(start)}&end_datetime=${encodeURIComponent(end)}&home_delivery=${homeDelivery}&damage_protection=${selectedProtectionPrice}`;
+
+            const selectedDepositEl = document.querySelector('input[name="deposit_type"]:checked');
+            if (selectedDepositEl) {
+                url += `&deposit_type=${encodeURIComponent(selectedDepositEl.value)}`;
+            }
+
             window.location.href = url;
         });
     </script>
