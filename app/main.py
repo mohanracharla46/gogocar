@@ -163,7 +163,7 @@ async def admin_redirect():
     from fastapi.responses import RedirectResponse
     return RedirectResponse(url="/admin/dashboard", status_code=302)
 
-
+print("ACTIVE DATABASE:", settings.DATABASE_URL)
 @app.get("/")
 async def root(
     request: Request, 
