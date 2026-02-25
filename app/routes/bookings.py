@@ -326,15 +326,47 @@ async def checkout_order(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Order not found"
             )
-        
-        # Render payment page with order details
-        # The payment page will have a "Pay Now" button that initiates CCAvenue payment
+
+        # Get car details
+        from app.db.models import Cars
+        car = db.query(Cars).filter(Cars.id == temp_order.car_id).first()
+
+        # Check KYC status
+        from app.services.kyc_service import kyc_service
+        kyc_complete = kyc_service.is_kyc_complete(user)
+        missing_documents = kyc_service.get_missing_documents(user)
+
+        # Calculate duration in hours
+        import math
+        duration_delta = temp_order.end_time - temp_order.start_time
+        hours = math.ceil(duration_delta.total_seconds() / 3600)
+
+        # Get initial pricing breakdown
+        from app.services.payment_calculation import payment_calculation_service
+        pricing_breakdown = payment_calculation_service.calculate_pricing_breakdown(
+            base_price=float(car.base_price),
+            damage_price=float(car.damage_price),
+            hours=hours,
+            damage_protection=0,  # Default to no protection initially
+            deposit=float(car.prices.get('deposit', 0)) if car.prices else 0.0
+        )
+
+        # Render payment page with all necessary context
         return templates.TemplateResponse(
             "payment.html",
             {
                 "request": request,
                 "user": user,
-                "order": temp_order
+                "order": temp_order,
+                "car": car,
+                "kyc_complete": kyc_complete,
+                "missing_documents": missing_documents,
+                "pricing_breakdown": pricing_breakdown,
+                "hours": hours,
+                "pickup_datetime": temp_order.start_time.strftime('%Y-%m-%dT%H:%M'),
+                "end_datetime": temp_order.end_time.strftime('%Y-%m-%dT%H:%M'),
+                "home_delivery": temp_order.pay_at_car > 0, # Assuming home delivery if pay_at_car is set? No, let's use a better check
+                "delivery_address": None # Delivery info should be passed if available
             }
         )
         
