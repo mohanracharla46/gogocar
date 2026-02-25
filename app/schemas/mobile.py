@@ -25,6 +25,10 @@ class MobileProfileResponse(BaseModel):
     permanentaddress: Optional[str] = None
     kyc_status: str
     created_at: Optional[datetime] = None
+    aadhaar_front: Optional[str]
+    aadhaar_back: Optional[str]
+    drivinglicense_front: Optional[str]
+    drivinglicense_back: Optional[str]
 
     class Config:
         from_attributes = True
@@ -32,10 +36,21 @@ class MobileProfileResponse(BaseModel):
 
 class MobileProfileUpdate(BaseModel):
     """Request schema for PUT /api/mobile/profile"""
-    firstname: Optional[str] = Field(None, min_length=1, max_length=100)
-    lastname: Optional[str] = Field(None, min_length=1, max_length=100)
-    phone: Optional[str] = Field(None, min_length=10, max_length=12)
-    permanentaddress: Optional[str] = Field(None, max_length=500)
+    firstname: Optional[str] = None
+    lastname: Optional[str] = None
+    phone: Optional[str] = None
+    permanentaddress: Optional[str] = None
+
+
+class MobileChangePasswordRequest(BaseModel):
+    """Request schema for PUT /api/mobile/change-password"""
+    old_password: str
+    new_password: str = Field(..., min_length=8, max_length=100)
+
+
+class MobileMessageResponse(BaseModel):
+    """Generic message response"""
+    message: str
 
 
 # ─────────────────────────────────────────────

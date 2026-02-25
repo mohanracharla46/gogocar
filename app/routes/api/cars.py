@@ -32,7 +32,7 @@ async def get_mobile_cars(
     min_price: Optional[float] = Query(None),
     max_price: Optional[float] = Query(None),
     db: Session = Depends(get_db),
-    current_user: UserProfile = Depends(get_current_user),
+    # current_user: UserProfile = Depends(get_current_user),
 ):
     """
     Fetch cars for mobile listing with production-ready filtering.
@@ -143,7 +143,7 @@ async def get_mobile_cars(
 async def get_mobile_car_detail(
     car_id: int,
     db: Session = Depends(get_db),
-    current_user: UserProfile = Depends(get_current_user),
+    # current_user: UserProfile = Depends(get_current_user),
 ):
     """
     Fetch car detail by ID for mobile. Requires JWT Bearer token.

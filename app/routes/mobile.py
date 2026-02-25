@@ -7,7 +7,12 @@ from app.db.session import get_db
 from app.db.models import UserProfile, KYCStatus
 from app.core.security import get_password_hash, verify_password, create_access_token, decode_access_token
 from app.schemas.mobile_auth import MobileLoginRequest, MobileSignupRequest, Token
-from app.schemas.mobile import MobileProfileResponse, MobileProfileUpdate
+from app.schemas.mobile import (
+    MobileProfileResponse,
+    MobileProfileUpdate,
+    MobileChangePasswordRequest,
+    MobileMessageResponse,
+)
 
 router = APIRouter(tags=["Mobile Auth"])
 
@@ -105,6 +110,10 @@ def get_profile(current_user: UserProfile = Depends(get_current_user)):
         "permanentaddress": current_user.permanentaddress,
         "kyc_status": kyc_val.value if hasattr(kyc_val, "value") else str(kyc_val),
         "created_at": current_user.created_at,
+        "aadhaar_front": current_user.aadhaar_front,
+        "aadhaar_back": current_user.aadhaar_back,
+        "drivinglicense_front": current_user.drivinglicense_front,
+        "drivinglicense_back": current_user.drivinglicense_back,
     }
 
 
@@ -114,30 +123,36 @@ async def update_profile(
     db: Session = Depends(get_db),
     current_user: UserProfile = Depends(get_current_user),
 ):
-    """Update firstname, lastname, phone, or permanentaddress. JWT required."""
+    """
+    Update firstname, lastname, phone, or permanentaddress. JWT Required.
+    Implements production-ready partial update logic.
+    """
     user = db.query(UserProfile).filter(UserProfile.id == current_user.id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-    if body.firstname is not None:
-        user.firstname = body.firstname.strip()
-    if body.lastname is not None:
-        user.lastname = body.lastname.strip()
-    if body.phone is not None:
-        phone = body.phone.strip()
-        if not phone.isdigit() or len(phone) not in (10, 12):
-            raise HTTPException(status_code=400, detail="Phone must be 10 or 12 digits")
-        user.phone = phone
-    if body.permanentaddress is not None:
-        user.permanentaddress = body.permanentaddress.strip()
+    # Safe partial update logic
+    update_data = body.model_dump(exclude_unset=True)
+    
+    for key, value in update_data.items():
+        if value is not None:
+            # Specific validation for phone
+            if key == "phone":
+                phone = str(value).strip()
+                if not phone.isdigit() or len(phone) not in (10, 12):
+                    raise HTTPException(status_code=400, detail="Phone must be digits only and length 10 or 12")
+                user.phone = phone
+            else:
+                setattr(user, key, value.strip() if isinstance(value, str) else value)
 
     user.updated_at = datetime.now()
+    
     try:
         db.commit()
         db.refresh(user)
-    except Exception as e:
+    except Exception:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Update failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Profile update failed")
 
     kyc_val = user.kyc_status
     return {
@@ -150,4 +165,41 @@ async def update_profile(
         "permanentaddress": user.permanentaddress,
         "kyc_status": kyc_val.value if hasattr(kyc_val, "value") else str(kyc_val),
         "created_at": user.created_at,
+        "aadhaar_front": user.aadhaar_front,
+        "aadhaar_back": user.aadhaar_back,
+        "drivinglicense_front": user.drivinglicense_front,
+        "drivinglicense_back": user.drivinglicense_back,
     }
+
+
+@router.put("/change-password", response_model=MobileMessageResponse)
+async def change_password(
+    body: MobileChangePasswordRequest,
+    db: Session = Depends(get_db),
+    current_user: UserProfile = Depends(get_current_user),
+):
+    """
+    Update user password. JWT required.
+    Verifies old password and hashes new password.
+    """
+    user = db.query(UserProfile).filter(UserProfile.id == current_user.id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    # Verify old password
+    if not verify_password(body.old_password, user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect old password"
+        )
+
+    # Hash new password and update
+    user.hashed_password = get_password_hash(body.new_password)
+    user.updated_at = datetime.now()
+
+    try:
+        db.commit()
+        return {"message": "Password updated successfully"}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Update failed: {str(e)}")
