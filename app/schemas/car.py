@@ -68,6 +68,7 @@ class CarUpdate(BaseModel):
     is_top_selling: Optional[bool] = None
     is_premium: Optional[bool] = None
     active: Optional[bool] = None
+    is_booked: Optional[bool] = None
 
 
 class CarResponse(BaseModel):
@@ -96,6 +97,7 @@ class CarResponse(BaseModel):
     color: Optional[str] = None
     is_top_selling: bool = False
     is_premium: bool = False
+    is_booked: bool = False
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     

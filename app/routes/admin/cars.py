@@ -249,6 +249,19 @@ async def toggle_car_active(
     return car
 
 
+@router.post("/{car_id}/toggle-booked", response_model=CarResponse)
+async def toggle_car_booked(
+    car_id: int,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(require_admin)
+):
+    """Toggle car booked status"""
+    car = car_service.toggle_car_booked(db, car_id)
+    if not car:
+        raise HTTPException(status_code=404, detail="Car not found")
+    return car
+
+
 @router.post("/{car_id}/availability", response_model=CarAvailabilityResponse)
 async def block_availability(
     car_id: int,

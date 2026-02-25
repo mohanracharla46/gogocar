@@ -207,6 +207,18 @@ class CarService:
         db.commit()
         db.refresh(car)
         return car
+
+    @staticmethod
+    def toggle_car_booked(db: Session, car_id: int) -> Optional[Cars]:
+        """Toggle car booked status"""
+        car = db.query(Cars).filter(Cars.id == car_id).first()
+        if not car:
+            return None
+        
+        car.is_booked = not car.is_booked
+        db.commit()
+        db.refresh(car)
+        return car
     
     @staticmethod
     def block_car_availability(
@@ -246,9 +258,9 @@ class CarService:
         end_date: datetime
     ) -> bool:
         """Check if car is available for given period"""
-        # Check active status
+        # Check active status and manual booked flag
         car = db.query(Cars).filter(Cars.id == car_id).first()
-        if not car or not car.active:
+        if not car or not car.active or getattr(car, 'is_booked', False):
             return False
         
         # Check availability blocks

@@ -719,10 +719,16 @@
                         <div class="car-card-bottom">
                             <div class="car-card-price">₹{{ "{:,.0f}".format(car.base_price) }} <span>per day</span>
                             </div>
+                            {% if car.is_booked %}
+                            <button class="book-btn-new" style="background: #94a3b8; cursor: not-allowed;" disabled>
+                                BOOKED
+                            </button>
+                            {% else %}
                             <a href="/cars/{{ car.id }}" class="book-btn-new book-now-card-btn"
                                 onclick="const p=document.getElementById('top-pickup-datetime').value; const r=document.getElementById('top-return-datetime').value; let u=this.href+'?location=Hyderabad'; if(p)u+='&pickup_datetime='+p; if(r)u+='&end_datetime='+r; window.location.assign(u); return false;">
                                 BOOK NOW
                             </a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="car-card-img-container">

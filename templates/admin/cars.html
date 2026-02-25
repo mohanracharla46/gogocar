@@ -135,10 +135,16 @@
                             <td><span style="font-weight: 800; color: var(--primary); font-size: 15px;">₹${(car.base_price || 0).toLocaleString('en-IN')}</span></td>
                             <td>${featuresDisplay}</td>
                             <td>
-                                <span class="badge badge-${car.active ? 'success' : 'danger'}">
-                                    <i class="fas fa-${car.active ? 'check-circle' : 'times-circle'}" style="margin-right: 5px;"></i>
-                                    ${car.active ? 'Visible' : 'Hidden'}
-                                </span>
+                                <div style="display: flex; flex-direction: column; gap: 5px;">
+                                    <span class="badge badge-${car.active ? 'success' : 'danger'}">
+                                        <i class="fas fa-${car.active ? 'check-circle' : 'times-circle'}" style="margin-right: 5px;"></i>
+                                        ${car.active ? 'Visible' : 'Hidden'}
+                                    </span>
+                                    <span class="badge ${car.is_booked ? 'badge-warning' : 'badge-success'}" style="${car.is_booked ? 'background: rgba(245, 158, 11, 0.1); color: #d97706;' : 'background: rgba(16, 185, 129, 0.1); color: #059669;'}">
+                                        <i class="fas fa-${car.is_booked ? 'lock' : 'lock-open'}" style="margin-right: 5px;"></i>
+                                        ${car.is_booked ? 'Booked' : 'Available'}
+                                    </span>
+                                </div>
                             </td>
                             <td style="text-align: right;">
                                 <div style="display: flex; gap: 8px; justify-content: flex-end;">
@@ -148,6 +154,10 @@
                                     <button onclick="toggleCarActive(${car.id})" class="btn ${car.active ? 'btn-outline' : 'btn-primary'}" 
                                             style="padding: 8px; width: 36px; height: 36px; justify-content: center; ${car.active ? 'color: var(--warning); border-color: var(--warning);' : ''}" title="${car.active ? 'Deactivate' : 'Activate'}">
                                         <i class="fas fa-${car.active ? 'eye-slash' : 'eye'}"></i>
+                                    </button>
+                                    <button onclick="toggleCarBooked(${car.id})" class="btn btn-outline" 
+                                            style="padding: 8px; width: 36px; height: 36px; justify-content: center; color: #d97706; border-color: rgba(217, 119, 6, 0.2);" title="${car.is_booked ? 'Mark Available' : 'Mark Booked'}">
+                                        <i class="fas fa-${car.is_booked ? 'unlock' : 'calendar-check'}"></i>
                                     </button>
                                     <button onclick="deleteCar(${car.id})" class="btn btn-outline" 
                                             style="padding: 8px; width: 36px; height: 36px; justify-content: center; color: var(--danger); border-color: rgba(239, 68, 68, 0.2);" title="Delete Car">
@@ -238,6 +248,21 @@
             loadCars();
         } catch (error) {
             showAlert('Error updating car: ' + error.message, 'danger');
+        }
+    }
+
+    async function toggleCarBooked(carId) {
+        if (!confirm('Are you sure you want to change the booking status of this car?')) return;
+
+        try {
+            const car = await apiCall(`/admin/api/cars/${carId}/toggle-booked`, {
+                method: 'POST'
+            });
+
+            showAlert(`Car marked as ${car.is_booked ? 'booked' : 'available'} successfully`, 'success');
+            loadCars();
+        } catch (error) {
+            showAlert('Error updating car booking status: ' + (error.message || 'Unknown error'), 'danger');
         }
     }
 

@@ -556,6 +556,10 @@ async def payment_callback(
             order.order_status = BookingStatus.BOOKED
             order.payment_source = "CCAvenue"
             
+            # Mark the car as booked
+            if order.car:
+                order.car.is_booked = True
+            
             # Apply coupon usage count increment if coupon was used
             if order.coupon_id:
                 offer_service.apply_coupon(db, order.coupon_id)
