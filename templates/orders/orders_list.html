@@ -7,73 +7,9 @@
     <title>My Bookings - GoGo Self Drive Cars</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    {% include '_header_css.html' %}
+    {% include '_footer_css.html' %}
     <style>
-        /* Header New Design */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 80px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .logo-img {
-            height: 50px;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-img img {
-            height: 100%;
-            object-fit: contain;
-        }
-
-        nav {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        nav a {
-            color: #1e293b;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
-            transition: color 0.2s ease;
-            position: relative;
-        }
-
-        nav a:hover,
-        nav a.active {
-            color: #2b3990;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #ff6b35;
-            transition: width 0.3s ease;
-        }
-
-        nav a.active::after,
-        nav a:hover::after {
-            width: 100%;
-        }
-
         .login-btn-new {
             color: #1a202c;
             text-decoration: none;
@@ -307,25 +243,6 @@
             margin-bottom: 15px;
         }
 
-        /* Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #1e293b;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
         @media (max-width: 992px) {
             .order-main-content {
                 grid-template-columns: 200px 1fr;
@@ -347,10 +264,6 @@
         }
 
         @media (max-width: 768px) {
-            header {
-                padding: 15px 30px;
-            }
-
             .order-main-content {
                 grid-template-columns: 1fr;
             }
@@ -375,40 +288,7 @@
 </head>
 
 <body>
-    <header>
-        <div class="logo-container">
-            <a href="/" class="logo-img">
-                <img src="/static/img/logo.png?v=2" alt="GoGo Cars Logo" onerror="this.style.display='none'">
-            </a>
-        </div>
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <nav id="mainNav">
-            <a href="/">Home</a>
-            <a href="/cars">Cars</a>
-            <a href="/orders/view" class="active">My Bookings</a>
-            <a href="/tickets">My Tickets</a>
-            {% if is_admin %}
-            <a href="/admin/dashboard" style="color: #ff6b35;">Admin Panel</a>
-            {% endif %}
-        </nav>
-        <div class="auth-buttons">
-            <div class="user-profile-nav" style="display: flex; align-items: center; gap: 15px;">
-                <a href="/profile" class="login-btn-new" style="display: flex; align-items: center; gap: 8px;">
-                    <span class="user-avatar-mini"
-                        style="width: 32px; height: 32px; background: #2b3990; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
-                        {{ current_user.firstname[0] if current_user else 'U' }}
-                    </span>
-                    {{ current_user.firstname if current_user else 'User' }}
-                </a>
-                <a href="/auth/logout" class="logout-link"
-                    style="color: #64748b; font-size: 14px; font-weight: 600; text-decoration: none;">Logout</a>
-            </div>
-        </div>
-    </header>
+    {% include '_header.html' %}
 
     <div class="main-container">
         <div class="page-header"
@@ -559,31 +439,9 @@
             url.searchParams.set('page', '1'); // Reset to first page
             window.location.href = url.toString();
         }
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const mainNav = document.getElementById('mainNav');
-
-        if (menuToggle && mainNav) {
-            menuToggle.addEventListener('click', function () {
-                this.classList.toggle('active');
-                mainNav.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function (e) {
-                if (!menuToggle.contains(e.target) && !mainNav.contains(e.target)) {
-                    menuToggle.classList.remove('active');
-                    mainNav.classList.remove('active');
-                }
-            });
-
-            mainNav.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', function () {
-                    menuToggle.classList.remove('active');
-                    mainNav.classList.remove('active');
-                });
-            });
-        }
     </script>
+    {% include '_footer.html' %}
+    {% include '_header_js.html' %}
 </body>
 
 </html>

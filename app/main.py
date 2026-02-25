@@ -28,6 +28,7 @@ logger.info(f"Starting {settings.APP_NAME} in {'DEBUG' if settings.DEBUG else 'P
 
 # Initialize FastAPI app
 app = FastAPI(
+    # docs_url=None,
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="GoGoCar - Self Drive Car Rental Application",
@@ -121,6 +122,16 @@ async def general_exception_handler(request: Request, exc: Exception):
 app.include_router(auth.router)
 app.include_router(payments.router)
 app.include_router(bookings.router)
+from app.routes import mobile
+app.include_router(mobile.router, prefix="/api/mobile")
+from app.routes.api import kyc as api_kyc
+app.include_router(api_kyc.router, prefix="/api/mobile/kyc", tags=["Mobile KYC"])
+from app.routes.api import cars as api_cars
+app.include_router(api_cars.router, prefix="/api/cars", tags=["Mobile Cars"])
+from app.routes.api import bookings as api_bookings
+app.include_router(api_bookings.router, prefix="/api/bookings", tags=["Mobile Bookings"])
+from app.routes.api import payments as api_payments
+app.include_router(api_payments.router, prefix="/api/payments", tags=["Mobile Payments"])
 from app.routes import reviews, tickets
 app.include_router(reviews.router)
 app.include_router(tickets.router)
@@ -152,7 +163,7 @@ async def admin_redirect():
     from fastapi.responses import RedirectResponse
     return RedirectResponse(url="/admin/dashboard", status_code=302)
 
-
+print("ACTIVE DATABASE:", settings.DATABASE_URL)
 @app.get("/")
 async def root(
     request: Request, 
@@ -300,6 +311,36 @@ async def root(
                 "expiration_time": offer.expiration_time.isoformat() if offer.expiration_time else None,
                 "max_discount": float(offer.max_discount) if offer.max_discount else None
             })
+        # Query cars tagged for homepage display
+        top_selling_cars = db.query(Cars).filter(
+            Cars.active == True,
+            Cars.is_top_selling == True
+        ).order_by(Cars.id.desc()).all()
+        
+        premium_cars = db.query(Cars).filter(
+            Cars.active == True,
+            Cars.is_premium == True
+        ).order_by(Cars.id.desc()).all()
+        
+        # Convert to template-friendly format
+        def car_to_dict(car):
+            first_image = car.images.split(',')[0] if car.images else '/static/img/landing.png'
+            seats_map = {'FIVE': '5', 'SEVEN': '7'}
+            return {
+                "id": car.id,
+                "brand": car.brand,
+                "car_model": car.car_model,
+                "base_price": float(car.base_price),
+                "images": car.images,
+                "first_image": first_image,
+                "car_type": car.car_type.value if car.car_type else '',
+                "transmission_type": car.transmission_type.value.title() if car.transmission_type else '',
+                "no_of_seats": seats_map.get(car.no_of_seats.value, '5') if car.no_of_seats else '5',
+                "fuel_type": car.fuel_type.value.title() if car.fuel_type else '',
+            }
+        
+        top_selling_data = [car_to_dict(c) for c in top_selling_cars]
+        premium_cars_data = [car_to_dict(c) for c in premium_cars]
         
         return templates.TemplateResponse(
             "index.html",
@@ -312,7 +353,9 @@ async def root(
                 "is_admin": is_admin,
                 "featured_cars": featured_cars_data,
                 "reviews": reviews_data,
-                "offers": offers_data
+                "offers": offers_data,
+                "top_selling_cars": top_selling_data,
+                "premium_cars": premium_cars_data
             }
         )
     
@@ -817,6 +860,38 @@ async def contact_page(
         from fastapi.responses import HTMLResponse
         return HTMLResponse(
             content="<h1>Error loading contact page</h1>",
+            status_code=500
+        )
+
+
+@app.get("/about")
+async def about_page(
+    request: Request,
+    current_user: dict = Depends(auth.get_current_user)
+):
+    """About page - render about.html"""
+    logger.info("About page accessed")
+    
+    try:
+        # Check authentication using current_user dependency
+        is_authenticated = not current_user.get("error")
+        is_admin = current_user.get("isadmin", False)
+        
+        return templates.TemplateResponse(
+            "about.html",
+            {
+                "request": request,
+                "is_authenticated": is_authenticated,
+                "is_admin": is_admin,
+                "login_url": settings.LOGIN_URL,
+                "current_user": current_user
+            }
+        )
+    except Exception as e:
+        logger.error(f"Error rendering about.html: {str(e)}", exc_info=True)
+        from fastapi.responses import HTMLResponse
+        return HTMLResponse(
+            content="<h1>Error loading about page</h1>",
             status_code=500
         )
 

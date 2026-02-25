@@ -98,6 +98,8 @@ async def create_car(
     registration_number: str = Form(None),
     year: int = Form(None),
     color: str = Form(None),
+    is_top_selling: bool = Form(False),
+    is_premium: bool = Form(False),
     active: bool = Form(True),
     images: List[UploadFile] = File(None),
     db: Session = Depends(get_db),
@@ -124,6 +126,8 @@ async def create_car(
             registration_number=registration_number,
             year=year,
             color=color,
+            is_top_selling=is_top_selling,
+            is_premium=is_premium,
             active=active
         )
         
@@ -156,6 +160,8 @@ async def update_car(
     registration_number: str = Form(None),
     year: int = Form(None),
     color: str = Form(None),
+    is_top_selling: bool = Form(None),
+    is_premium: bool = Form(None),
     active: bool = Form(None),
     images: List[UploadFile] = File(None),
     db: Session = Depends(get_db),
@@ -199,6 +205,10 @@ async def update_car(
             update_data['year'] = year
         if color is not None:
             update_data['color'] = color
+        if is_top_selling is not None:
+            update_data['is_top_selling'] = is_top_selling
+        if is_premium is not None:
+            update_data['is_premium'] = is_premium
         if active is not None:
             update_data['active'] = active
         

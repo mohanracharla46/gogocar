@@ -26,9 +26,35 @@ async def admin_dashboard(
     """Admin dashboard page"""
     from app.services.analytics_service import analytics_service
     from app.core.config import settings
+    from app.db.models import Orders, BookingStatus
+    from datetime import datetime, timedelta
     
     try:
         stats = analytics_service.get_dashboard_stats(db)
+        
+        # Quick action counts
+        today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        today_end = today_start + timedelta(days=1)
+        
+        new_bookings = db.query(Orders).filter(
+            Orders.order_status == BookingStatus.PENDING
+        ).count()
+        
+        todays_deliveries = db.query(Orders).filter(
+            Orders.start_time >= today_start,
+            Orders.start_time < today_end,
+            Orders.order_status.in_([BookingStatus.BOOKED, BookingStatus.APPROVED])
+        ).count()
+        
+        todays_pickups = db.query(Orders).filter(
+            Orders.end_time >= today_start,
+            Orders.end_time < today_end,
+            Orders.order_status == BookingStatus.ONGOING
+        ).count()
+        
+        ongoing_bookings = db.query(Orders).filter(
+            Orders.order_status == BookingStatus.ONGOING
+        ).count()
         
         return templates.TemplateResponse(
             "admin/dashboard.html",
@@ -36,7 +62,11 @@ async def admin_dashboard(
                 "request": request,
                 "stats": stats,
                 "user_info": current_user,
-                "is_authenticated": True
+                "is_authenticated": True,
+                "new_bookings": new_bookings,
+                "todays_deliveries": todays_deliveries,
+                "todays_pickups": todays_pickups,
+                "ongoing_bookings": ongoing_bookings,
             }
         )
     except Exception as e:
@@ -48,7 +78,11 @@ async def admin_dashboard(
                 "stats": None,
                 "user_info": current_user,
                 "is_authenticated": True,
-                "error": str(e)
+                "error": str(e),
+                "new_bookings": 0,
+                "todays_deliveries": 0,
+                "todays_pickups": 0,
+                "ongoing_bookings": 0,
             }
         )
 
@@ -137,12 +171,42 @@ async def admin_bookings(
     current_user: dict = Depends(require_admin)
 ):
     """Admin bookings page"""
+    from app.db.models import Orders, BookingStatus
+    from datetime import datetime, timedelta
+    
+    today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    today_end = today_start + timedelta(days=1)
+    
+    new_bookings = db.query(Orders).filter(
+        Orders.order_status == BookingStatus.PENDING
+    ).count()
+    
+    todays_deliveries = db.query(Orders).filter(
+        Orders.start_time >= today_start,
+        Orders.start_time < today_end,
+        Orders.order_status.in_([BookingStatus.BOOKED, BookingStatus.APPROVED])
+    ).count()
+    
+    todays_pickups = db.query(Orders).filter(
+        Orders.end_time >= today_start,
+        Orders.end_time < today_end,
+        Orders.order_status == BookingStatus.ONGOING
+    ).count()
+    
+    ongoing_bookings = db.query(Orders).filter(
+        Orders.order_status == BookingStatus.ONGOING
+    ).count()
+    
     return templates.TemplateResponse(
         "admin/bookings.html",
         {
             "request": request,
             "user_info": current_user,
-            "is_authenticated": True
+            "is_authenticated": True,
+            "new_bookings": new_bookings,
+            "todays_deliveries": todays_deliveries,
+            "todays_pickups": todays_pickups,
+            "ongoing_bookings": ongoing_bookings,
         }
     )
 

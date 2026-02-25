@@ -87,6 +87,7 @@ async def api_signup(
     request: Request,
     username: str = Form(...),
     email: str = Form(...),
+    phone: str = Form(...),
     password: str = Form(...),
     firstname: str = Form(...),
     lastname: str = Form(...),
@@ -95,6 +96,7 @@ async def api_signup(
     """Manual signup API"""
     username = username.strip()
     email = email.strip().lower()
+    phone = phone.strip()
     logger.info(f"Signup attempt for: {username} ({email})")
     try:
         # Check if user already exists
@@ -112,6 +114,7 @@ async def api_signup(
         new_user = UserProfile(
             username=username,
             email=email,
+            phone=phone,
             firstname=firstname,
             lastname=lastname,
             hashed_password=get_password_hash(password),
