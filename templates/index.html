@@ -2131,14 +2131,8 @@
                                 <label class="input-label">Location</label>
                                 <select class="input-value" id="locationInput" name="location">
                                     <option value="" disabled selected>Select Location</option>
-                                    <option value="Madhapur (HYD)">Madhapur (HYD)</option>
-                                    <option value="Chilakalurupet">Chilakalurupet</option>
-                                    <option value="Guntur">Guntur</option>
-
                                     {% for location in locations %}
-                                    {% if location.location not in ['Madhapur (HYD)', 'Chilakalurupet'] %}
                                     <option value="{{ location.location }}">{{ location.location }}</option>
-                                    {% endif %}
                                     {% endfor %}
                                 </select>
                                 <div class="error-message" id="locationError">Please select a location</div>
@@ -2188,30 +2182,7 @@
                     </div>
 
                     <div class="location-list" id="locationList">
-                        <div class="location-item" data-location="Madhapur (HYD)">
-                            <div class="location-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                            </div>
-                            <span class="location-name">Madhapur (HYD)</span>
-                            <div class="location-check"></div>
-                        </div>
-                        <div class="location-item" data-location="Chilakalurupet">
-                            <div class="location-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                            </div>
-                            <span class="location-name">Chilakalurupet</span>
-                            <div class="location-check"></div>
-                        </div>
                         {% for location in locations %}
-                        {% if location.location not in ['Madhapur (HYD)', 'Chilakalurupet'] %}
                         <div class="location-item" data-location="{{ location.location }}">
                             <div class="location-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -2223,7 +2194,6 @@
                             <span class="location-name">{{ location.location }}</span>
                             <div class="location-check"></div>
                         </div>
-                        {% endif %}
                         {% endfor %}
                     </div>
 
@@ -2349,6 +2319,16 @@
                             <div class="spec-item">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
+                                    <path d="M3 22V8a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14"></path>
+                                    <path d="M3 22h10"></path>
+                                    <path d="M13 8h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V7l-3-3"></path>
+                                    <path d="M20 4v3"></path>
+                                </svg>
+                                {{ car.fuel_type.value|title if car.fuel_type else 'N/A' }}
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
@@ -2429,6 +2409,16 @@
                                     <path d="M8 12h8"></path>
                                 </svg>
                                 {{ car.transmission_type }}
+                            </div>
+                            <div class="spec-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M3 22V8a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14"></path>
+                                    <path d="M3 22h10"></path>
+                                    <path d="M13 8h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V7l-3-3"></path>
+                                    <path d="M20 4v3"></path>
+                                </svg>
+                                {{ car.fuel_type.value|title if car.fuel_type else 'N/A' }}
                             </div>
                             <div class="spec-item">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"

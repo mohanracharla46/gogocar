@@ -104,6 +104,14 @@ def init_db() -> None:
             admin.kyc_status = models.KYCStatus.NOT_SUBMITTED
             logger.info("Updated existing admin user with hashed password")
         
+        # Ensure default locations exist
+        for city in ["Madhapur (HYD)", "Chilakalurupet", "Guntur"]:
+            existing = db.query(models.Location).filter(models.Location.location == city).first()
+            if not existing:
+                loc = models.Location(location=city)
+                db.add(loc)
+                logger.info(f"Created default location: {city}")
+
         db.commit()
         db.close()
         logger.info("Database initialized successfully")

@@ -462,6 +462,20 @@ async def cars_page(
         # Get unique brands for filter
         unique_brands = db.query(Cars.brand).filter(Cars.active == True).distinct().all()
         brands = [brand[0] for brand in unique_brands]
+
+        # Real counts for sidebar filters
+        from sqlalchemy import func
+        type_counts_raw = db.query(Cars.car_type, func.count(Cars.id)).filter(Cars.active == True).group_by(Cars.car_type).all()
+        fuel_counts_raw = db.query(Cars.fuel_type, func.count(Cars.id)).filter(Cars.active == True).group_by(Cars.fuel_type).all()
+        trans_counts_raw = db.query(Cars.transmission_type, func.count(Cars.id)).filter(Cars.active == True).group_by(Cars.transmission_type).all()
+        brand_counts_raw = db.query(Cars.brand, func.count(Cars.id)).filter(Cars.active == True).group_by(Cars.brand).all()
+
+        filter_counts = {
+            "type": {str(r[0].value if r[0] else ""): r[1] for r in type_counts_raw},
+            "fuel": {str(r[0].value if r[0] else ""): r[1] for r in fuel_counts_raw},
+            "transmission": {str(r[0].value if r[0] else ""): r[1] for r in trans_counts_raw},
+            "brand": {str(r[0]): r[1] for r in brand_counts_raw},
+        }
         
         # Calculate average ratings for each car
         from app.db.models import Reviews
@@ -509,7 +523,8 @@ async def cars_page(
                 "pickup_datetime": pickup_datetime,
                 "end_datetime": end_datetime,
                 "selected_location": location,
-                "current_user": current_user
+                "current_user": current_user,
+                "filter_counts": filter_counts
             }
         )
     except Exception as e:
@@ -530,7 +545,8 @@ async def cars_page(
                 "pagination": {"page": 1, "total_pages": 1, "total": 0, "page_size": 12, "has_next": False, "has_prev": False},
                 "pickup_datetime": None,
                 "end_datetime": None,
-                "selected_location": None
+                "selected_location": None,
+                "filter_counts": {"type": {}, "fuel": {}, "transmission": {}, "brand": {}}
             }
         )
 

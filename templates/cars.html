@@ -625,35 +625,43 @@
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Segment</h3>
                 <div class="filter-item"><input type="checkbox" class="filter-check" data-filter="type"
-                        data-value="HATCHBACK"> Hatchback <span class="filter-count">(21)</span></div>
+                        data-value="HATCHBACK"> Hatchback <span class="filter-count">({{
+                        filter_counts.type.get('HATCHBACK', 0) if filter_counts is defined else 0 }})</span></div>
                 <div class="filter-item"><input type="checkbox" class="filter-check" data-filter="type"
-                        data-value="SEDAN"> Sedan <span class="filter-count">(09)</span></div>
+                        data-value="SEDAN"> Sedan <span class="filter-count">({{ filter_counts.type.get('SEDAN', 0) if
+                        filter_counts is defined else 0 }})</span></div>
                 <div class="filter-item"><input type="checkbox" class="filter-check" data-filter="type"
-                        data-value="SUV"> SUV/MUV <span class="filter-count">(14)</span></div>
+                        data-value="SUV"> SUV/MUV <span class="filter-count">({{ filter_counts.type.get('SUV', 0) if
+                        filter_counts is defined else 0 }})</span></div>
             </div>
 
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Fuel</h3>
                 <div class="filter-item"><input type="checkbox" class="filter-check" data-filter="fuel"
-                        data-value="DIESEL"> Diesel <span class="filter-count">(24)</span></div>
+                        data-value="DIESEL"> Diesel <span class="filter-count">({{ filter_counts.fuel.get('DIESEL', 0)
+                        if filter_counts is defined else 0 }})</span></div>
                 <div class="filter-item"><input type="checkbox" class="filter-check" data-filter="fuel"
-                        data-value="PETROL"> Petrol <span class="filter-count">(20)</span></div>
+                        data-value="PETROL"> Petrol <span class="filter-count">({{ filter_counts.fuel.get('PETROL', 0)
+                        if filter_counts is defined else 0 }})</span></div>
             </div>
 
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Transmission</h3>
                 <div class="filter-item"><input type="checkbox" class="filter-check" data-filter="transmission"
-                        data-value="AUTOMATIC"> Automatic <span class="filter-count">(17)</span></div>
+                        data-value="AUTOMATIC"> Automatic <span class="filter-count">({{
+                        filter_counts.transmission.get('AUTOMATIC', 0) if filter_counts is defined else 0 }})</span>
+                </div>
                 <div class="filter-item"><input type="checkbox" class="filter-check" data-filter="transmission"
-                        data-value="MANUAL"> Manual <span class="filter-count">(27)</span></div>
+                        data-value="MANUAL"> Manual <span class="filter-count">({{
+                        filter_counts.transmission.get('MANUAL', 0) if filter_counts is defined else 0 }})</span></div>
             </div>
 
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Brand</h3>
-                {% for brand in brands[:6] %}
+                {% for brand in brands %}
                 <div class="filter-item"><input type="checkbox" class="filter-check" data-filter="brand"
-                        data-value="{{ brand }}"> {{ brand|title }} <span class="filter-count">(0{{ loop.index + 2
-                        }})</span></div>
+                        data-value="{{ brand }}"> {{ brand|title }} <span class="filter-count">({{
+                        filter_counts.brand.get(brand, 0) if filter_counts is defined else 0 }})</span></div>
                 {% endfor %}
             </div>
         </aside>
@@ -715,6 +723,8 @@
                             <span class="spec-item"><i class="fas fa-car-side"></i> {{ car.car_type.value|lower|title
                                 }}</span>
                             <span class="spec-item"><i class="fas fa-cog"></i> {{ transmission_display }}</span>
+                            <span class="spec-item"><i class="fas fa-gas-pump"></i> {{ car.fuel_type.value|title if
+                                car.fuel_type else 'N/A' }}</span>
                         </div>
                         <div class="car-card-bottom">
                             <div class="car-card-price">₹{{ "{:,.0f}".format(car.base_price) }} <span>per day</span>
