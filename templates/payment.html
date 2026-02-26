@@ -38,9 +38,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(32, 76, 79, 0.1) 0%, transparent 40%),
-                linear-gradient(135deg, #061a3d 0%, #0c2a5c 40%, #1e4d4e 100%);
+            background: radial-gradient(circle at 0% 0%, rgba(43, 57, 144, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #020617 0%, #0f172a 100%);
             z-index: -2;
         }
 
@@ -189,43 +189,43 @@
         }
 
         .payment-left {
-            background: rgba(255, 255, 255, 1);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 50px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
             color: #1a202c;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .payment-right {
             position: sticky;
-            top: 110px;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+            top: 120px;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
         }
 
         /* Page Title */
         .page-title {
-            font-size: 32px;
-            font-weight: 850;
-            margin-bottom: 30px;
-            text-align: center;
-            background: linear-gradient(135deg, #2b3990 0%, #1e3a8a 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -1px;
+            font-size: 40px;
+            font-weight: 900;
+            margin-bottom: 40px;
+            text-align: left;
+            color: #0f172a;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
         }
 
         /* Section Styles */
         .section-title {
-            font-size: 19px;
-            font-weight: 800;
-            color: #2b3990;
-            margin-bottom: 10px;
+            font-size: 22px;
+            font-weight: 850;
+            color: #0f172a;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .section-title .section-icon {
@@ -555,24 +555,38 @@
 
         /* Fare Summary Card (Right Column) */
         .fare-card {
-            background: #fff;
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
-            color: #1a202c;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #0f172a;
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 25px 90px rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fare-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2b3990, #ff6b35);
         }
 
         .fare-card-title {
-            font-size: 20px;
-            font-weight: 850;
-            color: #2b3990;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #edf2f7;
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .pricing-items {
@@ -585,9 +599,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            font-size: 14px;
-            color: #475569;
+            padding: 15px 0;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .pricing-item-name {
@@ -596,28 +610,30 @@
 
         .pricing-item-amount {
             font-weight: 600;
-            color: #1e293b;
+            color: #ffffff;
         }
 
         .pricing-total {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 0 0;
-            margin-top: 12px;
-            border-top: 2px dashed #e2e8f0;
+            padding: 25px 0 0;
+            margin-top: 20px;
+            border-top: 2px dashed rgba(255, 255, 255, 0.1);
         }
 
         .pricing-total-label {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1e293b;
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
         }
 
         .pricing-total-amount {
-            font-size: 24px;
-            font-weight: 800;
-            color: #1e3a8a;
+            font-size: 32px;
+            font-weight: 950;
+            color: #ff6b35;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
         }
 
         /* KYC Section */
@@ -1256,155 +1272,105 @@
         <div class="payment-left">
             <h1 class="page-title">Complete Your Booking</h1>
 
-            <!-- Booking Details -->
-            <div class="section-divider">
-                <h2 class="section-title">
-                    <div class="section-icon" style="background: rgba(43, 57, 144, 0.1); color: #2b3990;">
-                        <i class="fas fa-calendar-alt"></i>
+            <!-- Booking Hero Section -->
+            <div class="booking-hero-card"
+                style="background: #f8fafc; border-radius: 24px; padding: 30px; margin-bottom: 30px; border: 1px solid #e2e8f0;">
+                <div style="display: flex; gap: 30px; align-items: center;">
+                    <div
+                        style="width: 200px; height: 130px; background: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); flex-shrink: 0;">
+                        <img src="{{ car_image if car_image else '/static/img/landing.png' }}" alt="{{ car.brand }}"
+                            style="width: 90%; height: auto; object-fit: contain;">
                     </div>
-                    Booking Details
-                </h2>
-                <div class="booking-details-grid">
-                    <div class="booking-detail-item">
-                        <div class="booking-detail-label">DURATION</div>
-                        <div class="booking-detail-value" id="bookingDuration" style="font-size: 18px; color: #1e293b;">
-                            {% if hours %}
-                            {% set days = (hours / 24) | round(1) %}
-                            {% if days >= 1 %}
-                            {{ days | int }} Day{% if days > 1 %}s{% endif %}
-                            {% else %}
-                            {{ hours }} Hour{% if hours > 1 %}s{% endif %}
-                            {% endif %}
-                            {% else %}
-                            1 Day
-                            {% endif %}
+                    <div>
+                        <h2 style="font-size: 28px; font-weight: 900; color: #0f172a; margin-bottom: 10px;">{{ car.brand
+                            }} {{ car.car_model }}</h2>
+                        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                            <span
+                                style="background: #e2e8f0; padding: 4px 12px; border-radius: 100px; font-size: 13px; font-weight: 600; color: #475569;"><i
+                                    class="fas fa-users" style="margin-right: 6px;"></i>{{
+                                car.no_of_seats.value.replace('FIVE', '5').replace('SEVEN', '7') }} Seater</span>
+                            <span
+                                style="background: #e2e8f0; padding: 4px 12px; border-radius: 100px; font-size: 13px; font-weight: 600; color: #475569;"><i
+                                    class="fas fa-cog" style="margin-right: 6px;"></i>{{
+                                car.transmission_type.value.title() }}</span>
+                            <span
+                                style="background: #e2e8f0; padding: 4px 12px; border-radius: 100px; font-size: 13px; font-weight: 600; color: #475569;"><i
+                                    class="fas fa-gas-pump" style="margin-right: 6px;"></i>{{
+                                car.fuel_type.value.title() }}</span>
                         </div>
-                    </div>
-                    <div class="booking-detail-item">
-                        <div class="booking-detail-label">PICKUP LOCATION</div>
-                        <div class="booking-detail-value" id="pickupLocation" style="font-size: 18px; color: #1e293b;">
-                            {% if home_delivery and delivery_address %}
-                            {{ delivery_address }}
-                            {% elif car and car.location %}
-                            {{ car.location.location }}
-                            {% else %}
-                            Location TBD
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Car Details -->
-            <div class="section-divider">
-                <div class="car-details-section">
-                    <div class="car-image-container"
-                        style="width: 180px; height: 120px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                        <img src="{{ car_image if car_image else '/static/img/landing.png' }}" alt="Car"
-                            class="car-image" id="carImage">
-                    </div>
-                    <div class="car-info">
-                        <h2 class="car-model" id="carModel" style="font-size: 26px; color: #1a202c;">
-                            {% if car %}{{ car.brand }} {{ car.car_model }}{% else %}Car{% endif %}
-                        </h2>
-                        <div class="car-specs" style="margin-top: 15px;">
-                            {% if car %}
-                            <div class="car-spec"
-                                style="background: rgba(43, 57, 144, 0.05); border: none; color: #2b3990; font-weight: 600;">
-                                <i class="fas fa-users" style="margin-right: 8px;"></i>
-                                <span>{% if car.no_of_seats.value == 'FIVE' %}5{% else %}7{% endif %} Seater</span>
+                        <div style="display: flex; gap: 30px;">
+                            <div>
+                                <div
+                                    style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">
+                                    Duration</div>
+                                <div style="font-size: 15px; font-weight: 700; color: #2b3990;">{{ hours // 24 if hours
+                                    >= 24 else hours }} {{ 'Days' if hours >= 24 else 'Hours' }}</div>
                             </div>
-                            <div class="car-spec"
-                                style="background: rgba(43, 57, 144, 0.05); border: none; color: #2b3990; font-weight: 600;">
-                                <i class="fas fa-cog" style="margin-right: 8px;"></i>
-                                <span>{{ car.transmission_type.value.title() }}</span>
+                            <div style="height: 30px; width: 1px; background: #e2e8f0;"></div>
+                            <div>
+                                <div
+                                    style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">
+                                    Location</div>
+                                <div style="font-size: 15px; font-weight: 700; color: #2b3990;">{{ car.location.location
+                                    }}</div>
                             </div>
-                            <div class="car-spec"
-                                style="background: rgba(43, 57, 144, 0.05); border: none; color: #2b3990; font-weight: 600;">
-                                <i class="fas fa-gas-pump" style="margin-right: 8px;"></i>
-                                <span>{{ car.fuel_type.value.title() if car.fuel_type else 'N/A' }}</span>
-                            </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Deposit Section -->
-            <div class="section-divider">
+            <!-- Security Deposit -->
+            <div class="section-divider" style="border-bottom: none;">
                 <h2 class="section-title">
-                    <div class="section-icon" style="background: rgba(43, 57, 144, 0.1); color: #2b3990;">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
+                    <i class="fas fa-shield-alt"></i>
                     Security Deposit
                 </h2>
-                <p class="section-description">Your deposit is 100% safe and fully refundable post inspection</p>
-                <div class="deposit-grid">
-                    <label class="deposit-option-card selected">
+                <p class="section-description">Choose your preferred deposit method. 100% refundable.</p>
+                <div class="deposit-grid" style="grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <label class="deposit-option-card selected" style="padding: 25px; border-radius: 20px;">
                         <input type="radio" name="deposit" value="bike_rc" checked>
-                        <span class="deposit-icon">🏍️</span>
-                        <div class="deposit-name">Bike &amp; RC</div>
-                        <div class="deposit-desc">Physical document</div>
+                        <span class="deposit-icon" style="font-size: 32px; margin-bottom: 12px;">🏍️</span>
+                        <div class="deposit-name" style="font-size: 16px;">Bike &amp; RC</div>
+                        <div class="deposit-desc">Physical Document</div>
                     </label>
-                    <label class="deposit-option-card">
+                    <label class="deposit-option-card" style="padding: 25px; border-radius: 20px;">
                         <input type="radio" name="deposit" value="laptop">
-                        <span class="deposit-icon">💻</span>
-                        <div class="deposit-name">Laptop</div>
-                        <div class="deposit-desc">Device deposit</div>
+                        <span class="deposit-icon" style="font-size: 32px; margin-bottom: 12px;">💻</span>
+                        <div class="deposit-name" style="font-size: 16px;">Laptop</div>
+                        <div class="deposit-desc">Device Deposit</div>
                     </label>
-                    <label class="deposit-option-card">
+                    <label class="deposit-option-card" style="padding: 25px; border-radius: 20px;">
                         <input type="radio" name="deposit" value="cheque">
-                        <span class="deposit-icon">✍️</span>
-                        <div class="deposit-name">Empty Cheque</div>
-                        <div class="deposit-desc">Signed blank cheque</div>
+                        <span class="deposit-icon" style="font-size: 32px; margin-bottom: 12px;">✍️</span>
+                        <div class="deposit-name" style="font-size: 16px;">Empty Cheque</div>
+                        <div class="deposit-desc">Signed Blank Cheque</div>
                     </label>
-                    <label class="deposit-option-card">
+                    <label class="deposit-option-card" style="padding: 25px; border-radius: 20px;">
                         <input type="radio" name="deposit" value="cash">
-                        <span class="deposit-icon">💰</span>
-                        <div class="deposit-name">₹15,000 Cash</div>
-                        <div class="deposit-desc">Instant refund</div>
+                        <span class="deposit-icon" style="font-size: 32px; margin-bottom: 12px;">💰</span>
+                        <div class="deposit-name" style="font-size: 16px;">₹15,000 Cash</div>
+                        <div class="deposit-desc">Instant Refund</div>
                     </label>
                 </div>
             </div>
 
-            <!-- Damage Protection Section -->
+            <!-- Coupon Code -->
             <div class="section-divider">
-                <h2 class="section-title"><span class="section-icon">&#128737;</span> Damage Protection</h2>
-                <p class="section-description">Select protection level to reduce your liability for damages</p>
-
-                <div class="protection-grid">
-                    <button type="button" class="damage-protection-btn selected" data-protection="0" data-price="0">
-                        <div class="protection-price">₹0</div>
-                        <div class="protection-desc">Pay full amount in case of any damage. Min ₹5,000 for small
-                            damage.</div>
-                    </button>
-                    <button type="button" class="damage-protection-btn" data-protection="277" data-price="277">
-                        <div class="protection-price">₹277</div>
-                        <div class="protection-desc">Pay 70% of damage amount</div>
-                        <div class="protection-badge">Recommended</div>
-                    </button>
-                    <button type="button" class="damage-protection-btn" data-protection="477" data-price="477">
-                        <div class="protection-price">₹477</div>
-                        <div class="protection-desc">Pay 50% of damage amount</div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Coupon Code Section -->
-            <div class="section-divider">
-                <h2 class="section-title"><span class="section-icon">&#127921;</span> Have a Coupon Code?</h2>
-                <div class="coupon-input-group">
-                    <input type="text" id="couponCode" class="coupon-input" placeholder="Enter coupon code"
-                        onkeypress="if(event.key === 'Enter') validateCoupon()">
-                    <button onclick="validateCoupon()" id="applyCouponBtn" class="coupon-apply-btn">Apply</button>
+                <h2 class="section-title"><i class="fas fa-tag"></i> Coupon Code</h2>
+                <div class="coupon-input-group"
+                    style="background: #f8fafc; padding: 8px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    <input type="text" id="couponCode" class="coupon-input" placeholder="Have a coupon?"
+                        style="border: none; background: transparent;">
+                    <button onclick="validateCoupon()" id="applyCouponBtn" class="coupon-apply-btn"
+                        style="border-radius: 12px; background: #0f172a;">Apply</button>
                 </div>
                 <div id="couponMessage" class="coupon-message"></div>
-                <div id="appliedCoupon" class="coupon-applied">
+                <div id="appliedCoupon" class="coupon-applied" style="margin-top: 15px; border-radius: 16px;">
                     <div class="coupon-applied-inner">
                         <div>
-                            <strong style="color: #065f46;">Coupon Applied:</strong>
-                            <span id="appliedCouponCode" style="color: #065f46; margin-left: 8px;"></span>
-                            <span id="appliedCouponDiscount" style="color: #065f46; margin-left: 8px;"></span>
+                            <span
+                                style="background: #10b981; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; margin-right: 10px;">ACTIVE</span>
+                            <span id="appliedCouponCode" style="font-weight: 700; color: #065f46;"></span>
                         </div>
                         <button onclick="removeCoupon()" class="coupon-remove-btn">Remove</button>
                     </div>
@@ -1826,10 +1792,7 @@
                             else %}₹0{% endif %}
                         </span>
                     </li>
-                    <li class="pricing-item">
-                        <span class="pricing-item-name">Damage Protection</span>
-                        <span class="pricing-item-amount" id="damageProtectionAmount">₹0</span>
-                    </li>
+                    <!-- Damage Protection Removed -->
                     <li class="pricing-item" id="gstItem">
                         <span class="pricing-item-name">GST (18%)</span>
                         <span class="pricing-item-amount" id="gstAmount">
@@ -1851,9 +1814,11 @@
                 </div>
 
                 <div style="margin-top: 25px;">
-                    <button class="pay-button" style="width: 100%; border-radius: 16px; height: 60px; font-size: 18px;"
+                    <button class="pay-button"
+                        style="width: 100%; border-radius: 20px; height: 64px; font-size: 20px; font-weight: 900; background: linear-gradient(135deg, #ff6b35, #ff8c42); box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4); border: none; color: #fff; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;"
                         id="payButton" {% if not kyc_complete %}disabled{% endif %}>
-                        {% if kyc_complete %}PAY NOW{% else %}COMPLETE KYC FIRST{% endif %}
+                        {% if kyc_complete %}Pay ₹{{ "{:,.2f}".format(pricing_breakdown.total) if pricing_breakdown else
+                        '0.00' }}{% else %}Complete KYC to Pay{% endif %}
                     </button>
                     <div
                         style="font-size: 12px; color: #64748b; text-align: center; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
@@ -1877,35 +1842,10 @@
             let currentPricing = null;
             let appliedCoupon = null;
             const pmUrlParams = new URLSearchParams(window.location.search);
-            let selectedDamageProtection = parseInt(pmUrlParams.get('damage_protection')) || 0;
+            let selectedDamageProtection = 0; // Removed as per user request
             let selectedDeposit = pmUrlParams.get('deposit_type') || 'bike_rc';
 
-            // Damage protection buttons
-            const damageProtectionButtons = document.querySelectorAll('.damage-protection-btn');
-            damageProtectionButtons.forEach(btn => {
-                btn.addEventListener('click', function () {
-                    // Remove selected class from all buttons
-                    damageProtectionButtons.forEach(b => b.classList.remove('selected'));
-                    // Add selected class to clicked button
-                    this.classList.add('selected');
-                    // Update selected protection
-                    selectedDamageProtection = parseInt(this.getAttribute('data-protection'));
-                    updatePricing();
-                });
-            });
-
-            // Set default selection based on URL defaults
-            let foundProtectionBtn = false;
-            damageProtectionButtons.forEach(btn => {
-                if (parseInt(btn.getAttribute('data-protection')) === selectedDamageProtection) {
-                    btn.classList.add('selected');
-                    foundProtectionBtn = true;
-                }
-            });
-            if (!foundProtectionBtn && damageProtectionButtons.length > 0) {
-                damageProtectionButtons[0].classList.add('selected');
-                selectedDamageProtection = parseInt(damageProtectionButtons[0].getAttribute('data-protection')) || 0;
-            }
+            // Damage protection buttons - REMOVED
 
             // Deposit option selection
             const depositOptions = document.querySelectorAll('input[name="deposit"]');
@@ -2067,7 +2007,16 @@
                         discountItem.style.display = 'none';
                     }
 
-                    document.getElementById('totalAmount').textContent = `?${currentPricing.total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    const totalAmountElem = document.getElementById('totalAmount');
+                    if (totalAmountElem) {
+                        totalAmountElem.textContent = `₹${currentPricing.total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    }
+
+                    // Update Pay Button Text
+                    const payButton = document.getElementById('payButton');
+                    if (payButton && kycComplete) {
+                        payButton.textContent = `PAY ₹${currentPricing.total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    }
 
                     // Re-enable apply button
                     const applyBtn = document.getElementById('applyCouponBtn');
