@@ -2,7 +2,7 @@
 Pydantic schemas for Booking operations
 """
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -72,3 +72,42 @@ class BookingListFilter(BaseModel):
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
 
+
+class MobileBookingRequest(BaseModel):
+    """Schema for mobile booking request"""
+    car_id: int
+    start_datetime: datetime
+    end_datetime: datetime
+
+
+class MobileBookingResponse(BaseModel):
+    """Schema for mobile booking response"""
+    booking_id: int
+    car_id: int
+    total_price: float
+    status: str
+    start_datetime: datetime
+    end_datetime: datetime
+
+    class Config:
+        from_attributes = True
+
+class MobileMyBookingItem(BaseModel):
+    """Schema for individual booking item in mobile 'my bookings' list"""
+    booking_id: int
+    car_id: int
+    car_brand: str
+    car_model: str
+    start_datetime: datetime
+    end_datetime: datetime
+    total_price: float
+    status: str
+
+    class Config:
+        from_attributes = True
+
+
+class MobileMyBookingsResponse(BaseModel):
+    """Schema for mobile 'my bookings' list response"""
+    total: int
+    bookings: List[MobileMyBookingItem]

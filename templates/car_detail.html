@@ -1006,7 +1006,7 @@
         }
 
         .hover-info-list li::before {
-            content: '•';
+            content: '\2022';
             position: absolute;
             left: 0;
             color: #f59e0b;
@@ -1124,10 +1124,40 @@
         .host-cta:hover {
             background: #061a40;
         }
+
+        /* Star Rating Styles */
+        .star-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .star-icon {
+            width: 14px;
+            height: 14px;
+            fill: #f59e0b;
+            flex-shrink: 0;
+        }
+
+        .star-icon.empty {
+            fill: #cbd5e0;
+        }
+
+        .star-icon.half {
+            fill: url(#half-grad);
+        }
     </style>
 </head>
 
 <body>
+    <svg style="display: none;">
+        <defs>
+            <linearGradient id="half-grad">
+                <stop offset="50%" stop-color="#f59e0b" />
+                <stop offset="50%" stop-color="#cbd5e0" />
+            </linearGradient>
+        </defs>
+    </svg>
     {% include '_header.html' %}
 
     <!-- Main Container -->
@@ -1157,15 +1187,23 @@
                     <button class="share-btn">&#128279; Share</button>
                 </div>
                 <div class="rating-section">
-                    <div class="stars">
+                    <div class="stars star-rating">
                         {% for i in range(5) %}
                         {% if avg_rating >= i + 1 %}
-                        <span class="star">&#9733;</span>
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path
+                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
                         {% elif avg_rating >= i + 0.5 %}
-                        <span class="star"
-                            style="background: linear-gradient(90deg, #f59e0b 50%, #cbd5e0 50%); -webkit-background-clip: text; color: transparent;">â˜…</span>
+                        <svg class="star-icon half" viewBox="0 0 24 24">
+                            <path
+                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
                         {% else %}
-                        <span class="star" style="color: #cbd5e0;">â˜…</span>
+                        <svg class="star-icon empty" viewBox="0 0 24 24">
+                            <path
+                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
                         {% endif %}
                         {% endfor %}
                     </div>
@@ -1276,12 +1314,27 @@
                                 <span class="reviewer-name">Rajesh Kumar</span>
                                 <span class="review-date">2 days ago</span>
                             </div>
-                            <div class="review-stars">
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
+                            <div class="review-stars star-rating">
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
                             </div>
                             <p class="review-text">
                                 Excellent car for family trips! The 7-seater configuration was perfect for our weekend
@@ -1296,12 +1349,27 @@
                                 <span class="reviewer-name">Priya Sharma</span>
                                 <span class="review-date">1 week ago</span>
                             </div>
-                            <div class="review-stars">
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
-                                <span class="star" style="color: #cbd5e0;">â˜…</span>
+                            <div class="review-stars star-rating">
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon empty" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
                             </div>
                             <p class="review-text">
                                 Good value for money. The car is spacious and comfortable. AC works great.
@@ -1315,12 +1383,27 @@
                                 <span class="reviewer-name">Amit Patel</span>
                                 <span class="review-date">2 weeks ago</span>
                             </div>
-                            <div class="review-stars">
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
-                                <span class="star">&#9733;</span>
+                            <div class="review-stars star-rating">
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                                <svg class="star-icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
                             </div>
                             <p class="review-text">
                                 Perfect for city driving and highway trips. Fuel efficient and easy to handle.
@@ -1499,7 +1582,28 @@
                     </div>
                     <div class="overall-rating">
                         <span class="rating-number">4.9 / 5</span>
-                        <div class="rating-stars">â˜…â˜…â˜…â˜…â˜…</div>
+                        <div class="rating-stars star-rating">
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
                         <span class="reviews-count">Based on 1,240+ live reviews</span>
                     </div>
                 </div>
@@ -1515,7 +1619,28 @@
                                 <span class="review-time">Verified Local Guide</span>
                             </div>
                         </div>
-                        <span class="card-stars">â˜…â˜…â˜…â˜…â˜…</span>
+                        <span class="card-stars star-rating">
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </span>
                         <p class="review-content">"Amazing service! The car was in perfect condition and the paperwork
                             was handled very professionally. Best car rental experience in the city."</p>
                     </div>
@@ -1529,7 +1654,28 @@
                                 <span class="review-time">Verified Google User</span>
                             </div>
                         </div>
-                        <span class="card-stars">â˜…â˜…â˜…â˜…â˜…</span>
+                        <span class="card-stars star-rating">
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </span>
                         <p class="review-content">"Highly recommend GoGo Cars! Very transparent pricing and the staff is
                             super helpful. The doorstep delivery was on time."</p>
                     </div>
@@ -1549,21 +1695,21 @@
                     <div class="similar-card">
                         <div class="similar-badge">POPULAR</div>
                         <div class="similar-name">Tata Altroz</div>
-                        <div class="similar-specs">Hatchback â€¢ Petrol â€¢ 5 Seats</div>
+                        <div class="similar-specs">Hatchback &bull; Petrol &bull; 5 Seats</div>
                         <div class="similar-price">₹1,200</div>
                         <div class="similar-period">Per day</div>
                     </div>
                     <div class="similar-card">
                         <div class="similar-badge">FEATURED</div>
                         <div class="similar-name">Maruti Swift</div>
-                        <div class="similar-specs">Hatchback â€¢ Petrol â€¢ 5 Seats</div>
+                        <div class="similar-specs">Hatchback &bull; Petrol &bull; 5 Seats</div>
                         <div class="similar-price">₹1,100</div>
                         <div class="similar-period">Per day</div>
                     </div>
                     <div class="similar-card">
                         <div class="similar-badge">NEW</div>
                         <div class="similar-name">Hyundai i20</div>
-                        <div class="similar-specs">Hatchback â€¢ Petrol â€¢ 5 Seats</div>
+                        <div class="similar-specs">Hatchback &bull; Petrol &bull; 5 Seats</div>
                         <div class="similar-price">₹1,400</div>
                         <div class="similar-period">Per day</div>
                     </div>
@@ -1707,7 +1853,31 @@
                     <div class="host-avatar">PK</div>
                     <div class="host-details">
                         <div class="host-name">Pradeep Kumar</div>
-                        <div class="host-rating">â­ 4.8 â€¢ 156 trips</div>
+                        <div class="host-rating"
+                            style="display: flex; align-items: center; gap: 4px; font-size: 13px; color: #64748b;">
+                            <svg class="star-icon" style="width:14px;height:14px;fill:#f59e0b;" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" style="width:14px;height:14px;fill:#f59e0b;" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" style="width:14px;height:14px;fill:#f59e0b;" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" style="width:14px;height:14px;fill:#f59e0b;" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="star-icon" style="width:14px;height:14px;fill:url(#half-grad);"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <span>4.8 &#8226; 156 trips</span>
+                        </div>
                     </div>
                     <button class="host-cta">Chat</button>
                 </div>
@@ -1717,16 +1887,15 @@
 
     <script>
         // Image Gallery
-        // Image Gallery
         const images = [
             {% if car.images and ',' in car.images %}
         {% for image in car.images.split(',') %}
-        '{{ image }}',
-            {% endfor %}
+        { { image | trim | tojson } },
+        {% endfor %}
         {% elif car.images %}
-        '{{ car.images }}',
-            {% else %}
-        '/static/img/landing.png',
+        { { car.images | trim | tojson } },
+        {% else %}
+        "/static/img/landing.png",
             {% endif %}
         ];
 
