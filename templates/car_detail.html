@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -334,7 +334,7 @@
         }
 
         .feature-item::before {
-            content: 'âœ“';
+            content: '✓';
             color: #2b3990;
             font-weight: 700;
             font-size: 18px;
@@ -1460,7 +1460,7 @@
 
                             <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">2.
                                 Security Deposit</h4>
-                            <p>A refundable security deposit of ₹5,000 is required at the time of booking. This will be
+                            <p>A refundable security deposit of ?5,000 is required at the time of booking. This will be
                                 refunded within 7 business days after the vehicle is returned in good condition.</p>
 
                             <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">3. Fuel
@@ -1470,7 +1470,7 @@
 
                             <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">4.
                                 Mileage Limit</h4>
-                            <p>The rental includes 300 km per day. Additional kilometers will be charged at ₹8/km.</p>
+                            <p>The rental includes 300 km per day. Additional kilometers will be charged at ?8/km.</p>
 
                             <h4 style="font-weight: 600; color: #1e293b; margin-top: 20px; margin-bottom: 12px;">5.
                                 Cancellation Policy</h4>
@@ -1527,7 +1527,7 @@
                                 <span class="faq-icon">&#9660;</span>
                             </div>
                             <div class="faq-answer">
-                                A grace period of 1 hour is provided. Beyond that, you will be charged ₹200 per hour
+                                A grace period of 1 hour is provided. Beyond that, you will be charged ?200 per hour
                                 for the delay. If the delay exceeds 3 hours, you will be charged for an additional day.
                             </div>
                         </div>
@@ -1696,21 +1696,21 @@
                         <div class="similar-badge">POPULAR</div>
                         <div class="similar-name">Tata Altroz</div>
                         <div class="similar-specs">Hatchback &bull; Petrol &bull; 5 Seats</div>
-                        <div class="similar-price">₹1,200</div>
+                        <div class="similar-price">?1,200</div>
                         <div class="similar-period">Per day</div>
                     </div>
                     <div class="similar-card">
                         <div class="similar-badge">FEATURED</div>
                         <div class="similar-name">Maruti Swift</div>
                         <div class="similar-specs">Hatchback &bull; Petrol &bull; 5 Seats</div>
-                        <div class="similar-price">₹1,100</div>
+                        <div class="similar-price">?1,100</div>
                         <div class="similar-period">Per day</div>
                     </div>
                     <div class="similar-card">
                         <div class="similar-badge">NEW</div>
                         <div class="similar-name">Hyundai i20</div>
                         <div class="similar-specs">Hatchback &bull; Petrol &bull; 5 Seats</div>
-                        <div class="similar-price">₹1,400</div>
+                        <div class="similar-price">?1,400</div>
                         <div class="similar-period">Per day</div>
                     </div>
                 </div>
@@ -1721,7 +1721,7 @@
         <div class="right-sidebar">
             <div class="pricing-card">
                 <div class="price-header">
-                    <div class="price-amount">₹{{ "{:,.0f}".format(car.base_price) }}</div>
+                    <div class="price-amount">?{{ "{:,.0f}".format(car.base_price) }}</div>
                 </div>
                 <div class="price-label">Per day (24 hours)</div>
 
@@ -1829,7 +1829,7 @@
                                 <span class="hover-info-title" style="border-color: #f87171;">Full Premium</span>
                                 <ul class="hover-info-list">
                                     <li>Rs.377 only</li>
-                                    <li>You need to pay only ₹10,000 out of the total damage cost of ₹1,00,000.</li>
+                                    <li>You need to pay only ?10,000 out of the total damage cost of ?1,00,000.</li>
                                 </ul>
                             </div>
                         </div>
@@ -1839,7 +1839,7 @@
                 <!-- Total Price -->
                 <div class="total-price">
                     <span class="total-label">Total Price</span>
-                    <span class="total-amount" id="totalAmountDisplay">₹1,958</span>
+                    <span class="total-amount" id="totalAmountDisplay">?1,958</span>
                 </div>
 
                 <!-- CTA Buttons -->
@@ -1890,10 +1890,10 @@
         const images = [
             {% if car.images and ',' in car.images %}
         {% for image in car.images.split(',') %}
-        { { image | trim | tojson } },
+        {{ image | trim | tojson }},
         {% endfor %}
         {% elif car.images %}
-        { { car.images | trim | tojson } },
+        {{ car.images | trim | tojson }},
         {% else %}
         "/static/img/landing.png",
             {% endif %}
@@ -2009,7 +2009,7 @@
                 // Update Total Price
                 // Total Price = no. of days * price of 24 hrs
                 const newTotal = basePrice * diffDays + selectedProtectionPrice;
-                totalAmountDisplay.textContent = `₹${newTotal.toLocaleString('en-IN')}`;
+                totalAmountDisplay.textContent = `?${newTotal.toLocaleString('en-IN')}`;
             } else {
                 durationDisplay.textContent = 'Invalid duration';
             }
