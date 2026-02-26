@@ -471,9 +471,9 @@ async def cars_page(
         brand_counts_raw = db.query(Cars.brand, func.count(Cars.id)).filter(Cars.active == True).group_by(Cars.brand).all()
 
         filter_counts = {
-            "type": {str(r[0].value if r[0] else ""): r[1] for r in type_counts_raw},
-            "fuel": {str(r[0].value if r[0] else ""): r[1] for r in fuel_counts_raw},
-            "transmission": {str(r[0].value if r[0] else ""): r[1] for r in trans_counts_raw},
+            "type": {str(getattr(r[0], 'value', r[0]) if r[0] else ""): r[1] for r in type_counts_raw},
+            "fuel": {str(getattr(r[0], 'value', r[0]) if r[0] else ""): r[1] for r in fuel_counts_raw},
+            "transmission": {str(getattr(r[0], 'value', r[0]) if r[0] else ""): r[1] for r in trans_counts_raw},
             "brand": {str(r[0]): r[1] for r in brand_counts_raw},
         }
         

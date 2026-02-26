@@ -710,9 +710,10 @@
                 {% for car in cars %}
                 {% set image_url = car.images.split(',')[0] if car.images and ',' in car.images else (car.images if
                 car.images else '/static/img/landing.png') %}
-                {% set transmission_display = car.transmission_type.value.title() %}
-                <div class="car-card-new" data-brand="{{ car.brand }}" data-fuel="{{ car.fuel_type.value }}"
-                    data-type="{{ car.car_type.value }}" data-transmission="{{ car.transmission_type.value }}"
+                {% set transmission_display = (car.transmission_type.value if car.transmission_type is not string else
+                car.transmission_type)|title %}
+                <div class="car-card-new" data-brand="{{ car.brand }}" data-fuel="{{ car.fuel_type }}"
+                    data-type="{{ car.car_type }}" data-transmission="{{ car.transmission_type }}"
                     data-car-id="{{ car.id }}">
                     <div class="car-info-left">
                         <div>
@@ -720,11 +721,12 @@
                             <div class="car-card-brand">{{ car.brand }}</div>
                         </div>
                         <div class="car-card-specs">
-                            <span class="spec-item"><i class="fas fa-car-side"></i> {{ car.car_type.value|lower|title
-                                }}</span>
+                            <span class="spec-item"><i class="fas fa-car-side"></i> {{ (car.car_type.value if
+                                car.car_type is not string else car.car_type)|title }}</span>
                             <span class="spec-item"><i class="fas fa-cog"></i> {{ transmission_display }}</span>
-                            <span class="spec-item"><i class="fas fa-gas-pump"></i> {{ car.fuel_type.value|title if
-                                car.fuel_type else 'N/A' }}</span>
+                            <span class="spec-item"><i class="fas fa-gas-pump"></i> {{ (car.fuel_type.value if
+                                car.fuel_type is not string else car.fuel_type)|title if car.fuel_type else 'N/A'
+                                }}</span>
                         </div>
                         <div class="car-card-bottom">
                             <div class="car-card-price">₹{{ "{:,.0f}".format(car.base_price) }} <span>per day</span>
