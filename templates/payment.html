@@ -38,9 +38,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 0% 0%, rgba(43, 57, 144, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, #020617 0%, #0f172a 100%);
+            background: radial-gradient(circle at 0% 0%, rgba(43, 57, 144, 0.2) 0%, transparent 60%),
+                radial-gradient(circle at 100% 100%, rgba(255, 107, 53, 0.1) 0%, transparent 60%),
+                linear-gradient(135deg, #061a40 0%, #2b3990 100%);
             z-index: -2;
         }
 
@@ -126,11 +126,11 @@
         }
 
         .progress-step.completed {
-            color: #10b981;
+            color: #2b3990;
         }
 
         .progress-step.active {
-            color: #fff;
+            color: #ff6b35;
         }
 
         .step-number {
@@ -150,10 +150,10 @@
         }
 
         .progress-step.completed .step-number {
-            background: #10b981;
-            border-color: #10b981;
+            background: #2b3990;
+            border-color: #2b3990;
             color: #fff;
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 15px rgba(43, 57, 144, 0.3);
         }
 
         .progress-step.active .step-number {
@@ -174,7 +174,7 @@
         }
 
         .step-connector.completed {
-            background: linear-gradient(90deg, #10b981, #ff6b35);
+            background: linear-gradient(90deg, #2b3990, #ff6b35);
         }
 
         /* Two-Column Layout */
@@ -207,10 +207,10 @@
         /* Page Title */
         .page-title {
             font-size: 40px;
-            font-weight: 900;
+            font-weight: 950;
             margin-bottom: 40px;
             text-align: left;
-            color: #0f172a;
+            color: #061a40;
             letter-spacing: -1.5px;
             line-height: 1.1;
         }
@@ -219,7 +219,7 @@
         .section-title {
             font-size: 22px;
             font-weight: 850;
-            color: #0f172a;
+            color: #2b3990;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
@@ -491,7 +491,7 @@
 
         .coupon-apply-btn {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #2b3990, #3b82f6);
+            background: #ff6b35;
             color: #fff;
             border: none;
             border-radius: 10px;
@@ -555,7 +555,7 @@
 
         /* Fare Summary Card (Right Column) */
         .fare-card {
-            background: #0f172a;
+            background: #061a40;
             border-radius: 32px;
             padding: 40px;
             box-shadow: 0 25px 90px rgba(0, 0, 0, 0.5);
@@ -1274,44 +1274,44 @@
 
             <!-- Booking Hero Section -->
             <div class="booking-hero-card"
-                style="background: #f8fafc; border-radius: 24px; padding: 30px; margin-bottom: 30px; border: 1px solid #e2e8f0;">
+                style="background: #ffffff; border-radius: 24px; padding: 30px; margin-bottom: 30px; border: 2px solid #2b3990; box-shadow: 0 10px 30px rgba(6, 26, 64, 0.05);">
                 <div style="display: flex; gap: 30px; align-items: center;">
                     <div
-                        style="width: 200px; height: 130px; background: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); flex-shrink: 0;">
+                        style="width: 200px; height: 130px; background: #f8fafc; border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); flex-shrink: 0;">
                         <img src="{{ car_image if car_image else '/static/img/landing.png' }}" alt="{{ car.brand }}"
                             style="width: 90%; height: auto; object-fit: contain;">
                     </div>
                     <div>
-                        <h2 style="font-size: 28px; font-weight: 900; color: #0f172a; margin-bottom: 10px;">{{ car.brand
+                        <h2 style="font-size: 28px; font-weight: 950; color: #061a40; margin-bottom: 10px;">{{ car.brand
                             }} {{ car.car_model }}</h2>
                         <div style="display: flex; gap: 15px; margin-bottom: 15px;">
                             <span
-                                style="background: #e2e8f0; padding: 4px 12px; border-radius: 100px; font-size: 13px; font-weight: 600; color: #475569;"><i
+                                style="background: rgba(43, 57, 144, 0.1); padding: 5px 14px; border-radius: 100px; font-size: 13px; font-weight: 700; color: #2b3990;"><i
                                     class="fas fa-users" style="margin-right: 6px;"></i>{{
                                 car.no_of_seats.value.replace('FIVE', '5').replace('SEVEN', '7') }} Seater</span>
                             <span
-                                style="background: #e2e8f0; padding: 4px 12px; border-radius: 100px; font-size: 13px; font-weight: 600; color: #475569;"><i
+                                style="background: rgba(43, 57, 144, 0.1); padding: 5px 14px; border-radius: 100px; font-size: 13px; font-weight: 700; color: #2b3990;"><i
                                     class="fas fa-cog" style="margin-right: 6px;"></i>{{
                                 car.transmission_type.value.title() }}</span>
                             <span
-                                style="background: #e2e8f0; padding: 4px 12px; border-radius: 100px; font-size: 13px; font-weight: 600; color: #475569;"><i
+                                style="background: rgba(43, 57, 144, 0.1); padding: 5px 14px; border-radius: 100px; font-size: 13px; font-weight: 700; color: #2b3990;"><i
                                     class="fas fa-gas-pump" style="margin-right: 6px;"></i>{{
                                 car.fuel_type.value.title() }}</span>
                         </div>
-                        <div style="display: flex; gap: 30px;">
+                        <div style="display: flex; gap: 40px;">
                             <div>
                                 <div
-                                    style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">
+                                    style="font-size: 11px; font-weight: 800; color: #2b3990; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6;">
                                     Duration</div>
-                                <div style="font-size: 15px; font-weight: 700; color: #2b3990;">{{ hours // 24 if hours
+                                <div style="font-size: 18px; font-weight: 800; color: #061a40;">{{ hours // 24 if hours
                                     >= 24 else hours }} {{ 'Days' if hours >= 24 else 'Hours' }}</div>
                             </div>
-                            <div style="height: 30px; width: 1px; background: #e2e8f0;"></div>
+                            <div style="height: 40px; width: 2px; background: rgba(43, 57, 144, 0.1);"></div>
                             <div>
                                 <div
-                                    style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">
+                                    style="font-size: 11px; font-weight: 800; color: #2b3990; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6;">
                                     Location</div>
-                                <div style="font-size: 15px; font-weight: 700; color: #2b3990;">{{ car.location.location
+                                <div style="font-size: 18px; font-weight: 800; color: #061a40;">{{ car.location.location
                                     }}</div>
                             </div>
                         </div>
@@ -1358,11 +1358,11 @@
             <div class="section-divider">
                 <h2 class="section-title"><i class="fas fa-tag"></i> Coupon Code</h2>
                 <div class="coupon-input-group"
-                    style="background: #f8fafc; padding: 8px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                    style="background: #ffffff; padding: 8px; border-radius: 16px; border: 2px solid #2b3990;">
                     <input type="text" id="couponCode" class="coupon-input" placeholder="Have a coupon?"
                         style="border: none; background: transparent;">
                     <button onclick="validateCoupon()" id="applyCouponBtn" class="coupon-apply-btn"
-                        style="border-radius: 12px; background: #0f172a;">Apply</button>
+                        style="border-radius: 12px; background: #ff6b35;">Apply</button>
                 </div>
                 <div id="couponMessage" class="coupon-message"></div>
                 <div id="appliedCoupon" class="coupon-applied" style="margin-top: 15px; border-radius: 16px;">
@@ -1381,7 +1381,8 @@
             {% if home_delivery %}
             <div class="section-divider">
                 <h2 class="section-title"><span class="section-icon">&#128222;</span> Contact Details</h2>
-                <div class="kyc-warning">
+                <div class="kyc-warning"
+                    style="background: rgba(43, 57, 144, 0.05); border-left: 4px solid #2b3990; color: #061a40;">
                     <div class="kyc-warning-text">
                         <strong>Required for Home Delivery:</strong> Please provide your phone number for delivery
                         coordination.
@@ -1405,7 +1406,8 @@
             {% if not kyc_complete %}
             <div class="section-divider">
                 <h2 class="section-title"><span class="section-icon">&#128214;</span> KYC Documents</h2>
-                <div class="kyc-warning">
+                <div class="kyc-warning"
+                    style="background: rgba(43, 57, 144, 0.05); border-left: 4px solid #2b3990; color: #061a40;">
                     <div class="kyc-warning-text">
                         <strong>Action Required:</strong> Please upload all KYC documents to proceed. All documents must
                         be verified before booking.
