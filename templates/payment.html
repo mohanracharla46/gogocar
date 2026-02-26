@@ -636,17 +636,44 @@
             text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
         }
 
-        /* KYC Section */
-        .kyc-section {
-            animation: fadeInUp 0.4s ease-out;
-        }
-
         .kyc-warning {
             background: linear-gradient(135deg, #fef3c7, #fde68a);
             border-left: 4px solid #f59e0b;
             border-radius: 0 10px 10px 0;
             padding: 14px 18px;
             margin-bottom: 20px;
+        }
+
+        .pay-button {
+            width: 100%;
+            border-radius: 20px;
+            height: 64px;
+            font-size: 20px;
+            font-weight: 950;
+            background: linear-gradient(135deg, #ff6b35, #ff8c42);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pay-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5);
+        }
+
+        .pay-button:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: not-allowed;
+            box-shadow: none;
         }
 
         .kyc-warning-text {
@@ -1784,7 +1811,7 @@
         <div class="payment-right">
             <div class="fare-card">
                 <div class="fare-card-title">
-                    <span>&#128147;</span> Fare Summary
+                    <i class="fas fa-file-invoice-dollar"></i> Fare Summary
                 </div>
                 <ul class="pricing-items">
                     <li class="pricing-item">
@@ -1816,9 +1843,7 @@
                 </div>
 
                 <div style="margin-top: 25px;">
-                    <button class="pay-button"
-                        style="width: 100%; border-radius: 20px; height: 64px; font-size: 20px; font-weight: 900; background: linear-gradient(135deg, #ff6b35, #ff8c42); box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4); border: none; color: #fff; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;"
-                        id="payButton" {% if not kyc_complete %}disabled{% endif %}>
+                    <button class="pay-button" id="payButton" {% if not kyc_complete %}disabled{% endif %}>
                         {% if kyc_complete %}Pay ₹{{ "{:,.2f}".format(pricing_breakdown.total) if pricing_breakdown else
                         '0.00' }}{% else %}Complete KYC to Pay{% endif %}
                     </button>
@@ -1972,7 +1997,7 @@
                         };
 
                         document.getElementById('appliedCouponCode').textContent = appliedCoupon.coupon_code;
-                        document.getElementById('appliedCouponDiscount').textContent = `-?${result.pricing.discount.toLocaleString('en-IN')}`;
+                        document.getElementById('appliedCouponDiscount').textContent = `-₹${result.pricing.discount.toLocaleString('en-IN')}`;
                         document.getElementById('appliedCoupon').style.display = 'block';
                         document.getElementById('couponCode').value = '';
                         document.getElementById('couponMessage').style.display = 'none';
@@ -1985,12 +2010,12 @@
                     }
 
                     // Update display with backend-calculated values
-                    document.getElementById('carPriceAmount').textContent = `?${currentPricing.base_rental.toLocaleString('en-IN')}`;
+                    document.getElementById('carPriceAmount').textContent = `₹${currentPricing.base_rental.toLocaleString('en-IN')}`;
 
                     // Update damage protection amount
                     const damageProtectionAmount = document.getElementById('damageProtectionAmount');
                     if (damageProtectionAmount) {
-                        damageProtectionAmount.textContent = `?${selectedDamageProtection.toLocaleString('en-IN')}`;
+                        damageProtectionAmount.textContent = `₹${selectedDamageProtection.toLocaleString('en-IN')}`;
                     }
 
                     // Update GST amount
@@ -2004,7 +2029,7 @@
                     const discountAmount = document.getElementById('discountAmount');
                     if (currentPricing.discount > 0) {
                         discountItem.style.display = 'flex';
-                        discountAmount.textContent = `-?${currentPricing.discount.toLocaleString('en-IN')}`;
+                        discountAmount.textContent = `-₹${currentPricing.discount.toLocaleString('en-IN')}`;
                     } else {
                         discountItem.style.display = 'none';
                     }
