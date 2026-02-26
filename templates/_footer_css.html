@@ -1,12 +1,22 @@
 <style>
     /* Main Footer */
     .main-footer {
-        background-color: #1e293b;
-        background-image:
-            linear-gradient(rgba(30, 41, 59, 0.95), rgba(30, 41, 59, 0.95)),
-            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.83L.83 55.457l-.83-.83L54.627 0zm-53.797 0l.83.83L.83 1.66l-.83-.83L.83 0zm58.337 0l.83.83-58.337 58.337-.83-.83L59.167 0zM.83 60l-.83-.83L59.167 0l.83.83L.83 60z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
-        padding: 80px 50px 30px;
-        color: #ffffff;
+        background-color: #ffffff;
+        padding: 100px 50px 40px;
+        color: #1e293b;
+        border-top: 1px solid #edf2f7;
+        position: relative;
+    }
+
+    .main-footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 100% 0%, rgba(255, 107, 53, 0.03) 0%, transparent 40%);
+        pointer-events: none;
     }
 
     .footer-container {
@@ -39,27 +49,31 @@
     }
 
     .footer-desc {
-        font-size: 14px;
-        line-height: 1.6;
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 15px;
+        line-height: 1.8;
+        color: #64748b;
+        margin-top: 20px;
     }
 
     .footer-col-title {
         font-size: 18px;
-        font-weight: 700;
-        margin-bottom: 25px;
+        font-weight: 800;
+        color: #061a40;
+        margin-bottom: 30px;
         position: relative;
-        padding-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     .footer-col-title::after {
         content: '';
         position: absolute;
-        bottom: 0;
+        bottom: -10px;
         left: 0;
-        width: 40px;
-        height: 2px;
-        background: #3b82f6;
+        width: 30px;
+        height: 3px;
+        background: #ff6b35;
+        border-radius: 2px;
     }
 
     .footer-links {
@@ -72,28 +86,55 @@
     }
 
     .footer-links a {
-        color: rgba(255, 255, 255, 0.7);
+        color: #64748b;
         text-decoration: none;
-        font-size: 14px;
-        transition: color 0.3s ease, padding-left 0.3s ease;
+        font-size: 15px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .footer-links a::before {
+        content: '\f105';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        color: #ff6b35;
+        font-size: 12px;
+        transition: transform 0.3s ease;
     }
 
     .footer-links a:hover {
-        color: #ffffff;
-        padding-left: 5px;
+        color: #2b3990;
+        transform: translateX(5px);
+    }
+
+    .footer-links a:hover::before {
+        transform: translateX(3px);
     }
 
     .footer-gallery {
         display: flex;
-        gap: 10px;
+        gap: 15px;
+        margin-bottom: 25px;
     }
 
     .footer-gallery img {
-        width: 60px;
-        height: 60px;
-        border-radius: 12px;
-        object-fit: cover;
-        border: 2px solid rgba(255, 255, 255, 0.1);
+        width: 70px;
+        height: 70px;
+        border-radius: 16px;
+        object-fit: contain;
+        background: #f8fafc;
+        border: 1px solid #edf2f7;
+        padding: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .footer-gallery img:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        border-color: #ff6b35;
     }
 
     .social-icons-wrapper {
@@ -129,26 +170,30 @@
     .contact-info li {
         display: flex;
         gap: 15px;
-        margin-bottom: 20px;
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.7);
-        line-height: 1.5;
+        margin-bottom: 25px;
+        font-size: 15px;
+        color: #64748b;
+        line-height: 1.6;
     }
 
     .contact-icon {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         flex-shrink: 0;
-        color: #3b82f6;
+        color: #2b3990;
+        background: rgba(43, 57, 144, 0.05);
+        padding: 5px;
+        border-radius: 6px;
     }
 
     .footer-bottom {
         text-align: center;
-        margin-top: 50px;
-        padding-top: 20px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 80px;
+        padding-top: 30px;
+        border-top: 1px solid #edf2f7;
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.5);
+        color: #94a3b8;
+        font-weight: 500;
     }
 
     @media (max-width: 900px) {
