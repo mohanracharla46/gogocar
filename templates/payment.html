@@ -10,6 +10,7 @@
         rel="stylesheet">
     {% include '_header_css.html' %}
     {% include '_footer_css.html' %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -107,18 +108,21 @@
             justify-content: center;
             align-items: center;
             gap: 0;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
             padding: 0 20px;
+            animation: fadeIn 0.8s ease-out;
         }
 
         .progress-step {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 13px;
             font-weight: 600;
-            color: #94a3b8;
+            color: rgba(255, 255, 255, 0.5);
             position: relative;
+            z-index: 1;
         }
 
         .progress-step.completed {
@@ -126,45 +130,51 @@
         }
 
         .progress-step.active {
-            color: #2b3990;
+            color: #fff;
         }
 
         .step-number {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 14px;
-            border: 2px solid #e2e8f0;
-            background: #fff;
-            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(5px);
         }
 
         .progress-step.completed .step-number {
             background: #10b981;
             border-color: #10b981;
             color: #fff;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
         }
 
         .progress-step.active .step-number {
-            background: #2b3990;
-            border-color: #2b3990;
+            background: #ff6b35;
+            border-color: #ff6b35;
             color: #fff;
-            box-shadow: 0 0 0 4px rgba(43, 57, 144, 0.15);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+            transform: scale(1.1);
         }
 
         .step-connector {
-            width: 60px;
+            width: 100px;
             height: 2px;
-            background: #e2e8f0;
-            margin: 0 8px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: -25px 10px 0;
+            position: relative;
+            top: 18px;
         }
 
         .step-connector.completed {
-            background: #10b981;
+            background: linear-gradient(90deg, #10b981, #ff6b35);
         }
 
         /* Two-Column Layout */
@@ -179,42 +189,43 @@
         }
 
         .payment-left {
-            background: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 35px 40px;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 1);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
             color: #1a202c;
-            animation: fadeInUp 0.5s ease-out;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .payment-right {
             position: sticky;
             top: 110px;
-            animation: fadeInUp 0.6s ease-out 0.1s both;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
         }
 
         /* Page Title */
         .page-title {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 25px;
+            font-size: 32px;
+            font-weight: 850;
+            margin-bottom: 30px;
             text-align: center;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, #2b3990 0%, #1e3a8a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: -1px;
         }
 
         /* Section Styles */
         .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 8px;
+            font-size: 19px;
+            font-weight: 800;
+            color: #2b3990;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .section-title .section-icon {
@@ -236,9 +247,15 @@
         }
 
         .section-divider {
-            margin-bottom: 28px;
-            padding-bottom: 28px;
-            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .section-divider:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         /* Car Details */
@@ -313,7 +330,11 @@
             margin-top: 12px;
         }
 
-        .booking-detail-item {}
+        .booking-detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
 
         .booking-detail-label {
             font-size: 12px;
@@ -357,9 +378,9 @@
         }
 
         .deposit-option-card.selected {
-            border-color: #3b82f6 !important;
-            background: #eff6ff !important;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            border-color: #ff6b35 !important;
+            background: rgba(255, 107, 53, 0.05) !important;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.1);
         }
 
         .deposit-option-card input[type="radio"] {
@@ -413,9 +434,9 @@
         }
 
         .damage-protection-btn.selected {
-            border-color: #3b82f6 !important;
-            background: #eff6ff !important;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            border-color: #ff6b35 !important;
+            background: rgba(255, 107, 53, 0.05) !important;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.1);
         }
 
         .protection-price {
@@ -502,13 +523,14 @@
             border-radius: 8px;
         }
 
+        /* Coupon Applied Style */
         .coupon-applied {
-            margin-top: 10px;
-            padding: 12px 16px;
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-            border-radius: 10px;
+            margin-top: 15px;
+            padding: 15px 20px;
+            background: #f0fdf4;
+            border-radius: 14px;
             display: none;
-            border: 1px solid #6ee7b7;
+            border: 1px solid #bbf7d0;
         }
 
         .coupon-applied-inner {
@@ -533,24 +555,24 @@
 
         /* Fare Summary Card (Right Column) */
         .fare-card {
-            background: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: #fff;
+            border-radius: 24px;
             padding: 30px;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
             color: #1a202c;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .fare-card-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 850;
+            color: #2b3990;
+            margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #f1f5f9;
+            border-bottom: 2px solid #edf2f7;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .pricing-items {
@@ -719,8 +741,8 @@
         }
 
         .terms-header:hover {
-            border-color: #93c5fd;
-            background: #f0f7ff;
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.05);
         }
 
         .terms-header h3 {
@@ -1123,64 +1145,77 @@
             font-size: 14px;
         }
 
-        .pay-button {
-            width: 100%;
-        }
+        @media (max-width: 991px) {
+            .payment-layout {
+                grid-template-columns: 1fr;
+            }
 
-        .progress-steps {
-            gap: 0;
-        }
+            .payment-right {
+                position: static;
+            }
 
-        .car-details-section {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
+            .fare-card {
+                margin-top: 20px;
+            }
 
-        .car-specs {
-            justify-content: center;
-        }
+            .pay-button {
+                width: 100%;
+            }
 
-        .booking-details-grid {
-            grid-template-columns: 1fr;
-        }
+            .progress-steps {
+                gap: 0;
+            }
 
-        .deposit-grid {
-            grid-template-columns: 1fr 1fr;
-        }
+            .car-details-section {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
 
-        .protection-grid {
-            flex-direction: column;
-        }
+            .car-specs {
+                justify-content: center;
+            }
 
-        .damage-protection-btn {
-            min-width: unset;
-        }
+            .booking-details-grid {
+                grid-template-columns: 1fr;
+            }
 
-        .kyc-documents {
-            grid-template-columns: 1fr;
-        }
+            .deposit-grid {
+                grid-template-columns: 1fr 1fr;
+            }
 
-        .payment-section {
-            flex-direction: column;
-            text-align: center;
-        }
+            .protection-grid {
+                flex-direction: column;
+            }
 
-        .pay-button {
-            width: 100%;
-        }
+            .damage-protection-btn {
+                min-width: unset;
+            }
 
-        .progress-steps {
-            gap: 0;
-        }
+            .kyc-documents {
+                grid-template-columns: 1fr;
+            }
 
-        .step-connector {
-            width: 30px;
-        }
+            .payment-section {
+                flex-direction: column;
+                text-align: center;
+            }
 
-        .progress-step span:not(.step-number) {
-            display: none;
-        }
+            .pay-button {
+                width: 100%;
+            }
+
+            .progress-steps {
+                gap: 0;
+            }
+
+            .step-connector {
+                width: 30px;
+            }
+
+            .progress-step span:not(.step-number) {
+                display: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1223,26 +1258,31 @@
 
             <!-- Booking Details -->
             <div class="section-divider">
-                <h2 class="section-title"><span class="section-icon">&#128197;</span> Booking Details</h2>
+                <h2 class="section-title">
+                    <div class="section-icon" style="background: rgba(43, 57, 144, 0.1); color: #2b3990;">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    Booking Details
+                </h2>
                 <div class="booking-details-grid">
                     <div class="booking-detail-item">
-                        <div class="booking-detail-label">Duration</div>
-                        <div class="booking-detail-value" id="bookingDuration">
+                        <div class="booking-detail-label">DURATION</div>
+                        <div class="booking-detail-value" id="bookingDuration" style="font-size: 18px; color: #1e293b;">
                             {% if hours %}
                             {% set days = (hours / 24) | round(1) %}
                             {% if days >= 1 %}
-                            {{ days | int }} day{% if days > 1 %}s{% endif %}
+                            {{ days | int }} Day{% if days > 1 %}s{% endif %}
                             {% else %}
-                            {{ hours }} hour{% if hours > 1 %}s{% endif %}
+                            {{ hours }} Hour{% if hours > 1 %}s{% endif %}
                             {% endif %}
                             {% else %}
-                            1 day
+                            1 Day
                             {% endif %}
                         </div>
                     </div>
                     <div class="booking-detail-item">
-                        <div class="booking-detail-label">Pickup Location</div>
-                        <div class="booking-detail-value" id="pickupLocation">
+                        <div class="booking-detail-label">PICKUP LOCATION</div>
+                        <div class="booking-detail-value" id="pickupLocation" style="font-size: 18px; color: #1e293b;">
                             {% if home_delivery and delivery_address %}
                             {{ delivery_address }}
                             {% elif car and car.location %}
@@ -1258,40 +1298,30 @@
             <!-- Car Details -->
             <div class="section-divider">
                 <div class="car-details-section">
-                    <div class="car-image-container">
+                    <div class="car-image-container"
+                        style="width: 180px; height: 120px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
                         <img src="{{ car_image if car_image else '/static/img/landing.png' }}" alt="Car"
                             class="car-image" id="carImage">
                     </div>
                     <div class="car-info">
-                        <h2 class="car-model" id="carModel">
+                        <h2 class="car-model" id="carModel" style="font-size: 26px; color: #1a202c;">
                             {% if car %}{{ car.brand }} {{ car.car_model }}{% else %}Car{% endif %}
                         </h2>
-                        <div class="car-specs">
+                        <div class="car-specs" style="margin-top: 15px;">
                             {% if car %}
-                            <div class="car-spec">
-                                <svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" />
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                                </svg>
+                            <div class="car-spec"
+                                style="background: rgba(43, 57, 144, 0.05); border: none; color: #2b3990; font-weight: 600;">
+                                <i class="fas fa-users" style="margin-right: 8px;"></i>
                                 <span>{% if car.no_of_seats.value == 'FIVE' %}5{% else %}7{% endif %} Seater</span>
                             </div>
-                            <div class="car-spec">
-                                <svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z" />
-                                </svg>
+                            <div class="car-spec"
+                                style="background: rgba(43, 57, 144, 0.05); border: none; color: #2b3990; font-weight: 600;">
+                                <i class="fas fa-cog" style="margin-right: 8px;"></i>
                                 <span>{{ car.transmission_type.value.title() }}</span>
                             </div>
-                            <div class="car-spec">
-                                <svg class="spec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="2" y="3" width="20" height="18" rx="2" />
-                                    <line x1="2" y1="8" x2="22" y2="8" />
-                                    <line x1="6" y1="3" x2="6" y2="8" />
-                                </svg>
+                            <div class="car-spec"
+                                style="background: rgba(43, 57, 144, 0.05); border: none; color: #2b3990; font-weight: 600;">
+                                <i class="fas fa-gas-pump" style="margin-right: 8px;"></i>
                                 <span>{{ car.fuel_type.value.title() if car.fuel_type else 'N/A' }}</span>
                             </div>
                             {% endif %}
@@ -1302,32 +1332,37 @@
 
             <!-- Deposit Section -->
             <div class="section-divider">
-                <h2 class="section-title"><span class="section-icon">&#128179;</span> Security Deposit</h2>
-                <p class="section-description">Choose your preferred deposit method</p>
+                <h2 class="section-title">
+                    <div class="section-icon" style="background: rgba(43, 57, 144, 0.1); color: #2b3990;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    Security Deposit
+                </h2>
+                <p class="section-description">Your deposit is 100% safe and fully refundable post inspection</p>
                 <div class="deposit-grid">
                     <label class="deposit-option-card selected">
                         <input type="radio" name="deposit" value="bike_rc" checked>
-                        <span class="deposit-icon">&#127949;</span>
+                        <span class="deposit-icon">🏍️</span>
                         <div class="deposit-name">Bike &amp; RC</div>
-                        <div class="deposit-desc">Document deposit</div>
+                        <div class="deposit-desc">Physical document</div>
                     </label>
                     <label class="deposit-option-card">
                         <input type="radio" name="deposit" value="laptop">
-                        <span class="deposit-icon">&#128187;</span>
+                        <span class="deposit-icon">💻</span>
                         <div class="deposit-name">Laptop</div>
                         <div class="deposit-desc">Device deposit</div>
                     </label>
                     <label class="deposit-option-card">
                         <input type="radio" name="deposit" value="cheque">
-                        <span class="deposit-icon">&#128221;</span>
+                        <span class="deposit-icon">✍️</span>
                         <div class="deposit-name">Empty Cheque</div>
-                        <div class="deposit-desc">Blank cheque deposit</div>
+                        <div class="deposit-desc">Signed blank cheque</div>
                     </label>
                     <label class="deposit-option-card">
                         <input type="radio" name="deposit" value="cash">
-                        <span class="deposit-icon">&#128181;</span>
+                        <span class="deposit-icon">💰</span>
                         <div class="deposit-name">₹15,000 Cash</div>
-                        <div class="deposit-desc">Fully refundable</div>
+                        <div class="deposit-desc">Instant refund</div>
                     </label>
                 </div>
             </div>
@@ -1816,9 +1851,9 @@
                 </div>
 
                 <div style="margin-top: 25px;">
-                    <button class="pay-button" style="width: 100%;" id="payButton" {% if not kyc_complete %}disabled{%
-                        endif %}>
-                        {% if kyc_complete %}Pay Now{% else %}Complete KYC First{% endif %}
+                    <button class="pay-button" style="width: 100%; border-radius: 16px; height: 60px; font-size: 18px;"
+                        id="payButton" {% if not kyc_complete %}disabled{% endif %}>
+                        {% if kyc_complete %}PAY NOW{% else %}COMPLETE KYC FIRST{% endif %}
                     </button>
                     <div
                         style="font-size: 12px; color: #64748b; text-align: center; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;">
