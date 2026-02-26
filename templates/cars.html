@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="icon" type="image/png" href="/static/img/logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.0/css/all.css">
     <style>
         * {
             margin: 0;
@@ -68,8 +68,8 @@
             display: grid;
             grid-template-columns: 320px 1fr;
             gap: 25px;
-            padding: 110px 80px 40px;
-            max-width: 1500px;
+            padding: 110px 40px 40px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -315,10 +315,10 @@
         }
 
         .book-btn-new {
-            background: #2b3990;
+            background: #061a40;
             color: #ffffff;
             padding: 10px 25px;
-            border-radius: 12px;
+            border-radius: 50px;
             font-weight: 800;
             font-size: 14px;
             text-decoration: none;
@@ -326,11 +326,13 @@
             transition: all 0.2s ease;
             border: none;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(6, 26, 64, 0.2);
         }
 
         .book-btn-new:hover {
-            background: #ff6b35;
-            transform: scale(1.05);
+            background: #2b3990;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(6, 26, 64, 0.4);
         }
 
         .car-card-img-container {
@@ -346,6 +348,27 @@
             width: 100%;
             height: auto;
             object-fit: contain;
+        }
+
+        .car-card-rating {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 4px 10px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .car-card-rating i {
+            color: #f59e0b;
         }
 
         @media (max-width: 1200px) {
@@ -441,7 +464,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: #ff6b35;
+            background: #2b3990;
             color: #ffffff;
             width: 60px;
             height: 60px;
@@ -497,7 +520,7 @@
         }
 
         .location-map-btn:hover {
-            background: #ff6b35;
+            background: #2b3990;
         }
 
         .delivery-input-group {
@@ -712,9 +735,17 @@
                 car.images else '/static/img/landing.png') %}
                 {% set transmission_display = (car.transmission_type.value if car.transmission_type is not string else
                 car.transmission_type)|title %}
-                <div class="car-card-new" data-brand="{{ car.brand }}" data-fuel="{{ car.fuel_type }}"
-                    data-type="{{ car.car_type }}" data-transmission="{{ car.transmission_type }}"
-                    data-car-id="{{ car.id }}">
+                <a href="/cars/{{ car.id }}" class="car-card-new" data-brand="{{ car.brand }}"
+                    data-fuel="{{ car.fuel_type }}" data-type="{{ car.car_type }}"
+                    data-transmission="{{ car.transmission_type }}" data-car-id="{{ car.id }}"
+                    onclick="navigateToDetail(event, this.href)"
+                    style="text-decoration: none; color: inherit; display: grid;">
+
+                    <div class="car-card-rating">
+                        <i class="fas fa-star"></i>
+                        <span>4.8</span>
+                    </div>
+
                     <div class="car-info-left">
                         <div>
                             <div class="car-card-name">{{ car.car_model }}</div>
@@ -736,10 +767,9 @@
                                 BOOKED
                             </button>
                             {% else %}
-                            <a href="/cars/{{ car.id }}" class="book-btn-new book-now-card-btn"
-                                onclick="const p=document.getElementById('top-pickup-datetime').value; const r=document.getElementById('top-return-datetime').value; let u=this.href+'?location=Hyderabad'; if(p)u+='&pickup_datetime='+p; if(r)u+='&end_datetime='+r; window.location.assign(u); return false;">
+                            <div class="book-btn-new">
                                 BOOK NOW
-                            </a>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
@@ -747,7 +777,7 @@
                         <img src="{{ image_url }}" alt="{{ car.brand }}" class="car-card-img"
                             onerror="this.src='/static/img/landing.png'">
                     </div>
-                </div>
+                </a>
                 {% endfor %}
                 {% else %}
                 <div
@@ -764,6 +794,20 @@
     </div>
 
     <script>
+        function navigateToDetail(event, baseUrl) {
+            event.preventDefault();
+            const pickup = document.getElementById('top-pickup-datetime')?.value;
+            const return_ = document.getElementById('top-return-datetime')?.value;
+            const urlParams = new URLSearchParams(window.location.search);
+            const location_ = urlParams.get('location') || 'Hyderabad';
+
+            let url = baseUrl + '?location=' + encodeURIComponent(location_);
+            if (pickup) url += '&pickup_datetime=' + encodeURIComponent(pickup);
+            if (return_) url += '&end_datetime=' + encodeURIComponent(return_);
+
+            window.location.href = url;
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const pickupInput = document.getElementById('top-pickup-datetime');
             const returnInput = document.getElementById('top-return-datetime');

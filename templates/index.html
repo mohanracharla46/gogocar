@@ -9,6 +9,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.0/css/all.css">
     <style>
         * {
             margin: 0;
@@ -93,13 +94,12 @@
 
         .hero-container {
             width: 100%;
-            max-width: 1300px;
+            max-width: 1440px;
             margin: 0 auto;
             padding: 0 40px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            /* Aligned to top */
             gap: 60px;
             position: relative;
             z-index: 2;
@@ -361,8 +361,8 @@
         }
 
         .input-display .display-time {
-            color: #ff6b35;
-            background: #fff5f2;
+            color: #2b3990;
+            background: #f0f9ff;
             padding: 2px 8px;
             border-radius: 6px;
             font-size: 14px;
@@ -395,26 +395,26 @@
 
         .search-btn {
             width: 100%;
-            background: #2b3990;
+            background: #061a40;
             color: #ffffff;
             border: none;
             padding: 14px;
             /* Reduced vertical padding */
-            border-radius: 12px;
+            border-radius: 50px;
             font-size: 18px;
             /* Slightly smaller */
             font-weight: 800;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(43, 57, 144, 0.2);
+            box-shadow: 0 10px 20px rgba(6, 26, 64, 0.2);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .search-btn:hover {
-            background: #1e296a;
+            background: #2b3990;
             transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(43, 57, 144, 0.3);
+            box-shadow: 0 15px 35px rgba(6, 26, 64, 0.4);
         }
 
         .search-btn:active {
@@ -527,8 +527,8 @@
 
         .location-search-input:focus {
             outline: none;
-            border-color: #ff6b35;
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            border-color: #2b3990;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .location-list {
@@ -552,20 +552,20 @@
         }
 
         .location-item:hover {
-            border-color: #ff6b35;
-            background: #fff5f2;
+            border-color: #2b3990;
+            background: #f0f9ff;
             transform: translateX(4px);
         }
 
         .location-item.selected {
-            border-color: #ff6b35;
-            background: #fff5f2;
+            border-color: #2b3990;
+            background: #f0f9ff;
         }
 
         .location-icon {
             width: 40px;
             height: 40px;
-            background: #ff6b35;
+            background: #2b3990;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -599,8 +599,8 @@
         }
 
         .location-item.selected .location-check {
-            background: #ff6b35;
-            border-color: #ff6b35;
+            background: #2b3990;
+            border-color: #2b3990;
         }
 
         .location-item.selected .location-check::after {
@@ -621,7 +621,7 @@
 
         .btn-modal-primary {
             padding: 14px 32px;
-            background: #ff6b35;
+            background: #2b3990;
             color: #ffffff;
             border: none;
             border-radius: 8px;
@@ -723,7 +723,7 @@
         }
 
         .notification.info {
-            border-left-color: #3b82f6;
+            border-left-color: #2b3990;
         }
 
         .notification-icon {
@@ -1170,6 +1170,27 @@
             overflow: hidden;
         }
 
+        .car-card-rating {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 4px 10px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .car-card-rating i {
+            color: #f59e0b;
+        }
+
         .car-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 50px rgba(43, 57, 144, 0.15);
@@ -1295,7 +1316,7 @@
 
         .book-now-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(43, 57, 144, 0.3);
+            box-shadow: 0 15px 35px rgba(6, 26, 64, 0.4);
         }
 
         /* Responsive for Featured Cars */
@@ -1340,7 +1361,7 @@
 
         .offers-section .offer-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 12px 30px rgba(6, 26, 64, 0.4);
         }
 
         .offers-section .offer-card::before {
@@ -1397,7 +1418,7 @@
         }
 
         .copy-code-btn:hover {
-            background: #2563eb;
+            background: #061a40;
             transform: translateY(-2px);
         }
 
@@ -1503,7 +1524,7 @@
         }
 
         .reviews-scroll-container::-webkit-scrollbar-thumb {
-            background: #3b82f6;
+            background: #2b3990;
             border-radius: 4px;
         }
 
@@ -1563,7 +1584,7 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #2b3990 0%, #2563eb 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1596,7 +1617,7 @@
 
         /* Call to Action Footer */
         .cta-footer {
-            background: linear-gradient(135deg, #ff6b35 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, #2b3990 0%, #2b3990 100%);
             padding: 60px 50px;
             color: #ffffff;
             text-align: center;
@@ -2263,7 +2284,7 @@
                 <div class="category-header">
                     <h2 class="category-title">Top Selling Cars in Hyderabad</h2>
                     <div class="category-nav"> <a href="/cars"
-                            style="text-decoration: none; color: #ff6b35; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-right: 20px;">View
+                            style="text-decoration: none; color: #2b3990; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-right: 20px;">View
                             All Cars <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2.5">
                                 <polyline points="9 18 15 12 9 6"></polyline>
@@ -2283,7 +2304,8 @@
 
                 <div class="car-cards-grid">
                     {% for car in top_selling_cars %}
-                    <div class="car-card" onclick="window.location.href='/cars/{{ car.id }}'" style="cursor: pointer;">
+                    <a href="/cars/{{ car.id }}" class="car-card"
+                        style="text-decoration: none; color: inherit; display: block;">
                         <div class="card-content">
                             <div class="car-info">
                                 <div class="car-model">{{ car.car_model }}</div>
@@ -2296,42 +2318,19 @@
                         </div>
                         <div class="car-specs">
                             <div class="spec-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v4c0 .6.4 1 1 1h2">
-                                    </path>
-                                    <circle cx="7" cy="17" r="2"></circle>
-                                    <path d="M9 17h6"></path>
-                                    <circle cx="17" cy="17" r="2"></circle>
-                                </svg>
+                                <i class="fa-solid fa-car" style="font-size: 14px;"></i>
                                 {{ car.car_type }}
                             </div>
                             <div class="spec-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="M12 8v8"></path>
-                                    <path d="M8 12h8"></path>
-                                </svg>
+                                <i class="fa-solid fa-gear" style="font-size: 14px;"></i>
                                 {{ car.transmission_type }}
                             </div>
                             <div class="spec-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M3 22V8a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14"></path>
-                                    <path d="M3 22h10"></path>
-                                    <path d="M13 8h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V7l-3-3"></path>
-                                    <path d="M20 4v3"></path>
-                                </svg>
-                                {{ car.fuel_type|title if car.fuel_type else 'N/A' }}
+                                <i class="fa-solid fa-gas-pump" style="font-size: 14px;"></i>
+                                {{ car.fuel_type }}
                             </div>
                             <div class="spec-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </svg>
+                                <i class="fa-solid fa-users" style="font-size: 14px;"></i>
                                 {{ car.no_of_seats }} Seats
                             </div>
                         </div>
@@ -2341,11 +2340,9 @@
                                 <div class="price">₹ {{ car.base_price|int }} <span class="per-unit">per day</span>
                                 </div>
                             </div>
-                            <button class="book-now-btn"
-                                onclick="event.stopPropagation(); window.location.href='/cars/{{ car.id }}'">BOOK
-                                NOW</button>
+                            <div class="book-now-btn">BOOK NOW</div>
                         </div>
-                    </div>
+                    </a>
                     {% endfor %}
                 </div>
             </div>
@@ -2357,7 +2354,7 @@
                 <div class="category-header">
                     <h2 class="category-title">Premium Cars</h2>
                     <div class="category-nav"> <a href="/cars"
-                            style="text-decoration: none; color: #ff6b35; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-right: 20px;">View
+                            style="text-decoration: none; color: #2b3990; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-right: 20px;">View
                             All Cars <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2.5">
                                 <polyline points="9 18 15 12 9 6"></polyline>
@@ -2377,7 +2374,8 @@
 
                 <div class="car-cards-grid">
                     {% for car in premium_cars %}
-                    <div class="car-card" onclick="window.location.href='/cars/{{ car.id }}'" style="cursor: pointer;">
+                    <a href="/cars/{{ car.id }}" class="car-card"
+                        style="text-decoration: none; color: inherit; display: block;">
                         <div class="card-content">
                             <div class="car-info">
                                 <div class="car-model">{{ car.car_model }}</div>
@@ -2390,42 +2388,19 @@
                         </div>
                         <div class="car-specs">
                             <div class="spec-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v4c0 .6.4 1 1 1h2">
-                                    </path>
-                                    <circle cx="7" cy="17" r="2"></circle>
-                                    <path d="M9 17h6"></path>
-                                    <circle cx="17" cy="17" r="2"></circle>
-                                </svg>
+                                <i class="fa-solid fa-car" style="font-size: 14px;"></i>
                                 {{ car.car_type }}
                             </div>
                             <div class="spec-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="M12 8v8"></path>
-                                    <path d="M8 12h8"></path>
-                                </svg>
+                                <i class="fa-solid fa-gear" style="font-size: 14px;"></i>
                                 {{ car.transmission_type }}
                             </div>
                             <div class="spec-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M3 22V8a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14"></path>
-                                    <path d="M3 22h10"></path>
-                                    <path d="M13 8h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V7l-3-3"></path>
-                                    <path d="M20 4v3"></path>
-                                </svg>
-                                {{ car.fuel_type|title if car.fuel_type else 'N/A' }}
+                                <i class="fa-solid fa-gas-pump" style="font-size: 14px;"></i>
+                                {{ car.fuel_type }}
                             </div>
                             <div class="spec-item">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </svg>
+                                <i class="fa-solid fa-users" style="font-size: 14px;"></i>
                                 {{ car.no_of_seats }} Seats
                             </div>
                         </div>
@@ -2435,11 +2410,9 @@
                                 <div class="price">₹ {{ car.base_price|int }} <span class="per-unit">per day</span>
                                 </div>
                             </div>
-                            <button class="book-now-btn"
-                                onclick="event.stopPropagation(); window.location.href='/cars/{{ car.id }}'">BOOK
-                                NOW</button>
+                            <div class="book-now-btn">BOOK NOW</div>
                         </div>
-                    </div>
+                    </a>
                     {% endfor %}
                 </div>
             </div>
@@ -2905,7 +2878,11 @@
                     const price = car.base_price ? `₹ ${Math.round(car.base_price).toLocaleString('en-IN')}/day` : 'Price on request';
 
                     return `
-                        <div class="car-card" onclick="window.location.href='/cars'">
+                        <a href="/cars/${car.id}" class="car-card" style="text-decoration: none; color: inherit; display: block;">
+                            <div class="car-card-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.8</span>
+                            </div>
                             <div class="car-image-container">
                                 <img src="${carImage}" alt="${carName}" class="car-image" onerror="this.src='/static/img/landing.png'">
                             </div>
@@ -2913,7 +2890,7 @@
                                 <h3 class="car-name">${carName}</h3>
                                 <p class="car-price">${price}</p>
                             </div>
-                        </div>
+                        </a>
                     `;
                 }).join('');
             } else {
@@ -3378,7 +3355,7 @@
                     that such action shall be void and unenforceable.</p>
 
                 <div
-                    style="margin-top: 40px; padding: 25px; background: #fff5f2; border-left: 4px solid #ff6b35; border-radius: 8px;">
+                    style="margin-top: 40px; padding: 25px; background: #f0f9ff; border-left: 4px solid #2b3990; border-radius: 8px;">
                     <h2 style="color: #1a202c; margin-top: 0;">Risk & Liability Declaration</h2>
                     <p>I, the undersigned renter, acknowledge that I am renting and operating the vehicle from GoGo Cars
                         entirely at my own risk.</p>

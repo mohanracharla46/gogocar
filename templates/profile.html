@@ -10,7 +10,7 @@
     <style>
         :root {
             --primary: #2b3990;
-            --secondary: #ff6b35;
+            --secondary: #2b3990;
             --text-dark: #0f172a;
             --text-muted: #64748b;
             --bg-light: #f8fafc;
@@ -36,12 +36,12 @@
     <style>
         /* Profile Layout */
         .profile-container {
-            max-width: 1200px;
+            max-width: 1440px;
             margin: 110px auto 60px;
             display: grid;
             grid-template-columns: 320px 1fr;
             gap: 40px;
-            padding: 0 20px;
+            padding: 0 40px;
         }
 
         /* Sidebar Styling */
@@ -260,7 +260,7 @@
         }
 
         .progress-circle .val {
-            stroke: #ff6b35;
+            stroke: #2b3990;
             stroke-dasharray: 283;
             transition: stroke-dashoffset 1s ease;
         }
@@ -471,14 +471,18 @@
         }
 
         .btn-primary {
-            background: #2b3990;
+            background: #061a40;
             color: white;
-            box-shadow: 0 10px 20px rgba(43, 57, 144, 0.15);
+            box-shadow: 0 10px 20px rgba(6, 26, 64, 0.2);
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 25px rgba(43, 57, 144, 0.2);
+            background: #2b3990;
+            box-shadow: 0 15px 25px rgba(59, 130, 246, 0.4);
         }
 
         .btn-outline {

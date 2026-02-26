@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Renault Triber 2024 - GoGo Cars</title>
+    <title>{{ car.brand }} {{ car.car_model }} - GoGo Cars</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.0/css/all.css">
     <link rel="icon" type="image/png" href="/static/img/logo.png">
     {% include '_header_css.html' %}
     {% include '_footer_css.html' %}
@@ -411,7 +411,7 @@
         }
 
         .similar-card:nth-child(2) {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #2b3990 0%, #2563eb 100%);
         }
 
         .similar-card:nth-child(3) {
@@ -1050,25 +1050,31 @@
         }
 
         .cta-primary {
-            background: #2b3990;
+            background: #061a40;
             color: #ffffff;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(6, 26, 64, 0.2);
+            border-radius: 50px;
+            text-transform: uppercase;
         }
 
         .cta-primary:hover {
-            background: #1e2a78;
+            background: #2b3990;
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
         }
 
         .cta-secondary {
             background: #ffffff;
-            color: #2b3990;
-            border: 2px solid #2b3990;
+            color: #061a40;
+            border: 2px solid #061a40;
+            border-radius: 50px;
+            text-transform: uppercase;
         }
 
         .cta-secondary:hover {
             background: #f8fafc;
+            border-color: #2b3990;
+            color: #2b3990;
         }
 
         .host-info {
@@ -1149,7 +1155,10 @@
     </style>
 </head>
 
-<body>
+{% set image_list = car.images.split(',') if (car and car.images and ',' in car.images) else ([car.images] if (car and
+car.images) else ['/static/img/landing.png']) %}
+
+<body data-images='{{ image_list | tojson }}'>
     <svg style="display: none;">
         <defs>
             <linearGradient id="half-grad">
@@ -1216,8 +1225,6 @@
             <!-- Image Gallery -->
             <div class="image-gallery">
                 <div class="main-image-container">
-                    {% set image_list = car.images.split(',') if car.images and ',' in car.images else ([car.images] if
-                    car.images else ['/static/img/landing.png']) %}
                     <img src="{{ image_list[0] }}" alt="{{ car.brand }} {{ car.car_model }}" class="main-image"
                         id="mainImage" onerror="this.src='/static/img/landing.png'">
 
@@ -1228,8 +1235,7 @@
                 </div>
                 <div class="thumbnail-grid">
                     {% for image in image_list %}
-                    <div class="thumbnail {{ 'active' if loop.index0 == 0 else '' }}"
-                        onclick="selectImage({{ loop.index0 }})">
+                    <div class="thumbnail {{ 'active' if loop.index0 == 0 else '' }}" data-index="{{ loop.index0 }}">
                         <img src="{{ image }}" alt="View {{ loop.index }}" onerror="this.src='/static/img/landing.png'">
                     </div>
                     {% endfor %}
@@ -1239,11 +1245,11 @@
             <!-- Tabs -->
             <div class="tabs-container">
                 <div class="tabs-header">
-                    <button class="tab-btn active" onclick="switchTab('details')">Details</button>
-                    <button class="tab-btn" onclick="switchTab('reviews')">Reviews</button>
-                    <button class="tab-btn" onclick="switchTab('features')">Features</button>
-                    <button class="tab-btn" onclick="switchTab('conditions')">T&C and Conditions</button>
-                    <button class="tab-btn" onclick="switchTab('faqs')">FAQ</button>
+                    <button class="tab-btn active" onclick="switchTab('details', event)">Details</button>
+                    <button class="tab-btn" onclick="switchTab('reviews', event)">Reviews</button>
+                    <button class="tab-btn" onclick="switchTab('features', event)">Features</button>
+                    <button class="tab-btn" onclick="switchTab('conditions', event)">T&C and Conditions</button>
+                    <button class="tab-btn" onclick="switchTab('faqs', event)">FAQ</button>
                 </div>
 
                 <div class="tab-content">
@@ -1688,7 +1694,7 @@
                 </div>
             </div>
 
-            <!-- Similar Listings -->
+            <!-- Similar Listings (Commented out)
             <div class="similar-listings">
                 <h2>Similar Listings</h2>
                 <div class="similar-grid">
@@ -1696,25 +1702,26 @@
                         <div class="similar-badge">POPULAR</div>
                         <div class="similar-name">Tata Altroz</div>
                         <div class="similar-specs">Hatchback &bull; Petrol &bull; 5 Seats</div>
-                        <div class="similar-price">?1,200</div>
+                        <div class="similar-price">&#8377;1,200</div>
                         <div class="similar-period">Per day</div>
                     </div>
                     <div class="similar-card">
                         <div class="similar-badge">FEATURED</div>
                         <div class="similar-name">Maruti Swift</div>
                         <div class="similar-specs">Hatchback &bull; Petrol &bull; 5 Seats</div>
-                        <div class="similar-price">?1,100</div>
+                        <div class="similar-price">&#8377;1,100</div>
                         <div class="similar-period">Per day</div>
                     </div>
                     <div class="similar-card">
                         <div class="similar-badge">NEW</div>
                         <div class="similar-name">Hyundai i20</div>
                         <div class="similar-specs">Hatchback &bull; Petrol &bull; 5 Seats</div>
-                        <div class="similar-price">?1,400</div>
+                        <div class="similar-price">&#8377;1,400</div>
                         <div class="similar-period">Per day</div>
                     </div>
                 </div>
             </div>
+            -->
         </div>
 
         <!-- Right Sidebar -->
@@ -1848,7 +1855,7 @@
                     TO BOOK' }}</button>
                 <button class="cta-button cta-secondary">Contact Host</button>
 
-                <!-- Host Info -->
+                <!-- Host Info (Commented out)
                 <div class="host-info">
                     <div class="host-avatar">PK</div>
                     <div class="host-details">
@@ -1881,23 +1888,14 @@
                     </div>
                     <button class="host-cta">Chat</button>
                 </div>
+                -->
             </div>
         </div>
     </div>
 
     <script>
         // Image Gallery
-        const images = [
-            {% if car.images and ',' in car.images %}
-        {% for image in car.images.split(',') %}
-        {{ image | trim | tojson }},
-        {% endfor %}
-        {% elif car.images %}
-        {{ car.images | trim | tojson }},
-        {% else %}
-        "/static/img/landing.png",
-            {% endif %}
-        ];
+        const images = JSON.parse(document.body.dataset.images || '["/static/img/landing.png"]');
 
         let currentImageIndex = 0;
 
@@ -1911,10 +1909,16 @@
         }
 
         function selectImage(index) {
-            currentImageIndex = index;
-            document.getElementById('mainImage').src = images[index];
+            currentImageIndex = parseInt(index);
+            document.getElementById('mainImage').src = images[currentImageIndex];
             updateThumbnails();
         }
+
+        document.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', function () {
+                selectImage(this.dataset.index);
+            });
+        });
 
         function updateThumbnails() {
             const thumbnails = document.querySelectorAll('.thumbnail');
@@ -1924,12 +1928,16 @@
         }
 
         // Tabs
-        function switchTab(tabName) {
+        function switchTab(tabName, event) {
             // Update buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else if (window.event && window.event.target) {
+                window.event.target.classList.add('active');
+            }
 
             // Update content
             document.querySelectorAll('.tab-pane').forEach(pane => {
@@ -1993,23 +2001,22 @@
         const endDateInput = document.getElementById('endDate');
         const durationDisplay = document.getElementById('durationDisplay');
         const totalAmountDisplay = document.getElementById('totalAmountDisplay');
-        const basePrice = {{ car.base_price }}; // Daily rate
+        const basePrice = {{ car.base_price | default (0) }}; // Daily rate
 
         function updateTripDetails() {
             const start = new Date(startDateInput.value);
             const end = new Date(endDateInput.value);
 
-            if (start && end && end > start) {
+            if (start && end && end > start && !isNaN(start) && !isNaN(end)) {
                 const diffTime = Math.abs(end - start);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
                 // Update Duration Display
-                durationDisplay.textContent = `${diffDays} Day${diffDays > 1 ? 's' : ''}`;
+                durationDisplay.textContent = diffDays + ' Day' + (diffDays > 1 ? 's' : '');
 
                 // Update Total Price
-                // Total Price = no. of days * price of 24 hrs
                 const newTotal = basePrice * diffDays + selectedProtectionPrice;
-                totalAmountDisplay.textContent = `?${newTotal.toLocaleString('en-IN')}`;
+                totalAmountDisplay.textContent = '₹' + newTotal.toLocaleString('en-IN');
             } else {
                 durationDisplay.textContent = 'Invalid duration';
             }

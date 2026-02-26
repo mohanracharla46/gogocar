@@ -324,19 +324,28 @@ async def root(
         
         # Convert to template-friendly format
         def car_to_dict(car):
+            if not car: return {}
             first_image = car.images.split(',')[0] if car.images else '/static/img/landing.png'
             seats_map = {'FIVE': '5', 'SEVEN': '7'}
+            
+            # Helper to get value if it's an enum or return raw string
+            def get_val(attr):
+                val = getattr(car, attr, None)
+                if val is None: return ''
+                if hasattr(val, 'value'): return val.value
+                return str(val)
+
             return {
                 "id": car.id,
                 "brand": car.brand,
                 "car_model": car.car_model,
-                "base_price": float(car.base_price),
+                "base_price": float(car.base_price) if car.base_price is not None else 0,
                 "images": car.images,
                 "first_image": first_image,
-                "car_type": car.car_type.value if car.car_type else '',
-                "transmission_type": car.transmission_type.value.title() if car.transmission_type else '',
-                "no_of_seats": seats_map.get(car.no_of_seats.value, '5') if car.no_of_seats else '5',
-                "fuel_type": car.fuel_type.value.title() if car.fuel_type else '',
+                "car_type": get_val('car_type'),
+                "transmission_type": get_val('transmission_type').title(),
+                "no_of_seats": seats_map.get(get_val('no_of_seats'), '5'),
+                "fuel_type": get_val('fuel_type').title(),
             }
         
         top_selling_data = [car_to_dict(c) for c in top_selling_cars]
@@ -361,7 +370,7 @@ async def root(
     
     except Exception as e:
         logger.error(f"Error rendering index.html: {str(e)}", exc_info=True)
-        # Fallback to basic response if template rendering fails
+        # Fallback to basic response with minimal consistent context
         access_token = request.cookies.get('access_token')
         is_authenticated = access_token is not None and access_token != ''
         return templates.TemplateResponse(
@@ -371,7 +380,13 @@ async def root(
                 "login_url": settings.LOGIN_URL,
                 "cars": [],
                 "locations": [],
-                "is_authenticated": is_authenticated
+                "is_authenticated": is_authenticated,
+                "is_admin": False,
+                "featured_cars": [],
+                "reviews": [],
+                "offers": [],
+                "top_selling_cars": [],
+                "premium_cars": []
             }
         )
 

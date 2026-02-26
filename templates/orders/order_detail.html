@@ -12,9 +12,9 @@
     <style>
         /* Main Container */
         .main-container {
-            max-width: 1100px;
+            max-width: 1440px;
             margin: 110px auto 60px;
-            padding: 0 20px;
+            padding: 0 40px;
         }
 
         .back-link {
@@ -161,7 +161,7 @@
 
         .info-value.amount {
             font-size: 18px;
-            color: #ff6b35;
+            color: #2b3990;
             font-weight: 800;
         }
 
@@ -432,7 +432,7 @@
             {% if existing_review %}
             <div style="padding: 20px; background: #f8fafc; border-radius: 8px; margin-bottom: 16px;">
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                    <div style="font-size: 24px; color: #ff6b35;">
+                    <div style="font-size: 24px; color: #2b3990;">
                         {% for i in range(existing_review.rating) %}★{% endfor %}
                         {% for i in range(5 - existing_review.rating) %}☆{% endfor %}
                     </div>
@@ -448,7 +448,7 @@
                     <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #1a202c;">Rating</label>
                     <div class="star-rating" style="display: flex; gap: 8px; margin-bottom: 16px;">
                         {% for i in range(1, 6) %}
-                        <span class="star-input" data-rating="{{ i }}" onclick="selectRating({{ i }})"
+                        <span class="star-input" data-rating="{{ i }}" onclick="selectRating('{{ i }}')"
                             style="font-size: 32px; color: #cbd5e0; cursor: pointer; transition: color 0.2s;">★</span>
                         {% endfor %}
                     </div>
@@ -463,7 +463,8 @@
                         placeholder="Share your experience with this car..."></textarea>
                 </div>
                 <button type="submit"
-                    style="background: #ff6b35; color: #ffffff; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.3s;">
+                    style="background: #061a40; color: #ffffff; padding: 12px 35px; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: all 0.3s; text-transform: uppercase;"
+                    onmouseover="this.style.background='#2b3990'" onmouseout="this.style.background='#061a40'">
                     Submit Review
                 </button>
             </form>
@@ -482,7 +483,7 @@
             const stars = document.querySelectorAll('.star-input');
             stars.forEach((star, index) => {
                 if (index < rating) {
-                    star.style.color = '#ff6b35';
+                    star.style.color = '#2b3990';
                 } else {
                     star.style.color = '#cbd5e0';
                 }
@@ -508,22 +509,22 @@
                     },
                     credentials: 'include',
                     body: JSON.stringify({
-                        order_id: {{ order.id }},
-                    rating: parseInt(rating),
-                    review_text: reviewText || null
+                        order_id: "{{ order.id }}",
+                        rating: parseInt(rating),
+                        review_text: reviewText || null
                     })
-        });
+                });
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail || 'Failed to submit review');
-        }
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to submit review');
+                }
 
-        alert('Review submitted successfully! Thank you for your feedback.');
-        window.location.reload();
+                alert('Review submitted successfully! Thank you for your feedback.');
+                window.location.reload();
             } catch (error) {
-            alert('Error submitting review: ' + error.message);
-        }
+                alert('Error submitting review: ' + error.message);
+            }
         }
     </script>
     {% include '_footer.html' %}

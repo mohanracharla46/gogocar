@@ -106,15 +106,51 @@
     <div style="padding: 20px; max-height: 500px; overflow-y: auto;">
         {% if ticket.messages %}
         {% for message in ticket.messages %}
-        <div
-            style="display: flex; {% if message.is_admin %}justify-content: flex-end{% else %}justify-content: flex-start{% endif %}; margin-bottom: 16px;">
-            <div
-                style="max-width: 70%; background: {% if message.is_admin %}#eff6ff{% else %}#f9fafb{% endif %}; 
-                            padding: 16px; border-radius: 12px; 
-                            border-left: {% if message.is_admin %}none; border-right: 4px solid #3b82f6{% else %}4px solid #ff6b35; border-right: none{% endif %};">
+        <style>
+            .message-container {
+                display: flex;
+                margin-bottom: 16px;
+            }
+
+            .message-admin {
+                justify-content: flex-end;
+            }
+
+            .message-user {
+                justify-content: flex-start;
+            }
+
+            .message-bubble {
+                max-width: 70%;
+                padding: 16px;
+                border-radius: 12px;
+            }
+
+            .message-bubble-admin {
+                background: #eff6ff;
+                border-right: 4px solid #2b3990;
+            }
+
+            .message-bubble-user {
+                background: #f9fafb;
+                border-left: 4px solid #ff6b35;
+            }
+
+            .message-sender-admin {
+                color: #1e40af;
+            }
+
+            .message-sender-user {
+                color: #ff6b35;
+            }
+        </style>
+        {% if ticket.messages %}
+        {% for message in ticket.messages %}
+        <div class="message-container {{ 'message-admin' if message.is_admin else 'message-user' }}">
+            <div class="message-bubble {{ 'message-bubble-admin' if message.is_admin else 'message-bubble-user' }}">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <div
-                        style="font-weight: 600; color: {% if message.is_admin %}#1e40af{% else %}#ff6b35{% endif %}; font-size: 14px;">
+                    <div class="message-sender-{{ 'admin' if message.is_admin else 'user' }}"
+                        style="font-weight: 600; font-size: 14px;">
                         {% if message.is_admin %}
                         {% if message.sender %}
                         {{ message.sender.firstname }} {{ message.sender.lastname }} (Admin)
@@ -137,7 +173,7 @@
                 {% if message.attachment_url %}
                 <div style="margin-top: 12px;">
                     <a href="{{ message.attachment_url }}" target="_blank"
-                        style="color: #3b82f6; text-decoration: none; font-size: 14px;">
+                        style="color: #2b3990; text-decoration: none; font-size: 14px;">
                         <i class="fas fa-image"></i> View Attachment
                     </a>
                 </div>

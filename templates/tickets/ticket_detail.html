@@ -109,6 +109,16 @@
             border: 1px solid #e2e8f0;
         }
 
+        .priority-high,
+        .priority-urgent {
+            color: #dc2626 !important;
+        }
+
+        .priority-medium,
+        .priority-low {
+            color: #1e293b !important;
+        }
+
         /* Meta Info */
         .info-grid {
             display: grid;
@@ -233,19 +243,21 @@
         }
 
         .submit-btn {
-            background: #ff6b35;
+            background: #061a40;
             color: white;
-            padding: 14px 30px;
-            border-radius: 12px;
+            padding: 14px 40px;
+            border-radius: 50px;
             border: none;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-transform: uppercase;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.2);
+            background: #2b3990;
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
         }
 
         @media (max-width: 768px) {
@@ -292,8 +304,7 @@
                 <h3 class="info-card-title">General Info</h3>
                 <div class="info-row">
                     <span class="info-label">Priority</span>
-                    <span class="info-value"
-                        style="color: {% if ticket.priority.value == 'HIGH' %}#dc2626{% else %}#1e293b{% endif %};">
+                    <span class="info-value priority-{{ ticket.priority.value|lower }}">
                         {{ ticket.priority }}
                     </span>
                 </div>
@@ -418,55 +429,54 @@
     <script>
         async function submitReply(event) {
             event.preventDefault();
-            const ticketId = {{ ticket.id }
-        };
-        const message = document.getElementById('replyMessage').value;
-        const fileInput = document.getElementById('replyFile');
-        const file = fileInput.files[0];
+            const ticketId = "{{ ticket.id }}";
+            const message = document.getElementById('replyMessage').value;
+            const fileInput = document.getElementById('replyFile');
+            const file = fileInput.files[0];
 
-        if (!message.trim()) {
-            alert('Please enter a message');
-            return;
-        }
-
-        // Check file size if file is selected
-        if (file) {
-            const maxSize = 5 * 1024 * 1024; // 5MB
-            if (file.size > maxSize) {
-                alert('File size exceeds 5MB limit');
+            if (!message.trim()) {
+                alert('Please enter a message');
                 return;
             }
-        }
 
-        try {
-            const formData = new FormData();
-            formData.append('message', message);
+            // Check file size if file is selected
             if (file) {
-                formData.append('file', file);
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                if (file.size > maxSize) {
+                    alert('File size exceeds 5MB limit');
+                    return;
+                }
             }
 
-            const response = await fetch(`/tickets/${ticketId}/reply`, {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
+            try {
+                const formData = new FormData();
+                formData.append('message', message);
+                if (file) {
+                    formData.append('file', file);
+                }
 
-            if (!response.ok) {
-                const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-                throw new Error(error.detail || 'Failed to send reply');
+                const response = await fetch(`/tickets/${ticketId}/reply`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+                    throw new Error(error.detail || 'Failed to send reply');
+                }
+
+                const result = await response.json();
+                alert('Reply sent successfully!');
+                document.getElementById('replyForm').reset();
+
+                // Reload page to show new message
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } catch (error) {
+                alert('Error sending reply: ' + (error.message || 'Unknown error'));
             }
-
-            const result = await response.json();
-            alert('Reply sent successfully!');
-            document.getElementById('replyForm').reset();
-
-            // Reload page to show new message
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-        } catch (error) {
-            alert('Error sending reply: ' + (error.message || 'Unknown error'));
-        }
         }
     </script>
     {% include '_footer.html' %}
