@@ -1771,12 +1771,12 @@
         .faq-item {
             background: #ffffff;
             padding: 20px 30px;
-            border-radius: 50px;
+            border-radius: 24px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
-            display: flex;
-            align-items: center;
+            display: block;
+            border: 1px solid rgba(43, 57, 144, 0.05);
         }
 
         .faq-item:hover {
@@ -1784,11 +1784,47 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
+        .faq-question-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
         .faq-question {
             font-size: 15px;
             font-weight: 700;
             color: #2b3990;
             text-transform: uppercase;
+        }
+
+        .faq-icon {
+            color: #2b3990;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .faq-item.active {
+            border-radius: 20px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+            margin-top: 15px;
+            transition: all 0.3s cubic-bezier(1, 0, 1, 0);
         }
 
 
@@ -2529,29 +2565,85 @@
         <div class="faq-container">
             <h2 class="faq-title">FAQs</h2>
             <div class="faq-grid">
-                <div class="faq-item">
-                    <span class="faq-question">Q. WHAT IS GOGO CARS?</span>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question-container">
+                        <span class="faq-question">Q. WHAT IS GOGO CARS?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        GoGo Cars is a premium self-drive car rental service providing a wide range of well-maintained
+                        vehicles for personal and travel use, offering flexibility and convenience to our customers.
+                    </div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">Q. HOW CAN I BOOK A SELF-DRIVE CAR WITH GOGO CARS?</span>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question-container">
+                        <span class="faq-question">Q. HOW CAN I BOOK A SELF-DRIVE CAR WITH GOGO CARS?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        You can book through our website by selecting your preferred car, choosing the dates and
+                        location, and completing the payment process. It's quick, easy, and secure.
+                    </div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">Q. WHAT DOCUMENTS ARE REQUIRED TO RENT A CAR?</span>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question-container">
+                        <span class="faq-question">Q. WHAT DOCUMENTS ARE REQUIRED TO RENT A CAR?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        You will need a valid Driving License and an Aadhaar Card for verification. These documents can
+                        be uploaded through your profile during the booking process.
+                    </div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">Q. WHAT IS THE MINIMUM AGE REQUIRED TO RENT A CAR?</span>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question-container">
+                        <span class="faq-question">Q. WHAT IS THE MINIMUM AGE REQUIRED TO RENT A CAR?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        The minimum age for renting a self-drive car with GoGo Cars is 21 years. Ensure you have your
+                        identification ready for verification.
+                    </div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">Q. IS THERE A SECURITY DEPOSIT?</span>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question-container">
+                        <span class="faq-question">Q. IS THERE A SECURITY DEPOSIT?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, a security deposit is required for each booking. This can be in the form of a physical item
+                        (like a bike + RC) or a cash deposit, which is refunded upon safe return of the vehicle.
+                    </div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">Q. ARE FUEL CHARGES INCLUDED IN THE RENTAL COST?</span>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question-container">
+                        <span class="faq-question">Q. ARE FUEL CHARGES INCLUDED IN THE RENTAL COST?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        Fuel charges are generally not included in the rental cost. We provide the car with a certain
+                        fuel level, and we expect it to be returned with the same amount.
+                    </div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">Q. CAN I EXTEND MY BOOKING DURATION?</span>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question-container">
+                        <span class="faq-question">Q. CAN I EXTEND MY BOOKING DURATION?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, you can request a booking extension through the app or by contacting our support team,
+                        provided the car is available for the requested additional period.
+                    </div>
                 </div>
-                <div class="faq-item">
-                    <span class="faq-question">Q. WHAT HAPPENS IF I RETURN THE CAR LATE?</span>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question-container">
+                        <span class="faq-question">Q. WHAT HAPPENS IF I RETURN THE CAR LATE?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        Late returns may attract additional charges as per our policy. We recommend informing us in
+                        advance if you anticipate any delays.
+                    </div>
                 </div>
             </div>
         </div>
@@ -3416,6 +3508,21 @@
             </div>
         </div>
     </div>
+    <script>
+        function toggleFaq(element) {
+            const isActive = element.classList.contains('active');
+
+            // Close all other FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Toggle clicked FAQ
+            if (!isActive) {
+                element.classList.add('active');
+            }
+        }
+    </script>
     {% include '_header_js.html' %}
 </body>
 
