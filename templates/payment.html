@@ -1161,9 +1161,15 @@
             font-size: 14px;
         }
 
+        /* ============================================================
+           TABLET  (≤ 991px)
+           ============================================================ */
         @media (max-width: 991px) {
             .payment-layout {
                 grid-template-columns: 1fr;
+                padding: 0 20px;
+                margin-top: 90px;
+                gap: 24px;
             }
 
             .payment-right {
@@ -1171,15 +1177,7 @@
             }
 
             .fare-card {
-                margin-top: 20px;
-            }
-
-            .pay-button {
-                width: 100%;
-            }
-
-            .progress-steps {
-                gap: 0;
+                margin-top: 0;
             }
 
             .car-details-section {
@@ -1201,15 +1199,17 @@
             }
 
             .protection-grid {
-                flex-direction: column;
+                flex-direction: row;
+                flex-wrap: wrap;
             }
 
             .damage-protection-btn {
                 min-width: unset;
+                flex: 1 1 calc(33% - 8px);
             }
 
             .kyc-documents {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
 
             .payment-section {
@@ -1226,7 +1226,7 @@
             }
 
             .step-connector {
-                width: 30px;
+                width: 40px;
             }
 
             .progress-step span:not(.step-number) {
@@ -1234,8 +1234,177 @@
             }
         }
 
-        @media (max-width: 480px) {
+        /* ============================================================
+           MOBILE  (≤ 768px)
+           ============================================================ */
+        @media (max-width: 768px) {
+
+            /* Layout */
+            .payment-layout {
+                padding: 0 12px;
+                margin-top: 76px;
+                gap: 16px;
+            }
+
+            /* Left card */
+            .payment-left {
+                padding: 20px 16px;
+                border-radius: 20px;
+            }
+
+            /* Page title */
+            .page-title {
+                font-size: 26px;
+                letter-spacing: -0.5px;
+                margin-bottom: 24px;
+            }
+
+            /* Section title */
+            .section-title {
+                font-size: 16px;
+                gap: 10px;
+            }
+
+            /* Booking hero card (inline-styled) */
+            .booking-hero-card {
+                padding: 16px !important;
+            }
+
+            .booking-hero-card>div {
+                flex-direction: column !important;
+                gap: 16px !important;
+                align-items: flex-start !important;
+            }
+
+            .booking-hero-card>div>div:first-child {
+                width: 100% !important;
+                height: 160px !important;
+            }
+
+            .booking-hero-card h2 {
+                font-size: 20px !important;
+            }
+
+            .booking-hero-card>div>div:last-child>div[style*="display: flex; gap: 15px"] {
+                flex-wrap: wrap !important;
+                gap: 8px !important;
+            }
+
+            .booking-hero-card>div>div:last-child>div[style*="display: flex; gap: 40px"] {
+                gap: 20px !important;
+            }
+
+            /* Deposit grid */
             .deposit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Protection grid */
+            .protection-grid {
+                flex-direction: column;
+            }
+
+            .damage-protection-btn {
+                flex: unset;
+                min-width: unset;
+                width: 100%;
+            }
+
+            /* KYC documents */
+            .kyc-documents {
+                grid-template-columns: 1fr;
+            }
+
+            /* Fare card */
+            .fare-card {
+                padding: 20px 16px;
+                border-radius: 20px;
+            }
+
+            .fare-card-title {
+                font-size: 18px;
+                margin-bottom: 20px;
+                padding-bottom: 16px;
+                gap: 10px;
+            }
+
+            .pricing-total-amount {
+                font-size: 26px;
+            }
+
+            /* Payment section */
+            .payment-section {
+                padding: 18px 16px;
+                gap: 14px;
+            }
+
+            /* Pay button */
+            .pay-button {
+                height: 54px;
+                font-size: 16px;
+            }
+
+            /* Coupon */
+            .coupon-input-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .coupon-apply-btn {
+                width: 100%;
+                padding: 12px;
+            }
+
+            /* Terms body */
+            .terms-body {
+                padding: 16px;
+                font-size: 13px;
+            }
+
+            /* Booking details stats row */
+            .booking-details-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            /* Progress steps */
+            .progress-steps {
+                margin-bottom: 20px;
+            }
+
+            .step-connector {
+                width: 24px;
+            }
+
+            /* Footer */
+            .footer-container {
+                grid-template-columns: 1fr;
+                padding: 0 16px;
+                gap: 24px;
+            }
+        }
+
+        /* ============================================================
+           SMALL MOBILE  (≤ 480px)
+           ============================================================ */
+        @media (max-width: 480px) {
+            .payment-layout {
+                padding: 0 8px;
+                margin-top: 70px;
+            }
+
+            .payment-left {
+                padding: 16px 12px;
+            }
+
+            .page-title {
+                font-size: 22px;
+            }
+
+            .deposit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-details-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -1246,6 +1415,19 @@
             .logo-img {
                 width: 150px;
                 height: 45px;
+            }
+
+            .pricing-total-amount {
+                font-size: 22px;
+            }
+
+            .pay-button {
+                height: 50px;
+                font-size: 15px;
+            }
+
+            .fare-card {
+                padding: 16px 12px;
             }
         }
     </style>
