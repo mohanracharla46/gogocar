@@ -7,32 +7,68 @@
     <title>Order #{{ order.id }} - GoGo Self Drive Cars</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.0/css/all.css">
     {% include '_header_css.html' %}
     {% include '_footer_css.html' %}
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #061a40;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(32, 76, 79, 0.1) 0%, transparent 40%),
+                linear-gradient(135deg, #061a3d 0%, #0c2a5c 40%, #1e4d4e 100%);
+            z-index: -2;
+        }
+
         /* Main Container */
         .main-container {
             max-width: 1440px;
             margin: 110px auto 60px;
             padding: 0 40px;
+            position: relative;
+            z-index: 1;
         }
 
         .back-link {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            color: #64748b;
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             font-weight: 700;
             margin-bottom: 30px;
             font-size: 14px;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .back-link:hover {
-            color: #2b3990;
+            color: #ffffff;
             transform: translateX(-5px);
         }
 
@@ -41,9 +77,9 @@
             background: #ffffff;
             border-radius: 25px;
             padding: 30px 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             margin-bottom: 30px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .order-header-top {
@@ -56,16 +92,17 @@
             font-size: 32px;
             font-weight: 800;
             color: #2b3990;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
         }
 
         .status-badge {
-            padding: 8px 18px;
+            padding: 10px 24px;
             border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         /* Status Colors to match bookings list */
@@ -110,19 +147,24 @@
         .info-card {
             background: #ffffff;
             border-radius: 25px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f1f5f9;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: 100%;
         }
 
         .info-card-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
             color: #1e293b;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        .info-card-title svg {
+            color: #2b3990;
         }
 
         .info-card-title::after {
@@ -136,8 +178,8 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 15px 0;
-            border-bottom: 1px solid #f8fafc;
+            padding: 18px 0;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .info-row:last-child {
@@ -145,22 +187,22 @@
         }
 
         .info-label {
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: 800;
             color: #94a3b8;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .info-value {
-            font-size: 15px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700;
             color: #1e293b;
             text-align: right;
         }
 
         .info-value.amount {
-            font-size: 18px;
+            font-size: 20px;
             color: #2b3990;
             font-weight: 800;
         }
@@ -171,22 +213,28 @@
             gap: 25px;
             align-items: center;
             background: #f8fafc;
-            padding: 20px;
+            padding: 25px;
             border-radius: 20px;
+            border: 1px solid #f1f5f9;
         }
 
         .car-image-detail {
-            width: 140px;
-            height: 90px;
+            width: 160px;
+            height: 100px;
             object-fit: contain;
-            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.08));
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.12));
+            transition: transform 0.3s ease;
+        }
+
+        .car-info-display:hover .car-image-detail {
+            transform: scale(1.05);
         }
 
         .car-text h3 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
             color: #1e293b;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .specs-pills {
@@ -196,62 +244,66 @@
 
         .spec-pill {
             background: white;
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 8px;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 800;
             color: #64748b;
-            border: 1px solid #f1f5f9;
+            border: 1px solid #e2e8f0;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* Review Section */
-        .star-rating {
-            display: flex;
-            gap: 10px;
-        }
-
-        .star-input {
-            font-size: 36px !important;
-        }
-
         .submit-btn {
-            background: #2b3990;
+            background: #061a40;
             color: white;
-            padding: 14px 30px;
-            border-radius: 15px;
+            padding: 16px 35px;
+            border-radius: 50px;
             border: none;
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: 800;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(43, 57, 144, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(6, 26, 64, 0.2);
         }
 
         .submit-btn:hover {
-            background: #1e293b;
+            background: #2b3990;
             transform: translateY(-2px);
-            box-shadow: 0 15px 25px rgba(43, 57, 144, 0.2);
+            box-shadow: 0 15px 30px rgba(43, 57, 144, 0.3);
         }
 
         @media (max-width: 768px) {
             .order-header-card {
-                padding: 20px;
+                padding: 25px 30px;
             }
 
             .order-header-top {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
+                gap: 20px;
             }
 
             .order-title {
-                font-size: 24px;
+                font-size: 28px;
             }
 
             .car-info-display {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
+                text-align: center;
+            }
+
+            .main-container {
+                padding: 0 20px;
+                margin-top: 100px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>

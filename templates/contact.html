@@ -8,47 +8,96 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.0/css/all.css">
     {% include '_header_css.html' %}
     {% include '_footer_css.html' %}
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #061a40;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(32, 76, 79, 0.1) 0%, transparent 40%),
+                linear-gradient(135deg, #061a3d 0%, #0c2a5c 40%, #1e4d4e 100%);
+            z-index: -2;
+        }
+
         .contact-container {
-            max-width: 1200px;
-            margin: 100px auto 60px;
+            max-width: 1440px;
+            margin: 110px auto 60px;
             padding: 0 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 80px;
         }
 
         .contact-title {
-            font-size: 42px;
+            font-size: 48px;
             font-weight: 800;
             color: #ffffff;
-            text-align: center;
-            margin-bottom: 60px;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
         }
 
         .location-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 40px;
-            margin-bottom: 80px;
+            margin-bottom: 100px;
         }
 
         .location-card-wrapper {
+            background: #ffffff;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
         }
 
         .location-card-wrapper:hover {
-            transform: translateY(-10px);
+            transform: translateY(-12px);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
         }
 
         .location-card-white {
-            background: #ffffff;
-            padding: 40px;
+            padding: 50px 40px;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -57,157 +106,232 @@
         }
 
         .location-card-title {
-            color: #2b3990;
-            font-size: 24px;
+            color: #061a40;
+            font-size: 28px;
             font-weight: 800;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .location-icon {
-            width: 60px;
-            height: 60px;
-            background: #f0f7ff;
-            border-radius: 50%;
+        .location-icon-box {
+            width: 80px;
+            height: 80px;
+            background: #f0f3ff;
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
         }
 
-        .location-icon svg {
-            width: 30px;
-            height: 30px;
+        .location-card-wrapper:hover .location-icon-box {
+            transform: scale(1.1) rotate(5deg);
+            background: #2b3990;
+        }
+
+        .location-icon-box svg {
+            width: 36px;
+            height: 36px;
             fill: #2b3990;
+            transition: all 0.3s ease;
+        }
+
+        .location-card-wrapper:hover .location-icon-box svg {
+            fill: #ffffff;
         }
 
         .location-address {
             color: #64748b;
-            font-size: 16px;
-            line-height: 1.6;
-            font-weight: 500;
+            font-size: 17px;
+            line-height: 1.7;
+            font-weight: 600;
+            max-width: 300px;
         }
 
         .location-card-blue {
-            background: #2b3990;
-            padding: 25px;
+            background: #061a40;
+            padding: 30px;
             display: flex;
             flex-direction: column;
             gap: 15px;
             align-items: center;
+            transition: background 0.3s;
+        }
+
+        .location-card-wrapper:hover .location-card-blue {
+            background: #2b3990;
         }
 
         .location-phone {
             color: #ffffff;
             text-decoration: none;
-            font-size: 20px;
-            font-weight: 700;
-            transition: opacity 0.3s;
+            font-size: 22px;
+            font-weight: 800;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .location-phone i {
+            font-size: 18px;
+            opacity: 0.7;
         }
 
         .location-phone:hover {
-            opacity: 0.8;
+            transform: scale(1.05);
+            opacity: 1;
         }
 
         /* Newsletter Section */
         .newsletter-section {
             background: #ffffff;
             border-radius: 40px;
-            padding: 60px;
+            padding: 70px;
             display: flex;
             align-items: center;
-            gap: 60px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+            gap: 80px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(43, 57, 144, 0.03));
+            pointer-events: none;
         }
 
         .newsletter-illustration {
             flex: 1;
-            max-width: 400px;
+            max-width: 450px;
         }
 
         .newsletter-content {
             flex: 1.5;
+            position: relative;
+            z-index: 1;
         }
 
         .newsletter-title {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
-            color: #1a202c;
-            margin-bottom: 10px;
+            color: #061a40;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
         }
 
         .newsletter-subtitle {
             font-size: 24px;
             font-weight: 700;
             color: #2b3990;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
         }
 
         .newsletter-form {
             position: relative;
             display: flex;
             gap: 15px;
-            max-width: 500px;
+            max-width: 550px;
+        }
+
+        .newsletter-input-group {
+            position: relative;
+            flex: 1;
         }
 
         .newsletter-input {
-            flex: 1;
-            background: #f8fafc;
+            width: 100%;
+            background: #f1f5f9;
             border: 2px solid #e2e8f0;
-            padding: 18px 25px 18px 55px;
-            border-radius: 18px;
+            padding: 20px 25px 20px 60px;
+            border-radius: 20px;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #1e293b;
         }
 
         .newsletter-input:focus {
             border-color: #2b3990;
+            background: #ffffff;
+            box-shadow: 0 0 0 5px rgba(43, 57, 144, 0.08);
         }
 
         .email-icon {
             position: absolute;
-            left: 20px;
+            left: 22px;
             top: 50%;
             transform: translateY(-50%);
             width: 24px;
             height: 24px;
             fill: #94a3b8;
+            transition: all 0.3s;
+        }
+
+        .newsletter-input:focus~.email-icon {
+            fill: #2b3990;
         }
 
         .newsletter-btn {
             background: #061a40;
             color: #ffffff;
-            padding: 0 40px;
+            padding: 0 45px;
             border-radius: 50px;
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: 800;
+            font-size: 15px;
             cursor: pointer;
             border: none;
             transition: all 0.3s;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(6, 26, 64, 0.2);
         }
 
         .newsletter-btn:hover {
             background: #2b3990;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(43, 57, 144, 0.3);
         }
 
-
-
-        @media (max-width: 768px) {
-            .contact-title {
-                font-size: 32px;
+        @media (max-width: 1200px) {
+            .newsletter-section {
+                padding: 50px;
+                gap: 40px;
             }
+        }
 
+        @media (max-width: 992px) {
             .newsletter-section {
                 flex-direction: column;
-                padding: 40px;
+                text-align: center;
+            }
+
+            .newsletter-form {
+                margin: 0 auto;
             }
 
             .newsletter-illustration {
-                display: none;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .contact-title {
+                font-size: 36px;
+            }
+
+            .contact-container {
+                padding: 0 20px;
             }
 
             .newsletter-form {
@@ -215,7 +339,7 @@
             }
 
             .newsletter-btn {
-                padding: 18px;
+                padding: 20px;
             }
         }
     </style>
@@ -225,14 +349,17 @@
     {% include '_header.html' %}
 
     <div class="contact-container">
-        <h1 class="contact-title">We are Available 24x7</h1>
+        <div class="contact-header">
+            <h1 class="contact-title">We are Available 24x7</h1>
+            <p class="contact-subtitle">Get in touch with us for any queries or support</p>
+        </div>
 
         <div class="location-cards">
             <!-- Hyderabad Card -->
             <div class="location-card-wrapper">
                 <div class="location-card-white">
                     <h2 class="location-card-title">HYDERABAD</h2>
-                    <div class="location-icon">
+                    <div class="location-icon-box">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -245,8 +372,8 @@
                     </div>
                 </div>
                 <div class="location-card-blue">
-                    <a href="tel:9052775477" class="location-phone">9052775477</a>
-                    <a href="tel:8121765714" class="location-phone">8121765714</a>
+                    <a href="tel:9052775477" class="location-phone"><i class="fas fa-phone"></i> 9052775477</a>
+                    <a href="tel:8121765714" class="location-phone"><i class="fas fa-phone"></i> 8121765714</a>
                 </div>
             </div>
 
@@ -254,7 +381,7 @@
             <div class="location-card-wrapper">
                 <div class="location-card-white">
                     <h2 class="location-card-title">CHILAKALURIPET</h2>
-                    <div class="location-icon">
+                    <div class="location-icon-box">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -267,7 +394,7 @@
                     </div>
                 </div>
                 <div class="location-card-blue">
-                    <a href="tel:9133135477" class="location-phone">9133135477</a>
+                    <a href="tel:9133135477" class="location-phone"><i class="fas fa-phone"></i> 9133135477</a>
                 </div>
             </div>
         </div>
@@ -305,16 +432,16 @@
                 </svg>
             </div>
             <div class="newsletter-content">
-                <div class="newsletter-title">Would you like to receive</div>
-                <div class="newsletter-subtitle">special offers by your email?</div>
+                <div class="newsletter-title">Stay in the loop</div>
+                <div class="newsletter-subtitle">Get special offers directly in your inbox</div>
                 <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
-                    <div class="email-icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <div class="newsletter-input-group">
+                        <svg class="email-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                         </svg>
+                        <input type="email" class="newsletter-input" placeholder="Enter Your Email" required>
                     </div>
-                    <input type="email" class="newsletter-input" placeholder="Enter Your Mail" required>
                     <button type="submit" class="newsletter-btn">Subscribe</button>
                 </form>
             </div>
