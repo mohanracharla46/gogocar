@@ -70,6 +70,7 @@
     </style>
     {% include '_header_css.html' %}
     {% include '_footer_css.html' %}
+    {% include '_flatpickr_assets.html' %}
     <style>
         /* Hero Section Redesign */
         .hero {
@@ -2227,22 +2228,20 @@
                             </div>
 
                             <div class="date-grid" style="box-sizing: border-box;">
-                                <div class="input-group" id="pickupGroup" style="overflow: hidden;"
-                                    onclick="this.querySelector('input').showPicker()">
+                                <div class="input-group" id="pickupGroup" style="overflow: hidden;">
                                     <label class="input-label">Pick-Up Date</label>
                                     <div class="input-display" id="pickupDisplay">Select Date & Time</div>
-                                    <input type="datetime-local" class="input-value" id="pickupInput"
-                                        name="pickup_datetime" step="3600">
+                                    <input type="text" id="pickupInput" name="pickup_datetime"
+                                        style="position: absolute; opacity: 0; width: 1px; height: 1px; left: 50%; bottom: 0; pointer-events: none;">
                                     <div class="error-message" id="pickupError"
                                         style="position: absolute; bottom: 5px; right: 20px; font-size: 10px;">Required
                                     </div>
                                 </div>
-                                <div class="input-group" id="returnGroup" style="overflow: hidden;"
-                                    onclick="this.querySelector('input').showPicker()">
+                                <div class="input-group" id="returnGroup" style="overflow: hidden; position: relative;">
                                     <label class="input-label">Return Date</label>
                                     <div class="input-display" id="returnDisplay">Select Date & Time</div>
-                                    <input type="datetime-local" class="input-value" id="returnInput"
-                                        name="end_datetime" step="3600">
+                                    <input type="text" id="returnInput" name="end_datetime"
+                                        style="position: absolute; opacity: 0; width: 1px; height: 1px; left: 50%; bottom: 0; pointer-events: none;">
                                     <div class="error-message" id="returnError"
                                         style="position: absolute; bottom: 5px; right: 20px; font-size: 10px;">Required
                                     </div>
@@ -2698,24 +2697,50 @@
             const rentalsTab = document.getElementById('rentalsTab');
             const subscriptionTab = document.getElementById('subscriptionTab');
 
-            function formatForInput(date) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                const hours = String(date.getHours()).padStart(2, '0');
-                return `${year}-${month}-${day}T${hours}:00`;
-            }
+            // Initialize Flatpickr
+            const fpOptions = {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                altFormat: "M j, Y  h:i K",
+                minDate: "today",
+                minuteIncrement: 30,
+                position: "auto",
+                onClose: function () {
+                    updateDisplays();
+                    calculateDuration();
+                }
+            };
 
-            // Default dates: Today and Tomorrow (same time, rounded to next hour)
-            if (pickupInput && !pickupInput.value) {
-                const now = new Date();
-                now.setHours(now.getHours() + 1, 0, 0, 0);
-                pickupInput.value = formatForInput(now);
+            const startPicker = flatpickr(pickupInput, {
+                ...fpOptions,
+                defaultDate: new Date(new Date().setHours(new Date().getHours() + 1, 0, 0, 0)),
+                onChange: function (selectedDates, dateStr) {
+                    endPicker.set('minDate', dateStr);
+                    updateDisplays();
+                    calculateDuration();
+                }
+            });
 
-                const tomorrow = new Date(now);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                returnInput.value = formatForInput(tomorrow);
-            }
+            // Make the display groups clickable
+            const pickupGroup = document.getElementById('pickupGroup');
+            const returnGroup = document.getElementById('returnGroup');
+            if (pickupGroup) pickupGroup.onclick = (e) => {
+                e.stopPropagation();
+                startPicker.open();
+            };
+            if (returnGroup) returnGroup.onclick = (e) => {
+                e.stopPropagation();
+                endPicker.open();
+            };
+
+            const endPicker = flatpickr(returnInput, {
+                ...fpOptions,
+                defaultDate: new Date(new Date().getTime() + 25 * 60 * 60 * 1000).setHours(new Date().getHours() + 1, 0, 0, 0),
+                onChange: function () {
+                    updateDisplays();
+                    calculateDuration();
+                }
+            });
 
             function calculateDuration() {
                 if (!pickupInput || !returnInput || !durationDisplay) return;
@@ -2745,17 +2770,20 @@
 
             function formatDateTimeDisplay(isoString) {
                 if (!isoString) return "Select Date & Time";
-                const date = new Date(isoString);
+                // Flatpickr might give space instead of T
+                const date = new Date(isoString.replace(' ', 'T'));
                 if (isNaN(date.getTime())) return "Select Date & Time";
 
                 const options = { month: 'short', day: 'numeric', year: 'numeric' };
                 const dateStr = date.toLocaleDateString('en-US', options);
 
                 let hours = date.getHours();
+                let minutes = date.getMinutes();
                 const ampm = hours >= 12 ? 'PM' : 'AM';
                 hours = hours % 12;
                 hours = hours ? hours : 12;
-                const timeStr = `${hours} ${ampm}`;
+                const minStr = minutes === 0 ? '' : `:${minutes.toString().padStart(2, '0')}`;
+                const timeStr = `${hours}${minStr} ${ampm}`;
 
                 return `<span class="display-date">${dateStr}</span> <span class="display-time">${timeStr}</span>`;
             }
@@ -2765,20 +2793,11 @@
                 if (returnInput && returnDisplay) returnDisplay.innerHTML = formatDateTimeDisplay(returnInput.value);
             }
 
-            if (pickupInput && returnInput) {
-                pickupInput.addEventListener('input', () => {
-                    updateDisplays();
-                    calculateDuration();
-                });
-                returnInput.addEventListener('input', () => {
-                    updateDisplays();
-                    calculateDuration();
-                });
-
-                // Initial update
+            // Trigger initial update from flatpickr values
+            setTimeout(() => {
                 updateDisplays();
                 calculateDuration();
-            }
+            }, 100);
 
             // Tab switching
             if (rentalsTab && subscriptionTab) {

@@ -86,7 +86,8 @@
 
             <div class="form-group">
                 <label for="expirationTime">Expiration Date & Time *</label>
-                <input type="datetime-local" id="expirationTime" name="expiration_time" class="form-control" required>
+                <input type="text" id="expirationTime" name="expiration_time" class="form-control" required
+                    placeholder="Select date and time">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -158,6 +159,17 @@
     let currentPage = 1;
     let currentSearch = '';
     let currentStatus = '';
+    let expPicker;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        expPicker = flatpickr("#expirationTime", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            altFormat: "M j, Y  H:i K",
+            minDate: "today",
+            minuteIncrement: 30
+        });
+    });
 
     async function loadOffers(resetPage = false) {
         if (resetPage) currentPage = 1;
@@ -307,10 +319,10 @@
             document.getElementById('discount').value = offer.discount;
             document.getElementById('discountType').value = offer.discount_type;
 
-            // Format datetime for input
-            const expDate = new Date(offer.expiration_time);
-            const expDateStr = expDate.toISOString().slice(0, 16);
-            document.getElementById('expirationTime').value = expDateStr;
+            // Set date for flatpickr
+            if (offer.expiration_time) {
+                expPicker.setDate(new Date(offer.expiration_time));
+            }
 
             document.getElementById('usageLimit').value = offer.usage_limit || '';
             document.getElementById('minAmount').value = offer.min_amount || '';

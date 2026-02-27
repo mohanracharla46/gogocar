@@ -25,21 +25,5 @@
                 });
             });
         }
-
-        // Globally enforce minutes to '00' on all datetime-local inputs
-        function snapToHour(input) {
-            if (input.value) {
-                const parts = input.value.split(':');
-                if (parts.length >= 2 && parts[1] !== '00') {
-                    input.value = parts[0] + ':00';
-                    input.dispatchEvent(new Event('input')); // Trigger update displays
-                }
-            }
-        }
-
-        document.querySelectorAll('input[type="datetime-local"]').forEach(input => {
-            input.addEventListener('input', function () { snapToHour(this); });
-            input.addEventListener('change', function () { snapToHour(this); });
-        });
     });
 </script>

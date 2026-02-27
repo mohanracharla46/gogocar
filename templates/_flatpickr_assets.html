@@ -1,0 +1,122 @@
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+
+<!-- Custom Premium Flatpickr Styling -->
+<style>
+    .flatpickr-calendar {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        font-family: 'Inter', sans-serif;
+        padding: 5px;
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange,
+    .flatpickr-day.selected.inRange,
+    .flatpickr-day.startRange.inRange,
+    .flatpickr-day.endRange.inRange,
+    .flatpickr-day.selected:focus,
+    .flatpickr-day.startRange:focus,
+    .flatpickr-day.endRange:focus,
+    .flatpickr-day.selected:hover,
+    .flatpickr-day.startRange:hover,
+    .flatpickr-day.endRange:hover,
+    .flatpickr-day.selected.prevMonthDay,
+    .flatpickr-day.startRange.prevMonthDay,
+    .flatpickr-day.endRange.prevMonthDay,
+    .flatpickr-day.selected.nextMonthDay,
+    .flatpickr-day.startRange.nextMonthDay,
+    .flatpickr-day.endRange.nextMonthDay {
+        background: #2b3990;
+        border-color: #2b3990;
+        color: #fff;
+    }
+
+    .flatpickr-day.today {
+        border-color: #2b3990;
+    }
+
+    .flatpickr-day.today:hover {
+        background: #f1f5f9;
+        color: #1e293b;
+    }
+
+    .flatpickr-months .flatpickr-month {
+        background: #2b3990;
+        color: #ffffff;
+        fill: #ffffff;
+    }
+
+    .flatpickr-current-month .flatpickr-monthDropdown-months {
+        color: #f1f5f9;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .flatpickr-weekdays {
+        background: #2b3990;
+        padding-bottom: 5px;
+    }
+
+    .flatpickr-current-month .numInputWrapper span.arrowUp:after {
+        border-bottom-color: #f1f5f9;
+    }
+
+    .flatpickr-current-month .numInputWrapper span.arrowDown:after {
+        border-top-color: #f1f5f9;
+    }
+
+    .flatpickr-current-month input.cur-year {
+        color: #f1f5f9;
+    }
+
+    .flatpickr-monthDropdown-month {
+        background: #ffffff;
+        color: #061a40;
+    }
+
+    span.flatpickr-weekday {
+        background: #2b3990;
+        color: #f1f5f9;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .flatpickr-time {
+        border-top: 1px solid #f1f5f9;
+        height: 45px;
+    }
+
+    .flatpickr-time .flatpickr-am-pm,
+    .flatpickr-time input {
+        color: #061a40;
+        font-weight: 700;
+    }
+
+    /* Make time picker display more elegantly */
+    .flatpickr-time input:hover,
+    .flatpickr-time .flatpickr-am-pm:hover,
+    .flatpickr-time input:focus,
+    .flatpickr-time .flatpickr-am-pm:focus {
+        background: #f8fafc;
+    }
+
+    /* Arrow styling */
+    .flatpickr-months .flatpickr-prev-month svg,
+    .flatpickr-months .flatpickr-next-month svg {
+        fill: #ffffff;
+    }
+
+    .flatpickr-months .flatpickr-prev-month:hover svg,
+    .flatpickr-months .flatpickr-next-month:hover svg {
+        fill: #f1f5f9;
+        transform: scale(1.1);
+    }
+</style>
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

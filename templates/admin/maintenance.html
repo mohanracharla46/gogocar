@@ -202,11 +202,11 @@
                 </div>
                 <div class="form-group">
                     <label for="maintenanceStart">Start Date *</label>
-                    <input type="datetime-local" id="maintenanceStart" required>
+                    <input type="text" id="maintenanceStart" required placeholder="Select start date">
                 </div>
                 <div class="form-group">
                     <label for="maintenanceEnd">End Date</label>
-                    <input type="datetime-local" id="maintenanceEnd">
+                    <input type="text" id="maintenanceEnd" placeholder="Select end date (optional)">
                 </div>
                 <div class="form-group" style="grid-column: span 2;">
                     <label for="maintenanceProvider">Service Provider</label>
@@ -287,6 +287,18 @@
     let maintenanceModalMode = 'create';
     let editingMaintenanceId = null;
     let editingDamageId = null;
+    let startPicker, endPicker;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const fpOptions = {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            altFormat: "M j, Y  H:i K",
+            minuteIncrement: 30
+        };
+        startPicker = flatpickr("#maintenanceStart", fpOptions);
+        endPicker = flatpickr("#maintenanceEnd", fpOptions);
+    });
 
     function formatCurrency(amount) {
         if (!amount && amount !== 0) return '—';
@@ -500,12 +512,12 @@
             document.getElementById('maintenanceTitle').value = log.title;
             document.getElementById('maintenanceCost').value = log.cost || '';
 
-            // Format dates for datetime-local input (YYYY-MM-DDTHH:mm)
+            // Set dates for flatpickr
             if (log.start_date) {
-                document.getElementById('maintenanceStart').value = new Date(log.start_date).toISOString().slice(0, 16);
+                startPicker.setDate(new Date(log.start_date));
             }
             if (log.end_date) {
-                document.getElementById('maintenanceEnd').value = new Date(log.end_date).toISOString().slice(0, 16);
+                endPicker.setDate(new Date(log.end_date));
             }
 
             document.getElementById('maintenanceProvider').value = log.service_provider || '';
@@ -538,8 +550,8 @@
             title: document.getElementById('maintenanceTitle').value,
             description: document.getElementById('maintenanceDescription').value || null,
             cost: document.getElementById('maintenanceCost').value ? parseFloat(document.getElementById('maintenanceCost').value) : null,
-            start_date: new Date(document.getElementById('maintenanceStart').value).toISOString(),
-            end_date: document.getElementById('maintenanceEnd').value ? new Date(document.getElementById('maintenanceEnd').value).toISOString() : null,
+            start_date: new Date(document.getElementById('maintenanceStart').value.replace(' ', 'T')).toISOString(),
+            end_date: document.getElementById('maintenanceEnd').value ? new Date(document.getElementById('maintenanceEnd').value.replace(' ', 'T')).toISOString() : null,
             service_provider: document.getElementById('maintenanceProvider').value || null
         };
 

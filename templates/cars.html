@@ -61,6 +61,7 @@
     </style>
     {% include '_header_css.html' %}
     {% include '_footer_css.html' %}
+    {% include '_flatpickr_assets.html' %}
     <style>
         /* Mobile adjustments */
 
@@ -698,28 +699,28 @@
                             style="font-size: 15px; font-weight: 700; color: #2b3990;">Hyderabad</span>
                     </div>
                 </div>
-                <div class="top-date-card" style="cursor: pointer; position: relative;"
-                    onclick="document.getElementById('top-pickup-datetime').showPicker()">
+                <div class="top-date-card" style="cursor: pointer; position: relative;">
                     <span class="top-date-label">Pick-Up Date</span>
-                    <div class="top-date-value" style="justify-content: space-between; gap: 10px;">
-                        <span id="pickup-date-display" style="font-size: 15px; font-weight: 700; color: #2b3990;">Select
+                    <div class="top-date-value" style="justify-content: space-between; gap: 10px; position: relative;">
+                        <span id="pickup-date-display"
+                            style="font-size: 15px; font-weight: 700; color: #2b3990; pointer-events: none;">Select
                             Date</span>
                         <span id="pickup-time-display"
-                            style="font-size: 13px; font-weight: 600; color: #64748b;">--:--</span>
-                        <input type="datetime-local" id="top-pickup-datetime" step="3600"
-                            style="position: absolute; opacity: 0; width: 100%; height: 100%; left: 0; top: 0; cursor: pointer;">
+                            style="font-size: 13px; font-weight: 600; color: #64748b; pointer-events: none;">--:--</span>
+                        <input type="text" id="top-pickup-datetime"
+                            style="position: absolute; opacity: 0; width: 1px; height: 1px; left: 50%; bottom: 0; pointer-events: none;">
                     </div>
                 </div>
-                <div class="top-date-card" style="cursor: pointer; position: relative;"
-                    onclick="document.getElementById('top-return-datetime').showPicker()">
+                <div class="top-date-card" style="cursor: pointer; position: relative;">
                     <span class="top-date-label">Return Date</span>
-                    <div class="top-date-value" style="justify-content: space-between; gap: 10px;">
-                        <span id="return-date-display" style="font-size: 15px; font-weight: 700; color: #2b3990;">Select
+                    <div class="top-date-value" style="justify-content: space-between; gap: 10px; position: relative;">
+                        <span id="return-date-display"
+                            style="font-size: 15px; font-weight: 700; color: #2b3990; pointer-events: none;">Select
                             Date</span>
                         <span id="return-time-display"
-                            style="font-size: 13px; font-weight: 600; color: #64748b;">--:--</span>
-                        <input type="datetime-local" id="top-return-datetime" step="3600"
-                            style="position: absolute; opacity: 0; width: 100%; height: 100%; left: 0; top: 0; cursor: pointer;">
+                            style="font-size: 13px; font-weight: 600; color: #64748b; pointer-events: none;">--:--</span>
+                        <input type="text" id="top-return-datetime"
+                            style="position: absolute; opacity: 0; width: 1px; height: 1px; left: 50%; bottom: 0; pointer-events: none;">
                     </div>
                 </div>
                 <div class="total-time-badge">
@@ -817,6 +818,9 @@
             const returnTimeDisplay = document.getElementById('return-time-display');
             const durationDisplay = document.getElementById('totalDuration');
             const urlParams = new URLSearchParams(window.location.search);
+            const pickupParam = urlParams.get('pickup_datetime');
+            const returnParam = urlParams.get('end_datetime');
+
             let selectedLocation = urlParams.get('location') || 'Hyderabad';
             const locationDisplay = document.getElementById('selected-location-display');
             if (locationDisplay && urlParams.get('location')) {
@@ -826,7 +830,8 @@
             // Format date for display (e.g., "10-Feb-2026")
             function formatDateDisplay(dateStr) {
                 if (!dateStr) return 'Select Date';
-                const date = new Date(dateStr);
+                const date = new Date(dateStr.replace(' ', 'T'));
+                if (isNaN(date.getTime())) return 'Select Date';
                 const day = date.getDate().toString().padStart(2, '0');
                 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                 const month = months[date.getMonth()];
@@ -837,69 +842,73 @@
             // Format time for display (e.g., "2:30 PM")
             function formatTimeDisplay(dateStr) {
                 if (!dateStr) return '--:--';
-                const date = new Date(dateStr);
+                const date = new Date(dateStr.replace(' ', 'T'));
+                if (isNaN(date.getTime())) return '--:--';
                 let hours = date.getHours();
+                let minutes = date.getMinutes();
                 const ampm = hours >= 12 ? 'PM' : 'AM';
                 hours = hours % 12;
                 hours = hours ? hours : 12;
-                return `${hours} ${ampm}`;
+                const minStr = minutes === 0 ? '' : `:${minutes.toString().padStart(2, '0')}`;
+                return `${hours}${minStr} ${ampm}`;
             }
 
             // Update displays when input changes
-            function updatePickupDisplay() {
+            function updateDisplays() {
                 if (pickupInput.value) {
                     pickupDateDisplay.textContent = formatDateDisplay(pickupInput.value);
                     pickupTimeDisplay.textContent = formatTimeDisplay(pickupInput.value);
-                } else {
-                    pickupDateDisplay.textContent = 'Select Date';
-                    pickupTimeDisplay.textContent = '--:--';
                 }
-            }
-
-            function updateReturnDisplay() {
                 if (returnInput.value) {
                     returnDateDisplay.textContent = formatDateDisplay(returnInput.value);
                     returnTimeDisplay.textContent = formatTimeDisplay(returnInput.value);
-                } else {
-                    returnDateDisplay.textContent = 'Select Date';
-                    returnTimeDisplay.textContent = '--:--';
                 }
+                updateDuration();
+                syncDatesToForms();
             }
 
-            // Parse URL params and set initial values
-            const pickupParam = urlParams.get('pickup_datetime');
-            const returnParam = urlParams.get('end_datetime');
+            // Initialize Flatpickr
+            const fpOptions = {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                altFormat: "M j, Y  h:i K",
+                minDate: "today",
+                minuteIncrement: 30,
+                position: "auto",
+                onChange: function () {
+                    updateDisplays();
+                }
+            };
 
-            if (pickupParam) {
-                pickupInput.value = pickupParam;
-                updatePickupDisplay();
-            }
+            const startPicker = flatpickr(pickupInput, {
+                ...fpOptions,
+                defaultDate: pickupParam ? new Date(pickupParam.replace('T', ' ')) : new Date(new Date().setHours(new Date().getHours() + 1, 0, 0, 0)),
+                onChange: function (selectedDates, dateStr) {
+                    endPicker.set('minDate', dateStr);
+                    updateDisplays();
+                }
+            });
 
-            if (returnParam) {
-                returnInput.value = returnParam;
-                updateReturnDisplay();
-            }
+            const endPicker = flatpickr(returnInput, {
+                ...fpOptions,
+                defaultDate: returnParam ? new Date(returnParam.replace('T', ' ')) : new Date(new Date().getTime() + 25 * 60 * 60 * 1000).setHours(new Date().getHours() + 1, 0, 0, 0),
+            });
 
-            // Set min datetime for inputs to prevent past selection
-            function formatForInput(date) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                const hours = String(date.getHours()).padStart(2, '0');
-                return `${year}-${month}-${day}T${hours}:00`;
-            }
-
-            // Set min datetime for inputs to prevent past selection (rounded to hour)
-            const nowObj = new Date();
-            nowObj.setMinutes(0, 0, 0);
-            const nowISO = formatForInput(nowObj);
-            pickupInput.min = nowISO;
-            returnInput.min = nowISO;
+            document.querySelectorAll('.top-date-card').forEach((card, idx) => {
+                if (idx === 1) card.onclick = (e) => {
+                    e.stopPropagation();
+                    startPicker.open(); // Pickup
+                };
+                if (idx === 2) card.onclick = (e) => {
+                    e.stopPropagation();
+                    endPicker.open();   // Return
+                };
+            });
 
             function updateDuration() {
                 if (pickupInput.value && returnInput.value) {
-                    const pick = new Date(pickupInput.value);
-                    const ret = new Date(returnInput.value);
+                    const pick = new Date(pickupInput.value.replace(' ', 'T'));
+                    const ret = new Date(returnInput.value.replace(' ', 'T'));
 
                     if (ret > pick) {
                         const diff = ret - pick;
@@ -912,19 +921,8 @@
                 durationDisplay.textContent = "-- Days, -- Hrs.";
             }
 
-            pickupInput.addEventListener('change', function () {
-                updatePickupDisplay();
-                updateDuration();
-                // Update return min to be at least the pickup date
-                if (this.value) {
-                    returnInput.min = this.value;
-                }
-            });
-
-            returnInput.addEventListener('change', function () {
-                updateReturnDisplay();
-                updateDuration();
-            });
+            // Initial manual trigger for displays
+            setTimeout(updateDisplays, 100);
 
             document.querySelectorAll('.filter-check').forEach(box => {
                 box.addEventListener('change', function () {

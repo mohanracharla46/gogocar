@@ -12,6 +12,7 @@
     <link rel="icon" type="image/png" href="/static/img/logo.png">
     {% include '_header_css.html' %}
     {% include '_footer_css.html' %}
+    {% include '_flatpickr_assets.html' %}
     <style>
         * {
             margin: 0;
@@ -2000,13 +2001,11 @@ car.images) else ['/static/img/landing.png']) %}
                 <div class="trip-details">
                     <div class="trip-item">
                         <span class="trip-label">Start Date</span>
-                        <input type="datetime-local" class="date-input" id="startDate" step="3600"
-                            value="2026-01-20T10:00">
+                        <input type="text" class="date-input" id="startDate" placeholder="Select Pick-up Date">
                     </div>
                     <div class="trip-item">
                         <span class="trip-label">End Date</span>
-                        <input type="datetime-local" class="date-input" id="endDate" step="3600"
-                            value="2026-01-22T10:00">
+                        <input type="text" class="date-input" id="endDate" placeholder="Select Return Date">
                     </div>
                     <div class="trip-item">
                         <span class="trip-label">Duration</span>
@@ -2273,6 +2272,10 @@ car.images) else ['/static/img/landing.png']) %}
         });
 
         // Date Calculation Logic
+        const urlParams = new URLSearchParams(window.location.search);
+        const pParam = urlParams.get('pickup_datetime');
+        const rParam = urlParams.get('end_datetime');
+
         const startDateInput = document.getElementById('startDate');
         const endDateInput = document.getElementById('endDate');
         const durationDisplay = document.getElementById('durationDisplay');
@@ -2281,11 +2284,45 @@ car.images) else ['/static/img/landing.png']) %}
 
         const mobDurationDisplay = document.getElementById('mobDurationDisplay');
 
-        function updateTripDetails() {
-            const start = new Date(startDateInput.value);
-            const end = new Date(endDateInput.value);
+        // Initialize Flatpickr
+        const fpOptions = {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            altInput: true,
+            altFormat: "M j, Y  h:i K",
+            minDate: "today",
+            minuteIncrement: 30,
+            position: "auto",
+            onChange: function () {
+                updateTripDetails();
+            }
+        };
 
-            if (start && end && end > start && !isNaN(start) && !isNaN(end)) {
+        const startPicker = flatpickr(startDateInput, {
+            ...fpOptions,
+            defaultDate: pParam ? new Date(pParam.replace('T', ' ')) : new Date(new Date().setMinutes(0, 0, 0, 0)),
+            onChange: function (selectedDates, dateStr) {
+                endPicker.set('minDate', dateStr);
+                updateTripDetails();
+            }
+        });
+
+        const endPicker = flatpickr(endDateInput, {
+            ...fpOptions,
+            defaultDate: rParam ? new Date(rParam.replace('T', ' ')) : new Date(new Date().getTime() + 24 * 60 * 60 * 1000).setMinutes(0, 0, 0, 0),
+        });
+
+        function updateTripDetails() {
+            const startStr = startDateInput.value;
+            const endStr = endDateInput.value;
+
+            if (!startStr || !endStr) return;
+
+            // Flatpickr might give space instead of T
+            const start = new Date(startStr.replace(' ', 'T'));
+            const end = new Date(endStr.replace(' ', 'T'));
+
+            if (start && end && end > start && !isNaN(start.getTime()) && !isNaN(end.getTime())) {
                 const diffTime = Math.abs(end - start);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -2296,111 +2333,71 @@ car.images) else ['/static/img/landing.png']) %}
 
                 // Update Total Price
                 const newTotal = basePrice * diffDays + selectedProtectionPrice;
-                if (totalAmountDisplay) totalAmountDisplay.textContent = '\u20b9' + newTotal.toLocaleString('en-IN');
+                if (totalAmountDisplay) totalAmountDisplay.textContent = '₹' + newTotal.toLocaleString('en-IN');
             } else {
                 if (durationDisplay) durationDisplay.textContent = 'Invalid duration';
                 if (mobDurationDisplay) mobDurationDisplay.textContent = '—';
             }
         }
 
-        startDateInput.addEventListener('change', function () {
-            updateTripDetails();
-            // Update end date min constraint
-            if (this.value) {
-                endDateInput.min = this.value;
-            }
-        });
-        endDateInput.addEventListener('change', updateTripDetails);
-
-        // Set initial values from URL or defaults
-        const detailUrlParams = new URLSearchParams(window.location.search);
-        const pParam = detailUrlParams.get('pickup_datetime');
-        const rParam = detailUrlParams.get('end_datetime');
-
-        function formatForInput(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            return `${year}-${month}-${day}T${hours}:00`;
-        }
-
-        if (pParam) {
-            startDateInput.value = pParam;
-        } else {
-            const now = new Date();
-            startDateInput.value = formatForInput(now);
-        }
-
-        if (rParam) {
-            endDateInput.value = rParam;
-        } else {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            endDateInput.value = formatForInput(tomorrow);
-        }
-
-
-
-        // Set min values
-        const nowObj = new Date();
-        startDateInput.min = formatForInput(nowObj);
-        endDateInput.min = formatForInput(nowObj);
-
         // Run calculation once to set initial state
         updateTripDetails();
 
         // Booking Button Logic
-        document.getElementById('bookBtn').addEventListener('click', function () {
-            const start = startDateInput.value;
-            const end = endDateInput.value;
+        const bookBtn = document.getElementById('bookBtn');
+        if (bookBtn) {
+            bookBtn.addEventListener('click', function () {
+                const start = startDateInput.value;
+                const end = endDateInput.value;
 
-            if (!start || !end) {
-                alert('Please select valid start and end dates.');
-                return;
-            }
+                if (!start || !end) {
+                    alert('Please select valid start and end dates.');
+                    return;
+                }
 
-            const startDate = new Date(start);
-            const endDate = new Date(end);
-            const now = new Date();
+                const startDate = new Date(start.replace(' ', 'T'));
+                const endDate = new Date(end.replace(' ', 'T'));
+                const now = new Date();
 
-            // Allow 5 min buffer
-            if (startDate < new Date(now.getTime() - 5 * 60000)) {
-                alert('Pickup time cannot be in the past. Please select a future time.');
-                return;
-            }
+                // Allow 5 min buffer
+                if (startDate < new Date(now.getTime() - 5 * 60000)) {
+                    alert('Pickup time cannot be in the past. Please select a future time.');
+                    return;
+                }
 
-            if (endDate <= startDate) {
-                alert('Return time must be after pickup time.');
-                return;
-            }
+                if (endDate <= startDate) {
+                    alert('Return time must be after pickup time.');
+                    return;
+                }
 
-            // Minimum 1 hour
-            const diffHours = (endDate - startDate) / (1000 * 60 * 60);
-            if (diffHours < 1) {
-                alert('Minimum booking duration is 1 hour.');
-                return;
-            }
+                // Minimum 1 hour
+                const diffHours = (endDate - startDate) / (1000 * 60 * 60);
+                if (diffHours < 1) {
+                    alert('Minimum booking duration is 1 hour.');
+                    return;
+                }
 
-            // Check if home delivery is selected
-            const deliveryToggle = document.querySelector('.delivery-toggle .toggle-switch');
-            const homeDelivery = deliveryToggle && deliveryToggle.classList.contains('active');
+                // Check if home delivery is selected
+                const deliveryToggle = document.querySelector('.delivery-toggle .toggle-switch');
+                const homeDelivery = deliveryToggle && deliveryToggle.classList.contains('active');
 
-            let url = `/payment?car_id={{ car.id }}&pickup_datetime=${encodeURIComponent(start)}&end_datetime=${encodeURIComponent(end)}&home_delivery=${homeDelivery}&damage_protection=${selectedProtectionPrice}`;
+                let url = `/payment?car_id={{ car.id }}&pickup_datetime=${encodeURIComponent(start)}&end_datetime=${encodeURIComponent(end)}&home_delivery=${homeDelivery}&damage_protection=${selectedProtectionPrice}`;
 
-            const selectedDepositEl = document.querySelector('input[name="deposit_type"]:checked');
-            if (selectedDepositEl) {
-                url += `&deposit_type=${encodeURIComponent(selectedDepositEl.value)}`;
-            }
+                const selectedDepositEl = document.querySelector('input[name="deposit_type"]:checked');
+                if (selectedDepositEl) {
+                    url += `&deposit_type=${encodeURIComponent(selectedDepositEl.value)}`;
+                }
 
-            window.location.href = url;
-        });
+                window.location.href = url;
+            });
+        }
 
         // Mobile booking bar — delegate to desktop book button logic
         const mobBookBtn = document.getElementById('mobBookBtn');
         if (mobBookBtn) {
             mobBookBtn.addEventListener('click', function () {
-                document.getElementById('bookBtn').click();
+                const desktopBtn = document.getElementById('bookBtn');
+                if (desktopBtn) desktopBtn.click();
             });
         }
     </script>
